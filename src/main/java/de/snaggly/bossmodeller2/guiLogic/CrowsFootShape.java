@@ -53,16 +53,24 @@ public abstract class CrowsFootShape {
     }
 
     public abstract ChangeListener<Number> getMultiplicityMany_XListener(Pane parentPane);
+    public abstract void drawMultiplicityMany_X(double xOffset);
     public abstract ChangeListener<Number> getMultiplicityMany_YListener(Pane parentPane);
+    public abstract void drawMultiplicityMany_Y(double yOffset);
     public abstract ChangeListener<Number> getMultiplicityOne_XListener(Pane parentPane);
+    public abstract void drawMultiplicityOne_X(double xOffset);
     public abstract ChangeListener<Number> getMultiplicityOne_YListener(Pane parentPane);
+    public abstract void drawMultiplicityOne_Y(double yOffset);
 
     public abstract ChangeListener<Number> getMandatory_XListener(Pane parentPane);
+    public abstract void drawMandatory_X(double xOffset);
     public abstract ChangeListener<Number> getMandatory_YListener(Pane parentPane);
+    public abstract void drawMandatory_Y(double yOffset);
     public abstract ChangeListener<Number> getOptional_XListener(Pane parentPane);
+    public abstract void drawOptional_X(double xOffset);
     public abstract ChangeListener<Number> getOptional_YListener(Pane parentPane);
+    public abstract void drawOptional_Y(double yOffset);
 
-    private ArrayList<ChangeListener<Number>> listeners = new ArrayList<>();
+    private final ArrayList<ChangeListener<Number>> listeners = new ArrayList<>();
 
     public void bindCrowsFootView(Pane parentPane, Relation.Cardinality cardinality, Relation.Obligation obligation) {
         if (cardinality == Relation.Cardinality.MANY) {
@@ -91,6 +99,40 @@ public abstract class CrowsFootShape {
             entity.widthProperty().addListener(this.getMandatory_XListener((Pane) entity.getParent()));
             entity.layoutYProperty().addListener(this.getMandatory_YListener((Pane) entity.getParent()));
             entity.heightProperty().addListener(this.getMandatory_YListener((Pane) entity.getParent()));
+        }
+    }
+
+    public void draw(Pane parentPane, Relation.Cardinality cardinality, Relation.Obligation obligation, double xOffset, double yOffset) {
+        if (cardinality == Relation.Cardinality.MANY) {
+            parentPane.getChildren().addAll(this.multiplicityLineMultiple1, this.multiplicityLineMultiple2);
+        } else {
+            parentPane.getChildren().add(this.multiplicityLineOne);
+        }
+
+        if (obligation == Relation.Obligation.CAN) {
+            parentPane.getChildren().add(this.optionalCircle);
+        } else {
+            parentPane.getChildren().add(this.mandatoryLine);
+        }
+
+        move(cardinality, obligation, xOffset, yOffset);
+    }
+
+    public void move(Relation.Cardinality cardinality, Relation.Obligation obligation, double xOffset, double yOffset) {
+        if (cardinality == Relation.Cardinality.MANY) {
+            this.drawMultiplicityMany_X(xOffset);
+            this.drawMultiplicityMany_Y(yOffset);
+        } else {
+            this.drawMultiplicityOne_X(xOffset);
+            this.drawMultiplicityOne_Y(yOffset);
+        }
+
+        if (obligation == Relation.Obligation.CAN) {
+            this.drawOptional_X(xOffset);
+            this.drawOptional_Y(yOffset);
+        } else {
+            this.drawMandatory_X(xOffset);
+            this.drawMandatory_Y(yOffset);
         }
     }
 
@@ -128,67 +170,107 @@ public abstract class CrowsFootShape {
         @Override
         public ChangeListener<Number> getMultiplicityMany_XListener(Pane parent) {
             return (observableValue, number, t1) -> {
-                multiplicityLineMultiple1.setStartX(super.entity.getLayoutX() + super.entity.getWidth() + parent.getLayoutX());
-                multiplicityLineMultiple1.setEndX(super.entity.getLayoutX() + super.entity.getWidth()+ parent.getLayoutX() + (scale * 3));
-                multiplicityLineMultiple2.setStartX(super.entity.getLayoutX() + super.entity.getWidth() + parent.getLayoutX());
-                multiplicityLineMultiple2.setEndX(super.entity.getLayoutX() + super.entity.getWidth()+ parent.getLayoutX() + (scale * 3));
+                drawMultiplicityMany_X(parent.getLayoutX());
             };
+        }
+
+        @Override
+        public void drawMultiplicityMany_X(double xCoordinateOffset) {
+            multiplicityLineMultiple1.setStartX(super.entity.getLayoutX() + super.entity.getWidth() + xCoordinateOffset);
+            multiplicityLineMultiple1.setEndX(super.entity.getLayoutX() + super.entity.getWidth()+ xCoordinateOffset + (scale * 3));
+            multiplicityLineMultiple2.setStartX(super.entity.getLayoutX() + super.entity.getWidth() + xCoordinateOffset);
+            multiplicityLineMultiple2.setEndX(super.entity.getLayoutX() + super.entity.getWidth()+ xCoordinateOffset + (scale * 3));
         }
 
         @Override
         public ChangeListener<Number> getMultiplicityMany_YListener(Pane parentPane) {
             return (observableValue, number, t1) -> {
-                multiplicityLineMultiple1.setStartY((super.entity.getHeight() / super.connectingAmount) + super.entity.getLayoutY() - (scale * 2) + parentPane.getLayoutY());
-                multiplicityLineMultiple1.setEndY((super.entity.getHeight() / super.connectingAmount) + super.entity.getLayoutY() + parentPane.getLayoutY());
-                multiplicityLineMultiple2.setStartY((super.entity.getHeight() / super.connectingAmount) + super.entity.getLayoutY() + (scale * 2) + parentPane.getLayoutY());
-                multiplicityLineMultiple2.setEndY((super.entity.getHeight() / super.connectingAmount) + super.entity.getLayoutY() + parentPane.getLayoutY());
+                drawMultiplicityMany_Y(parentPane.getLayoutY());
             };
+        }
+
+        @Override
+        public void drawMultiplicityMany_Y(double yCoordinateOffset) {
+            multiplicityLineMultiple1.setStartY((super.entity.getHeight() / super.connectingAmount) + super.entity.getLayoutY() - (scale * 2) + yCoordinateOffset);
+            multiplicityLineMultiple1.setEndY((super.entity.getHeight() / super.connectingAmount) + super.entity.getLayoutY() + yCoordinateOffset);
+            multiplicityLineMultiple2.setStartY((super.entity.getHeight() / super.connectingAmount) + super.entity.getLayoutY() + (scale * 2) + yCoordinateOffset);
+            multiplicityLineMultiple2.setEndY((super.entity.getHeight() / super.connectingAmount) + super.entity.getLayoutY() + yCoordinateOffset);
         }
 
         @Override
         public ChangeListener<Number> getMultiplicityOne_XListener(Pane parentPane) {
             return (observableValue, number, t1) -> {
-                multiplicityLineOne.setStartX(super.entity.getLayoutX() + super.entity.getWidth() + parentPane.getLayoutX() + (scale * 1.5));
-                multiplicityLineOne.setEndX(super.entity.getLayoutX() + super.entity.getWidth() + parentPane.getLayoutX() + (scale * 1.5));
+                drawMultiplicityOne_X(parentPane.getLayoutX());
             };
+        }
+
+        @Override
+        public void drawMultiplicityOne_X(double xCoordinateOffset) {
+            multiplicityLineOne.setStartX(super.entity.getLayoutX() + super.entity.getWidth() + (scale * 1.5) + xCoordinateOffset);
+            multiplicityLineOne.setEndX(super.entity.getLayoutX() + super.entity.getWidth() + (scale * 1.5) + xCoordinateOffset);
         }
 
         @Override
         public ChangeListener<Number> getMultiplicityOne_YListener(Pane parentPane) {
             return (observableValue, number, t1) -> {
-                multiplicityLineOne.setStartY((super.entity.getHeight() / super.connectingAmount) + super.entity.getLayoutY() - (scale * 2) + parentPane.getLayoutY());
-                multiplicityLineOne.setEndY((super.entity.getHeight() / super.connectingAmount) + super.entity.getLayoutY() + (scale * 2) + parentPane.getLayoutY());
+                drawMultiplicityOne_Y(parentPane.getLayoutY());
             };
+        }
+
+        @Override
+        public void drawMultiplicityOne_Y(double yOffset) {
+            multiplicityLineOne.setStartY((super.entity.getHeight() / super.connectingAmount) + super.entity.getLayoutY() - (scale * 2) + yOffset);
+            multiplicityLineOne.setEndY((super.entity.getHeight() / super.connectingAmount) + super.entity.getLayoutY() + (scale * 2) + yOffset);
         }
 
         @Override
         public ChangeListener<Number> getMandatory_XListener(Pane parentPane) {
             return (observableValue, number, t1) -> {
-                mandatoryLine.setStartX(super.entity.getLayoutX() + super.entity.getWidth() + parentPane.getLayoutX() + (scale * 3));
-                mandatoryLine.setEndX(super.entity.getLayoutX() + super.entity.getWidth() + parentPane.getLayoutX() + (scale * 3));
+                drawMandatory_X(parentPane.getLayoutX());
             };
+        }
+
+        @Override
+        public void drawMandatory_X(double xOffset) {
+            mandatoryLine.setStartX(super.entity.getLayoutX() + super.entity.getWidth() + xOffset + (scale * 3));
+            mandatoryLine.setEndX(super.entity.getLayoutX() + super.entity.getWidth() + xOffset + (scale * 3));
         }
 
         @Override
         public ChangeListener<Number> getMandatory_YListener(Pane parentPane) {
             return (observableValue, number, t1) -> {
-                mandatoryLine.setStartY((super.entity.getHeight() / super.connectingAmount) + super.entity.getLayoutY() - (scale * 2) + parentPane.getLayoutY());
-                mandatoryLine.setEndY((super.entity.getHeight() / super.connectingAmount) + super.entity.getLayoutY() + (scale * 2) + parentPane.getLayoutY());
+                drawMandatory_Y(parentPane.getLayoutY());
             };
+        }
+
+        @Override
+        public void drawMandatory_Y(double yOffset) {
+            mandatoryLine.setStartY((super.entity.getHeight() / super.connectingAmount) + super.entity.getLayoutY() - (scale * 2) + yOffset);
+            mandatoryLine.setEndY((super.entity.getHeight() / super.connectingAmount) + super.entity.getLayoutY() + (scale * 2) + yOffset);
         }
 
         @Override
         public ChangeListener<Number> getOptional_XListener(Pane parentPane) {
             return (observableValue, number, t1) -> {
-                optionalCircle.setLayoutX(super.entity.getLayoutX() + super.entity.getWidth() + parentPane.getLayoutX() + (scale * 4));
+                drawOptional_X(parentPane.getLayoutX());
             };
+        }
+
+        @Override
+        public void drawOptional_X(double xOffset) {
+            optionalCircle.setLayoutX(super.entity.getLayoutX() + super.entity.getWidth() + xOffset + (scale * 4));
         }
 
         @Override
         public ChangeListener<Number> getOptional_YListener(Pane parentPane) {
             return (observableValue, number, t1) -> {
-                optionalCircle.setLayoutY(super.entity.getLayoutY() + (super.entity.getHeight() / super.connectingAmount) + parentPane.getLayoutY());
+                drawOptional_Y(parentPane.getLayoutY());
             };
+        }
+
+        @Override
+        public void drawOptional_Y(double yOffset) {
+            optionalCircle.setLayoutY(super.entity.getLayoutY() + (super.entity.getHeight() / super.connectingAmount) + yOffset);
         }
     }
 
@@ -200,67 +282,107 @@ public abstract class CrowsFootShape {
         @Override
         public ChangeListener<Number> getMultiplicityMany_XListener(Pane parentPane) {
             return (observableValue, number, t1) -> {
-                multiplicityLineMultiple1.setStartX(super.entity.getLayoutX() + parentPane.getLayoutX());
-                multiplicityLineMultiple1.setEndX(super.entity.getLayoutX() + parentPane.getLayoutX() - (scale * 3));
-                multiplicityLineMultiple2.setStartX(super.entity.getLayoutX() + parentPane.getLayoutX());
-                multiplicityLineMultiple2.setEndX(super.entity.getLayoutX() + parentPane.getLayoutX() - (scale * 3));
+                drawMultiplicityMany_X(parentPane.getLayoutX());
             };
+        }
+
+        @Override
+        public void drawMultiplicityMany_X(double xOffset) {
+            multiplicityLineMultiple1.setStartX(super.entity.getLayoutX() + xOffset);
+            multiplicityLineMultiple1.setEndX(super.entity.getLayoutX() + xOffset - (scale * 3));
+            multiplicityLineMultiple2.setStartX(super.entity.getLayoutX() + xOffset);
+            multiplicityLineMultiple2.setEndX(super.entity.getLayoutX() + xOffset - (scale * 3));
         }
 
         @Override
         public ChangeListener<Number> getMultiplicityMany_YListener(Pane parentPane) {
             return (observableValue, number, t1) -> {
-                multiplicityLineMultiple1.setStartY((super.entity.getHeight() / super.connectingAmount) + super.entity.getLayoutY() - (scale * 2) + parentPane.getLayoutY());
-                multiplicityLineMultiple1.setEndY((super.entity.getHeight() / super.connectingAmount) + super.entity.getLayoutY() + parentPane.getLayoutY());
-                multiplicityLineMultiple2.setStartY((super.entity.getHeight() / super.connectingAmount) + super.entity.getLayoutY() + (scale * 2) + parentPane.getLayoutY());
-                multiplicityLineMultiple2.setEndY((super.entity.getHeight() / super.connectingAmount) + super.entity.getLayoutY() + parentPane.getLayoutY());
+                drawMultiplicityMany_Y(parentPane.getLayoutY());
             };
+        }
+
+        @Override
+        public void drawMultiplicityMany_Y(double yOffset) {
+            multiplicityLineMultiple1.setStartY((super.entity.getHeight() / super.connectingAmount) + super.entity.getLayoutY() - (scale * 2) + yOffset);
+            multiplicityLineMultiple1.setEndY((super.entity.getHeight() / super.connectingAmount) + super.entity.getLayoutY() + yOffset);
+            multiplicityLineMultiple2.setStartY((super.entity.getHeight() / super.connectingAmount) + super.entity.getLayoutY() + (scale * 2) + yOffset);
+            multiplicityLineMultiple2.setEndY((super.entity.getHeight() / super.connectingAmount) + super.entity.getLayoutY() + yOffset);
         }
 
         @Override
         public ChangeListener<Number> getMultiplicityOne_XListener(Pane parentPane) {
             return (observableValue, number, t1) -> {
-                multiplicityLineOne.setStartX(super.entity.getLayoutX() + parentPane.getLayoutX() - (scale * 1.5));
-                multiplicityLineOne.setEndX(super.entity.getLayoutX() + parentPane.getLayoutX() - (scale * 1.5));
+                drawMultiplicityOne_X(parentPane.getLayoutX());
             };
+        }
+
+        @Override
+        public void drawMultiplicityOne_X(double xOffset) {
+            multiplicityLineOne.setStartX(super.entity.getLayoutX() + xOffset - (scale * 1.5));
+            multiplicityLineOne.setEndX(super.entity.getLayoutX() + xOffset - (scale * 1.5));
         }
 
         @Override
         public ChangeListener<Number> getMultiplicityOne_YListener(Pane parentPane) {
             return (observableValue, number, t1) -> {
-                multiplicityLineOne.setStartY((super.entity.getHeight() / super.connectingAmount) + super.entity.getLayoutY() - (scale * 2) + parentPane.getLayoutY());
-                multiplicityLineOne.setEndY((super.entity.getHeight() / super.connectingAmount) + super.entity.getLayoutY() + (scale * 2) + parentPane.getLayoutY());
+                drawMultiplicityOne_Y(parentPane.getLayoutY());
             };
+        }
+
+        @Override
+        public void drawMultiplicityOne_Y(double yOffset) {
+            multiplicityLineOne.setStartY((super.entity.getHeight() / super.connectingAmount) + super.entity.getLayoutY() - (scale * 2) + yOffset);
+            multiplicityLineOne.setEndY((super.entity.getHeight() / super.connectingAmount) + super.entity.getLayoutY() + (scale * 2) + yOffset);
         }
 
         @Override
         public ChangeListener<Number> getMandatory_XListener(Pane parentPane) {
             return (observableValue, number, t1) -> {
-                mandatoryLine.setStartX(super.entity.getLayoutX() + parentPane.getLayoutX() - (scale * 3));
-                mandatoryLine.setEndX(super.entity.getLayoutX() + parentPane.getLayoutX() - (scale * 3));
+                drawMandatory_X(parentPane.getLayoutX());
             };
+        }
+
+        @Override
+        public void drawMandatory_X(double xOffset) {
+            mandatoryLine.setStartX(super.entity.getLayoutX() + xOffset - (scale * 3));
+            mandatoryLine.setEndX(super.entity.getLayoutX() + xOffset - (scale * 3));
         }
 
         @Override
         public ChangeListener<Number> getMandatory_YListener(Pane parentPane) {
             return (observableValue, number, t1) -> {
-                mandatoryLine.setStartY((super.entity.getHeight() / super.connectingAmount) + super.entity.getLayoutY() - (scale * 2) + parentPane.getLayoutY());
-                mandatoryLine.setEndY((super.entity.getHeight() / super.connectingAmount) + super.entity.getLayoutY() + (scale * 2) + parentPane.getLayoutY());
+                drawMandatory_Y(parentPane.getLayoutY());
             };
+        }
+
+        @Override
+        public void drawMandatory_Y(double yOffset) {
+            mandatoryLine.setStartY((super.entity.getHeight() / super.connectingAmount) + super.entity.getLayoutY() - (scale * 2) + yOffset);
+            mandatoryLine.setEndY((super.entity.getHeight() / super.connectingAmount) + super.entity.getLayoutY() + (scale * 2) + yOffset);
         }
 
         @Override
         public ChangeListener<Number> getOptional_XListener(Pane parentPane) {
             return (observableValue, number, t1) -> {
-                optionalCircle.setLayoutX(super.entity.getLayoutX() + parentPane.getLayoutX() - (scale * 4));
+                drawOptional_X(parentPane.getLayoutX());
             };
+        }
+
+        @Override
+        public void drawOptional_X(double xOffset) {
+            optionalCircle.setLayoutX(super.entity.getLayoutX() + xOffset - (scale * 4));
         }
 
         @Override
         public ChangeListener<Number> getOptional_YListener(Pane parentPane) {
             return (observableValue, number, t1) -> {
-                optionalCircle.setLayoutY(super.entity.getLayoutY() + (super.entity.getHeight() / super.connectingAmount) + parentPane.getLayoutY());
+                drawOptional_Y(parentPane.getLayoutY());
             };
+        }
+
+        @Override
+        public void drawOptional_Y(double yOffset) {
+            optionalCircle.setLayoutY(super.entity.getLayoutY() + (super.entity.getHeight() / super.connectingAmount) + yOffset);
         }
     }
 
@@ -272,67 +394,107 @@ public abstract class CrowsFootShape {
         @Override
         public ChangeListener<Number> getMultiplicityMany_XListener(Pane parentPane) {
             return (observableValue, number, t1) -> {
-                multiplicityLineMultiple1.setStartX((super.entity.getWidth() / super.connectingAmount) - (scale * 2) + super.entity.getLayoutX() + parentPane.getLayoutX());
-                multiplicityLineMultiple1.setEndX((super.entity.getWidth() / super.connectingAmount) + super.entity.getLayoutX() + parentPane.getLayoutX());
-                multiplicityLineMultiple2.setStartX((super.entity.getWidth() / super.connectingAmount) + (scale * 2) + super.entity.getLayoutX() + parentPane.getLayoutX());
-                multiplicityLineMultiple2.setEndX((super.entity.getWidth() / super.connectingAmount) + super.entity.getLayoutX() + parentPane.getLayoutX());
+                drawMultiplicityMany_X(parentPane.getLayoutX());
             };
+        }
+
+        @Override
+        public void drawMultiplicityMany_X(double xOffset) {
+            multiplicityLineMultiple1.setStartX((super.entity.getWidth() / super.connectingAmount) - (scale * 2) + super.entity.getLayoutX() + xOffset);
+            multiplicityLineMultiple1.setEndX((super.entity.getWidth() / super.connectingAmount) + super.entity.getLayoutX() + xOffset);
+            multiplicityLineMultiple2.setStartX((super.entity.getWidth() / super.connectingAmount) + (scale * 2) + super.entity.getLayoutX() + xOffset);
+            multiplicityLineMultiple2.setEndX((super.entity.getWidth() / super.connectingAmount) + super.entity.getLayoutX() + xOffset);
         }
 
         @Override
         public ChangeListener<Number> getMultiplicityMany_YListener(Pane parentPane) {
             return (observableValue, number, t1) -> {
-                multiplicityLineMultiple1.setStartY(super.entity.getLayoutY() + parentPane.getLayoutY());
-                multiplicityLineMultiple1.setEndY(super.entity.getLayoutY() - (scale * 3) + parentPane.getLayoutY());
-                multiplicityLineMultiple2.setStartY(super.entity.getLayoutY() + parentPane.getLayoutY());
-                multiplicityLineMultiple2.setEndY(super.entity.getLayoutY() - (scale * 3) + parentPane.getLayoutY());
+                drawMultiplicityMany_Y(parentPane.getLayoutY());
             };
+        }
+
+        @Override
+        public void drawMultiplicityMany_Y(double yOffset) {
+            multiplicityLineMultiple1.setStartY(super.entity.getLayoutY() + yOffset);
+            multiplicityLineMultiple1.setEndY(super.entity.getLayoutY() - (scale * 3) + yOffset);
+            multiplicityLineMultiple2.setStartY(super.entity.getLayoutY() + yOffset);
+            multiplicityLineMultiple2.setEndY(super.entity.getLayoutY() - (scale * 3) + yOffset);
         }
 
         @Override
         public ChangeListener<Number> getMultiplicityOne_XListener(Pane parentPane) {
             return (observableValue, number, t1) -> {
-                multiplicityLineOne.setStartX((super.entity.getWidth() / super.connectingAmount) - (scale * 2) + super.entity.getLayoutX() + parentPane.getLayoutX());
-                multiplicityLineOne.setEndX((super.entity.getWidth() / super.connectingAmount) + (scale * 2) + super.entity.getLayoutX() + parentPane.getLayoutX());
+                drawMultiplicityOne_X(parentPane.getLayoutX());
             };
+        }
+
+        @Override
+        public void drawMultiplicityOne_X(double xOffset) {
+            multiplicityLineOne.setStartX((super.entity.getWidth() / super.connectingAmount) - (scale * 2) + super.entity.getLayoutX() + xOffset);
+            multiplicityLineOne.setEndX((super.entity.getWidth() / super.connectingAmount) + (scale * 2) + super.entity.getLayoutX() + xOffset);
         }
 
         @Override
         public ChangeListener<Number> getMultiplicityOne_YListener(Pane parentPane) {
             return (observableValue, number, t1) -> {
-                multiplicityLineOne.setStartY(super.entity.getLayoutY() + parentPane.getLayoutY() - (scale * 1.5));
-                multiplicityLineOne.setEndY(super.entity.getLayoutY() + parentPane.getLayoutY() - (scale * 1.5));
+                drawMultiplicityOne_Y(parentPane.getLayoutY());
             };
+        }
+
+        @Override
+        public void drawMultiplicityOne_Y(double yOffset) {
+            multiplicityLineOne.setStartY(super.entity.getLayoutY() + yOffset - (scale * 1.5));
+            multiplicityLineOne.setEndY(super.entity.getLayoutY() + yOffset - (scale * 1.5));
         }
 
         @Override
         public ChangeListener<Number> getMandatory_XListener(Pane parentPane) {
             return (observableValue, number, t1) -> {
-                mandatoryLine.setStartX((super.entity.getWidth() / super.connectingAmount) + super.entity.getLayoutX() - (scale * 2) + parentPane.getLayoutX());
-                mandatoryLine.setEndX((super.entity.getWidth() / super.connectingAmount) + super.entity.getLayoutX() + (scale * 2) + parentPane.getLayoutX());
+                drawMandatory_X(parentPane.getLayoutX());
             };
+        }
+
+        @Override
+        public void drawMandatory_X(double xOffset) {
+            mandatoryLine.setStartX((super.entity.getWidth() / super.connectingAmount) + super.entity.getLayoutX() - (scale * 2) + xOffset);
+            mandatoryLine.setEndX((super.entity.getWidth() / super.connectingAmount) + super.entity.getLayoutX() + (scale * 2) + xOffset);
         }
 
         @Override
         public ChangeListener<Number> getMandatory_YListener(Pane parentPane) {
             return (observableValue, number, t1) -> {
-                mandatoryLine.setStartY(super.entity.getLayoutY() + parentPane.getLayoutY() - (scale * 3));
-                mandatoryLine.setEndY(super.entity.getLayoutY() + parentPane.getLayoutY() - (scale * 3));
+                drawMandatory_Y(parentPane.getLayoutY());
             };
+        }
+
+        @Override
+        public void drawMandatory_Y(double yOffset) {
+            mandatoryLine.setStartY(super.entity.getLayoutY() + yOffset - (scale * 3));
+            mandatoryLine.setEndY(super.entity.getLayoutY() + yOffset - (scale * 3));
         }
 
         @Override
         public ChangeListener<Number> getOptional_XListener(Pane parentPane) {
             return (observableValue, number, t1) -> {
-                optionalCircle.setLayoutX(super.entity.getLayoutX() + (super.entity.getWidth() / super.connectingAmount) + parentPane.getLayoutX());
+                drawOptional_X(parentPane.getLayoutX());
             };
+        }
+
+        @Override
+        public void drawOptional_X(double xOffset) {
+            optionalCircle.setLayoutX(super.entity.getLayoutX() + (super.entity.getWidth() / super.connectingAmount) + xOffset);
         }
 
         @Override
         public ChangeListener<Number> getOptional_YListener(Pane parentPane) {
             return (observableValue, number, t1) -> {
-                optionalCircle.setLayoutY(super.entity.getLayoutY() + parentPane.getLayoutY() - (scale * 4));
+                drawOptional_Y(parentPane.getLayoutY());
             };
+        }
+
+        @Override
+        public void drawOptional_Y(double xOffset) {
+            optionalCircle.setLayoutY(super.entity.getLayoutY() + xOffset - (scale * 4));
         }
     }
 
@@ -344,67 +506,107 @@ public abstract class CrowsFootShape {
         @Override
         public ChangeListener<Number> getMultiplicityMany_XListener(Pane parentPane) {
             return (observableValue, number, t1) -> {
-                multiplicityLineMultiple1.setStartX((super.entity.getWidth() / super.connectingAmount) - (scale * 2) + super.entity.getLayoutX() + parentPane.getLayoutX());
-                multiplicityLineMultiple1.setEndX((super.entity.getWidth() / super.connectingAmount) + super.entity.getLayoutX() + parentPane.getLayoutX());
-                multiplicityLineMultiple2.setStartX((super.entity.getWidth() / super.connectingAmount) + (scale * 2) + super.entity.getLayoutX() + parentPane.getLayoutX());
-                multiplicityLineMultiple2.setEndX((super.entity.getWidth() / super.connectingAmount) + super.entity.getLayoutX() + parentPane.getLayoutX());
+                drawMultiplicityMany_X(parentPane.getLayoutX());
             };
+        }
+
+        @Override
+        public void drawMultiplicityMany_X(double xOffset) {
+            multiplicityLineMultiple1.setStartX((super.entity.getWidth() / super.connectingAmount) - (scale * 2) + super.entity.getLayoutX() + xOffset);
+            multiplicityLineMultiple1.setEndX((super.entity.getWidth() / super.connectingAmount) + super.entity.getLayoutX() + xOffset);
+            multiplicityLineMultiple2.setStartX((super.entity.getWidth() / super.connectingAmount) + (scale * 2) + super.entity.getLayoutX() + xOffset);
+            multiplicityLineMultiple2.setEndX((super.entity.getWidth() / super.connectingAmount) + super.entity.getLayoutX() + xOffset);
         }
 
         @Override
         public ChangeListener<Number> getMultiplicityMany_YListener(Pane parentPane) {
             return (observableValue, number, t1) -> {
-                multiplicityLineMultiple1.setStartY(super.entity.getLayoutY() + parentPane.getLayoutY() + super.entity.getHeight());
-                multiplicityLineMultiple1.setEndY(super.entity.getLayoutY() + (scale * 3) + parentPane.getLayoutY() + super.entity.getHeight());
-                multiplicityLineMultiple2.setStartY(super.entity.getLayoutY() + parentPane.getLayoutY() + super.entity.getHeight());
-                multiplicityLineMultiple2.setEndY(super.entity.getLayoutY() + (scale * 3) + parentPane.getLayoutY() + super.entity.getHeight());
+                drawMultiplicityMany_Y(parentPane.getLayoutY());
             };
+        }
+
+        @Override
+        public void drawMultiplicityMany_Y(double yOffset) {
+            multiplicityLineMultiple1.setStartY(super.entity.getLayoutY() + yOffset + super.entity.getHeight());
+            multiplicityLineMultiple1.setEndY(super.entity.getLayoutY() + (scale * 3) + yOffset + super.entity.getHeight());
+            multiplicityLineMultiple2.setStartY(super.entity.getLayoutY() + yOffset + super.entity.getHeight());
+            multiplicityLineMultiple2.setEndY(super.entity.getLayoutY() + (scale * 3) + yOffset + super.entity.getHeight());
         }
 
         @Override
         public ChangeListener<Number> getMultiplicityOne_XListener(Pane parentPane) {
             return (observableValue, number, t1) -> {
-                multiplicityLineOne.setStartX((super.entity.getWidth() / super.connectingAmount) - (scale * 2) + super.entity.getLayoutX() + parentPane.getLayoutX());
-                multiplicityLineOne.setEndX((super.entity.getWidth() / super.connectingAmount) + (scale * 2) + super.entity.getLayoutX() + parentPane.getLayoutX());
+                drawMultiplicityOne_X(parentPane.getLayoutX());
             };
+        }
+
+        @Override
+        public void drawMultiplicityOne_X(double xOffset) {
+            multiplicityLineOne.setStartX((super.entity.getWidth() / super.connectingAmount) - (scale * 2) + super.entity.getLayoutX() + xOffset);
+            multiplicityLineOne.setEndX((super.entity.getWidth() / super.connectingAmount) + (scale * 2) + super.entity.getLayoutX() + xOffset);
         }
 
         @Override
         public ChangeListener<Number> getMultiplicityOne_YListener(Pane parentPane) {
             return (observableValue, number, t1) -> {
-                multiplicityLineOne.setStartY(super.entity.getLayoutY() + parentPane.getLayoutY() + (scale * 1.5) + super.entity.getHeight());
-                multiplicityLineOne.setEndY(super.entity.getLayoutY() + parentPane.getLayoutY() + (scale * 1.5) + super.entity.getHeight());
+                drawMultiplicityOne_Y(parentPane.getLayoutY());
             };
+        }
+
+        @Override
+        public void drawMultiplicityOne_Y(double yOffset) {
+            multiplicityLineOne.setStartY(super.entity.getLayoutY() + yOffset + (scale * 1.5) + super.entity.getHeight());
+            multiplicityLineOne.setEndY(super.entity.getLayoutY() + yOffset + (scale * 1.5) + super.entity.getHeight());
         }
 
         @Override
         public ChangeListener<Number> getMandatory_XListener(Pane parentPane) {
             return (observableValue, number, t1) -> {
-                mandatoryLine.setStartX((super.entity.getWidth() / super.connectingAmount) + super.entity.getLayoutX() - (scale * 2) + parentPane.getLayoutX());
-                mandatoryLine.setEndX((super.entity.getWidth() / super.connectingAmount) + super.entity.getLayoutX() + (scale * 2) + parentPane.getLayoutX());
+                drawMandatory_X(parentPane.getLayoutX());
             };
+        }
+
+        @Override
+        public void drawMandatory_X(double xOffset) {
+            mandatoryLine.setStartX((super.entity.getWidth() / super.connectingAmount) + super.entity.getLayoutX() - (scale * 2) + xOffset);
+            mandatoryLine.setEndX((super.entity.getWidth() / super.connectingAmount) + super.entity.getLayoutX() + (scale * 2) + xOffset);
         }
 
         @Override
         public ChangeListener<Number> getMandatory_YListener(Pane parentPane) {
             return (observableValue, number, t1) -> {
-                mandatoryLine.setStartY(super.entity.getLayoutY() + parentPane.getLayoutY() + (scale * 3) + super.entity.getHeight());
-                mandatoryLine.setEndY(super.entity.getLayoutY() + parentPane.getLayoutY() + (scale * 3) + super.entity.getHeight());
+                drawMandatory_Y(parentPane.getLayoutY());
             };
+        }
+
+        @Override
+        public void drawMandatory_Y(double yOffset) {
+            mandatoryLine.setStartY(super.entity.getLayoutY() + yOffset + (scale * 3) + super.entity.getHeight());
+            mandatoryLine.setEndY(super.entity.getLayoutY() + yOffset + (scale * 3) + super.entity.getHeight());
         }
 
         @Override
         public ChangeListener<Number> getOptional_XListener(Pane parentPane) {
             return (observableValue, number, t1) -> {
-                optionalCircle.setLayoutX(super.entity.getLayoutX() + (super.entity.getWidth() / super.connectingAmount) + parentPane.getLayoutX());
+                drawOptional_X(parentPane.getLayoutX());
             };
+        }
+
+        @Override
+        public void drawOptional_X(double xOffset) {
+            optionalCircle.setLayoutX(super.entity.getLayoutX() + (super.entity.getWidth() / super.connectingAmount) + xOffset);
         }
 
         @Override
         public ChangeListener<Number> getOptional_YListener(Pane parentPane) {
             return (observableValue, number, t1) -> {
-                optionalCircle.setLayoutY(super.entity.getLayoutY() + parentPane.getLayoutY() + (scale * 4) + super.entity.getHeight());
+                drawOptional_Y(parentPane.getLayoutY());
             };
+        }
+
+        @Override
+        public void drawOptional_Y(double xOffset) {
+            optionalCircle.setLayoutY(super.entity.getLayoutY() + xOffset + (scale * 4) + super.entity.getHeight());
         }
     }
 }

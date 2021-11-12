@@ -34,6 +34,8 @@ public class MainController {
 
     private final ContextMenu mainWorkbenchContextMenu = new ContextMenu();
 
+    CrowsFootShape crowsFootA = null; //ToDo Map&Move
+    CrowsFootShape crowsFootB = null;
     private void relationLineDrawer() { //For future: Follow State-Pattern
         for (var relation : currentProject.getRelations()) {
             var node1 = entitiesOverview.get(relation.getTableA());
@@ -67,9 +69,13 @@ public class MainController {
             line1.setStrongConnection();
             line2.setStrongConnection();
             line3.setStrongConnection();
-            CrowsFootShape crowsFootA = null;
-            CrowsFootShape crowsFootB = null;
 
+            if (crowsFootA != null) {
+                mainWorkbench.getChildren().removeAll(crowsFootA.getAllNodes());
+            }
+            if (crowsFootB != null) {
+                mainWorkbench.getChildren().removeAll(crowsFootB.getAllNodes());
+            }
             mainWorkbench.getChildren().removeIf(node -> node instanceof RelationLineView);
             mainWorkbench.getChildren().addAll(line1, line2, line3);
 
@@ -223,7 +229,7 @@ public class MainController {
                         line1.setVisible(true);
                         line2.setVisible(true);
                         crowsFootA = new CrowsFootShape.South(node1, 2);
-                        crowsFootB = new CrowsFootShape.East(node2, 2);
+                        crowsFootB = new CrowsFootShape.West(node2, 2);
                     }
                 }
             }
@@ -381,8 +387,8 @@ public class MainController {
             }
 
             if (crowsFootA != null && crowsFootB != null){
-                //crowsFootA.bindCrowsFootView(mainWorkbench, relation.getTableA_Cardinality(), relation.getTableA_Obligation());
-                //crowsFootB.bindCrowsFootView(mainWorkbench, relation.getTableB_Cardinality(), relation.getTableB_Obligation());
+                crowsFootA.draw(mainWorkbench, relation.getTableA_Cardinality(), relation.getTableA_Obligation(), 0, 0);
+                crowsFootB.draw(mainWorkbench, relation.getTableB_Cardinality(), relation.getTableB_Obligation(), 0, 0);
             }
         }
     }
