@@ -20,6 +20,7 @@ public abstract class CrowsFootShape {
     private final EntityView entity;
 
     private final ArrayList<Shape> elementsList = new ArrayList<>();
+    private final MoveStrategy[] movers = new MoveStrategy[2];
 
     public Line multiplicityLineOne = new Line();
     public Line multiplicityLineMultiple1 = new Line();
@@ -105,35 +106,38 @@ public abstract class CrowsFootShape {
     public void draw(Pane parentPane, Relation.Cardinality cardinality, Relation.Obligation obligation, double xOffset, double yOffset) {
         if (cardinality == Relation.Cardinality.MANY) {
             parentPane.getChildren().addAll(this.multiplicityLineMultiple1, this.multiplicityLineMultiple2);
+            movers[0] = () -> {
+                this.drawMultiplicityMany_X(xOffset);
+                this.drawMultiplicityMany_Y(yOffset);
+            };
         } else {
             parentPane.getChildren().add(this.multiplicityLineOne);
+            movers[0] = () -> {
+                this.drawMultiplicityOne_X(xOffset);
+                this.drawMultiplicityOne_Y(yOffset);
+            };
         }
 
         if (obligation == Relation.Obligation.CAN) {
             parentPane.getChildren().add(this.optionalCircle);
+            movers[1] = () -> {
+                this.drawOptional_X(xOffset);
+                this.drawOptional_Y(yOffset);
+            };
         } else {
             parentPane.getChildren().add(this.mandatoryLine);
+            movers[1] = () -> {
+                this.drawMandatory_X(xOffset);
+                this.drawMandatory_Y(yOffset);
+            };
         }
 
-        move(cardinality, obligation, xOffset, yOffset);
+        move();
     }
 
-    public void move(Relation.Cardinality cardinality, Relation.Obligation obligation, double xOffset, double yOffset) {
-        if (cardinality == Relation.Cardinality.MANY) {
-            this.drawMultiplicityMany_X(xOffset);
-            this.drawMultiplicityMany_Y(yOffset);
-        } else {
-            this.drawMultiplicityOne_X(xOffset);
-            this.drawMultiplicityOne_Y(yOffset);
-        }
-
-        if (obligation == Relation.Obligation.CAN) {
-            this.drawOptional_X(xOffset);
-            this.drawOptional_Y(yOffset);
-        } else {
-            this.drawMandatory_X(xOffset);
-            this.drawMandatory_Y(yOffset);
-        }
+    public void move() {
+        movers[0].move();
+        movers[1].move();
     }
 
     public void unbindCrowsFootView(Pane parentPane) {
@@ -160,6 +164,10 @@ public abstract class CrowsFootShape {
                 this.optionalCircle,
                 this.mandatoryLine
         );
+    }
+
+    private interface MoveStrategy {
+        void move();
     }
 
     public static class East extends CrowsFootShape {
