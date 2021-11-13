@@ -132,12 +132,21 @@ public abstract class CrowsFootShape {
             };
         }
 
-        move();
+        try {
+            move();
+        } catch (NotDrawnException e) {
+            e.printStackTrace();
+        }
     }
 
-    public void move() {
-        movers[0].move();
-        movers[1].move();
+    public void move() throws NotDrawnException {
+        try {
+            movers[0].move();
+            movers[1].move();
+        }
+        catch (NullPointerException npe) {
+            throw new NotDrawnException();
+        }
     }
 
     public void unbindCrowsFootView(Pane parentPane) {
@@ -169,6 +178,8 @@ public abstract class CrowsFootShape {
     private interface MoveStrategy {
         void move();
     }
+
+    public static class NotDrawnException extends Exception {}
 
     public static class East extends CrowsFootShape {
         public East(EntityView entity, int connectingAmount) {
