@@ -66,9 +66,17 @@ public class MainController {
             var line1 = new RelationLineView();
             var line2 = new RelationLineView();
             var line3 = new RelationLineView();
-            line1.setStrongConnection();
-            line2.setStrongConnection();
-            line3.setStrongConnection();
+
+            if (relation.getTableA().isWeakType() || relation.getTableB().isWeakType()) {
+                line1.setWeakConnection();
+                line2.setWeakConnection();
+                line3.setWeakConnection();
+            }
+            else {
+                line1.setStrongConnection();
+                line2.setStrongConnection();
+                line3.setStrongConnection();
+            }
 
             if (crowsFootA != null) {
                 mainWorkbench.getChildren().removeAll(crowsFootA.getAllNodes());
