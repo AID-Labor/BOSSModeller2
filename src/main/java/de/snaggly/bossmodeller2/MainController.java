@@ -3,9 +3,7 @@ package de.snaggly.bossmodeller2;
 import de.snaggly.bossmodeller2.guiLogic.CrowsFootShape;
 import de.snaggly.bossmodeller2.guiLogic.GUIMethods;
 import de.snaggly.bossmodeller2.guiLogic.Project;
-import de.snaggly.bossmodeller2.model.Attribute;
-import de.snaggly.bossmodeller2.model.Comment;
-import de.snaggly.bossmodeller2.model.Entity;
+import de.snaggly.bossmodeller2.model.*;
 import de.snaggly.bossmodeller2.view.CommentView;
 import de.snaggly.bossmodeller2.view.EntityView;
 import de.snaggly.bossmodeller2.view.RelationLineView;
@@ -31,18 +29,48 @@ public class MainController {
 
     private Project currentProject;
     private final HashMap<Entity, EntityView> entitiesOverview = new HashMap<>();
+    private final HashMap<Relation, RelationViewStruct> relationsOverview = new HashMap<>();
 
     private final ContextMenu mainWorkbenchContextMenu = new ContextMenu();
 
-    CrowsFootShape crowsFootA = null; //ToDo Map&Move
-    CrowsFootShape crowsFootB = null;
     private void relationLineDrawer() { //For future: Follow State-Pattern
         for (var relation : currentProject.getRelations()) {
             var node1 = entitiesOverview.get(relation.getTableA());
             var node2 = entitiesOverview.get(relation.getTableB());
+
+            var relationViewStruct = relationsOverview.get(relation);
+
             if (node1 == null || node2 == null) {
                 currentProject.removeRelation(relation);
+
+                if (relationViewStruct != null) {
+                    if (relationViewStruct.crowsFootA != null) {
+                        mainWorkbench.getChildren().removeAll(relationViewStruct.crowsFootA.getAllNodes());
+                    }
+                    if (relationViewStruct.crowsFootB != null) {
+                        mainWorkbench.getChildren().removeAll(relationViewStruct.crowsFootB.getAllNodes());
+                    }
+                    if (relationViewStruct.line1 != null) {
+                        mainWorkbench.getChildren().remove(relationViewStruct.line1);
+                    }
+                    if (relationViewStruct.line2 != null) {
+                        mainWorkbench.getChildren().remove(relationViewStruct.line2);
+                    }
+                    if (relationViewStruct.line3 != null) {
+                        mainWorkbench.getChildren().remove(relationViewStruct.line3);
+                    }
+                }
                 continue;
+            }
+
+            if (relationViewStruct == null) {
+                relationViewStruct = new RelationViewStruct();
+                relationViewStruct.line1 = new RelationLineView();
+                relationViewStruct.line2 = new RelationLineView();
+                relationViewStruct.line3 = new RelationLineView();
+                relationsOverview.put(relation, relationViewStruct);
+
+                mainWorkbench.getChildren().addAll(relationViewStruct.line1, relationViewStruct.line2, relationViewStruct.line3);
             }
 
             var node1w = node1.getWidth();
@@ -63,10 +91,13 @@ public class MainController {
             var midLineX = node1mx;
             var midLineY = node1my;
 
-            var line1 = new RelationLineView();
-            var line2 = new RelationLineView();
-            var line3 = new RelationLineView();
+            var line1 = relationViewStruct.line1;
+            var line2 = relationViewStruct.line2;
+            var line3 = relationViewStruct.line3;
 
+            line1.setVisible(false);
+            line2.setVisible(false);
+            line3.setVisible(false);
             if (relation.getTableA().isWeakType() || relation.getTableB().isWeakType()) {
                 line1.setWeakConnection();
                 line2.setWeakConnection();
@@ -78,14 +109,15 @@ public class MainController {
                 line3.setStrongConnection();
             }
 
+            var crowsFootA = relationViewStruct.crowsFootA;
+            var crowsFootB = relationViewStruct.crowsFootB;
+
             if (crowsFootA != null) {
                 mainWorkbench.getChildren().removeAll(crowsFootA.getAllNodes());
             }
             if (crowsFootB != null) {
                 mainWorkbench.getChildren().removeAll(crowsFootB.getAllNodes());
             }
-            mainWorkbench.getChildren().removeIf(node -> node instanceof RelationLineView);
-            mainWorkbench.getChildren().addAll(line1, line2, line3);
 
             double midPointX = node1x + node1w + (node2x - (node1x + node1w)) / 2;
             double midPointY = node1y + node1h + (node2y - (node1y + node1h)) / 2;
@@ -394,6 +426,9 @@ public class MainController {
                 }
             }
 
+            relationViewStruct.crowsFootA = crowsFootA;
+            relationViewStruct.crowsFootB = crowsFootB;
+
             if (crowsFootA != null && crowsFootB != null){
                 crowsFootA.draw(mainWorkbench, relation.getTableA_Cardinality(), relation.getTableA_Obligation(), 0, 0);
                 crowsFootB.draw(mainWorkbench, relation.getTableB_Cardinality(), relation.getTableB_Obligation(), 0, 0);
@@ -683,7 +718,7 @@ public class MainController {
         currentProject.removeEntity(selectedEntity);
     }
 
-    public void testRelation(ActionEvent actionEvent) {
+    public void testRelation() {
         relationLineDrawer();
     }
 }
