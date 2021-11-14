@@ -1,5 +1,7 @@
 package de.snaggly.bossmodeller2.model;
 
+import de.snaggly.bossmodeller2.struct.relations.ConnectingOrientation;
+
 public class Relation extends DataModel{
     private Entity tableA;
     private Entity tableB;
@@ -7,6 +9,7 @@ public class Relation extends DataModel{
     private Cardinality tableB_Cardinality;
     private Obligation tableA_Obligation;
     private Obligation tableB_Obligation;
+    public ConnectingOrientation orientation;
 
     public Relation(String name, Entity tableA, Entity tableB, Cardinality tableA_Cardinality, Cardinality tableB_Cardinality, Obligation tableA_Obligation, Obligation tableB_Obligation) {
         super(name, 0.0, 0.0);

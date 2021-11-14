@@ -18,4 +18,5 @@ module de.snaggly.bossmodeller2 {
     exports de.snaggly.bossmodeller2.guiLogic;
     exports de.snaggly.bossmodeller2.view;
     exports de.snaggly.bossmodeller2.view.viewtypes;
+    exports de.snaggly.bossmodeller2.struct.relations;
 }

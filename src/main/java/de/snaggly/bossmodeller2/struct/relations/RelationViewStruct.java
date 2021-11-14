@@ -1,4 +1,4 @@
-package de.snaggly.bossmodeller2.model;
+package de.snaggly.bossmodeller2.struct.relations;
 
 import de.snaggly.bossmodeller2.guiLogic.CrowsFootShape;
 import de.snaggly.bossmodeller2.view.RelationLineView;
