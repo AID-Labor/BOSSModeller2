@@ -3,7 +3,6 @@ package de.snaggly.bossmodeller2.guiLogic;
 import de.snaggly.bossmodeller2.model.Relation;
 import de.snaggly.bossmodeller2.view.EntityView;
 import javafx.beans.value.ChangeListener;
-import javafx.scene.Parent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -16,7 +15,7 @@ import java.util.Collection;
 public abstract class CrowsFootShape {
     private static final int scale = 5;
 
-    private final int connectingAmount;
+    private final double positionShift;
     private final EntityView entity;
 
     private final ArrayList<Shape> elementsList = new ArrayList<>();
@@ -29,7 +28,7 @@ public abstract class CrowsFootShape {
     public Line mandatoryLine = new Line();
     public Circle optionalCircle = new Circle();
 
-    public CrowsFootShape(EntityView entity, int connectingAmount) {
+    public CrowsFootShape(EntityView entity, double positionShift) {
         multiplicityLineOne.setStrokeWidth(3);
         multiplicityLineMultiple1.setStrokeWidth(3);
         multiplicityLineMultiple2.setStrokeWidth(3);
@@ -40,7 +39,7 @@ public abstract class CrowsFootShape {
         optionalCircle.setStroke(Color.BLACK);
 
         this.entity = entity;
-        this.connectingAmount = connectingAmount;
+        this.positionShift = positionShift;
 
         elementsList.add(multiplicityLineOne);
         elementsList.add(multiplicityLineMultiple1);
@@ -182,8 +181,8 @@ public abstract class CrowsFootShape {
     public static class NotDrawnException extends Exception {}
 
     public static class East extends CrowsFootShape {
-        public East(EntityView entity, int connectingAmount) {
-            super(entity, connectingAmount);
+        public East(EntityView entity, double positionShift) {
+            super(entity, positionShift);
         }
 
         @Override
@@ -210,10 +209,10 @@ public abstract class CrowsFootShape {
 
         @Override
         public void drawMultiplicityMany_Y(double yCoordinateOffset) {
-            multiplicityLineMultiple1.setStartY((super.entity.getHeight() / super.connectingAmount) + super.entity.getLayoutY() - (scale * 2) + yCoordinateOffset);
-            multiplicityLineMultiple1.setEndY((super.entity.getHeight() / super.connectingAmount) + super.entity.getLayoutY() + yCoordinateOffset);
-            multiplicityLineMultiple2.setStartY((super.entity.getHeight() / super.connectingAmount) + super.entity.getLayoutY() + (scale * 2) + yCoordinateOffset);
-            multiplicityLineMultiple2.setEndY((super.entity.getHeight() / super.connectingAmount) + super.entity.getLayoutY() + yCoordinateOffset);
+            multiplicityLineMultiple1.setStartY((super.entity.getHeight() * super.positionShift) + super.entity.getLayoutY() - (scale * 2) + yCoordinateOffset);
+            multiplicityLineMultiple1.setEndY((super.entity.getHeight() * super.positionShift) + super.entity.getLayoutY() + yCoordinateOffset);
+            multiplicityLineMultiple2.setStartY((super.entity.getHeight() * super.positionShift) + super.entity.getLayoutY() + (scale * 2) + yCoordinateOffset);
+            multiplicityLineMultiple2.setEndY((super.entity.getHeight() * super.positionShift) + super.entity.getLayoutY() + yCoordinateOffset);
         }
 
         @Override
@@ -238,8 +237,8 @@ public abstract class CrowsFootShape {
 
         @Override
         public void drawMultiplicityOne_Y(double yOffset) {
-            multiplicityLineOne.setStartY((super.entity.getHeight() / super.connectingAmount) + super.entity.getLayoutY() - (scale * 2) + yOffset);
-            multiplicityLineOne.setEndY((super.entity.getHeight() / super.connectingAmount) + super.entity.getLayoutY() + (scale * 2) + yOffset);
+            multiplicityLineOne.setStartY((super.entity.getHeight() * super.positionShift) + super.entity.getLayoutY() - (scale * 2) + yOffset);
+            multiplicityLineOne.setEndY((super.entity.getHeight() * super.positionShift) + super.entity.getLayoutY() + (scale * 2) + yOffset);
         }
 
         @Override
@@ -264,8 +263,8 @@ public abstract class CrowsFootShape {
 
         @Override
         public void drawMandatory_Y(double yOffset) {
-            mandatoryLine.setStartY((super.entity.getHeight() / super.connectingAmount) + super.entity.getLayoutY() - (scale * 2) + yOffset);
-            mandatoryLine.setEndY((super.entity.getHeight() / super.connectingAmount) + super.entity.getLayoutY() + (scale * 2) + yOffset);
+            mandatoryLine.setStartY((super.entity.getHeight() * super.positionShift) + super.entity.getLayoutY() - (scale * 2) + yOffset);
+            mandatoryLine.setEndY((super.entity.getHeight() * super.positionShift) + super.entity.getLayoutY() + (scale * 2) + yOffset);
         }
 
         @Override
@@ -289,13 +288,13 @@ public abstract class CrowsFootShape {
 
         @Override
         public void drawOptional_Y(double yOffset) {
-            optionalCircle.setLayoutY(super.entity.getLayoutY() + (super.entity.getHeight() / super.connectingAmount) + yOffset);
+            optionalCircle.setLayoutY(super.entity.getLayoutY() + (super.entity.getHeight() * super.positionShift) + yOffset);
         }
     }
 
     public static class West extends CrowsFootShape {
-        public West(EntityView entity, int connectingAmount) {
-            super(entity, connectingAmount);
+        public West(EntityView entity, double positionShift) {
+            super(entity, positionShift);
         }
 
         @Override
@@ -322,10 +321,10 @@ public abstract class CrowsFootShape {
 
         @Override
         public void drawMultiplicityMany_Y(double yOffset) {
-            multiplicityLineMultiple1.setStartY((super.entity.getHeight() / super.connectingAmount) + super.entity.getLayoutY() - (scale * 2) + yOffset);
-            multiplicityLineMultiple1.setEndY((super.entity.getHeight() / super.connectingAmount) + super.entity.getLayoutY() + yOffset);
-            multiplicityLineMultiple2.setStartY((super.entity.getHeight() / super.connectingAmount) + super.entity.getLayoutY() + (scale * 2) + yOffset);
-            multiplicityLineMultiple2.setEndY((super.entity.getHeight() / super.connectingAmount) + super.entity.getLayoutY() + yOffset);
+            multiplicityLineMultiple1.setStartY((super.entity.getHeight() * super.positionShift) + super.entity.getLayoutY() - (scale * 2) + yOffset);
+            multiplicityLineMultiple1.setEndY((super.entity.getHeight() * super.positionShift) + super.entity.getLayoutY() + yOffset);
+            multiplicityLineMultiple2.setStartY((super.entity.getHeight() * super.positionShift) + super.entity.getLayoutY() + (scale * 2) + yOffset);
+            multiplicityLineMultiple2.setEndY((super.entity.getHeight() * super.positionShift) + super.entity.getLayoutY() + yOffset);
         }
 
         @Override
@@ -350,8 +349,8 @@ public abstract class CrowsFootShape {
 
         @Override
         public void drawMultiplicityOne_Y(double yOffset) {
-            multiplicityLineOne.setStartY((super.entity.getHeight() / super.connectingAmount) + super.entity.getLayoutY() - (scale * 2) + yOffset);
-            multiplicityLineOne.setEndY((super.entity.getHeight() / super.connectingAmount) + super.entity.getLayoutY() + (scale * 2) + yOffset);
+            multiplicityLineOne.setStartY((super.entity.getHeight() * super.positionShift) + super.entity.getLayoutY() - (scale * 2) + yOffset);
+            multiplicityLineOne.setEndY((super.entity.getHeight() * super.positionShift) + super.entity.getLayoutY() + (scale * 2) + yOffset);
         }
 
         @Override
@@ -376,8 +375,8 @@ public abstract class CrowsFootShape {
 
         @Override
         public void drawMandatory_Y(double yOffset) {
-            mandatoryLine.setStartY((super.entity.getHeight() / super.connectingAmount) + super.entity.getLayoutY() - (scale * 2) + yOffset);
-            mandatoryLine.setEndY((super.entity.getHeight() / super.connectingAmount) + super.entity.getLayoutY() + (scale * 2) + yOffset);
+            mandatoryLine.setStartY((super.entity.getHeight() * super.positionShift) + super.entity.getLayoutY() - (scale * 2) + yOffset);
+            mandatoryLine.setEndY((super.entity.getHeight() * super.positionShift) + super.entity.getLayoutY() + (scale * 2) + yOffset);
         }
 
         @Override
@@ -401,13 +400,13 @@ public abstract class CrowsFootShape {
 
         @Override
         public void drawOptional_Y(double yOffset) {
-            optionalCircle.setLayoutY(super.entity.getLayoutY() + (super.entity.getHeight() / super.connectingAmount) + yOffset);
+            optionalCircle.setLayoutY(super.entity.getLayoutY() + (super.entity.getHeight() * super.positionShift) + yOffset);
         }
     }
 
     public static class North extends CrowsFootShape {
-        public North(EntityView entity, int connectingAmount) {
-            super(entity, connectingAmount);
+        public North(EntityView entity, double positionShift) {
+            super(entity, positionShift);
         }
 
         @Override
@@ -419,10 +418,10 @@ public abstract class CrowsFootShape {
 
         @Override
         public void drawMultiplicityMany_X(double xOffset) {
-            multiplicityLineMultiple1.setStartX((super.entity.getWidth() / super.connectingAmount) - (scale * 2) + super.entity.getLayoutX() + xOffset);
-            multiplicityLineMultiple1.setEndX((super.entity.getWidth() / super.connectingAmount) + super.entity.getLayoutX() + xOffset);
-            multiplicityLineMultiple2.setStartX((super.entity.getWidth() / super.connectingAmount) + (scale * 2) + super.entity.getLayoutX() + xOffset);
-            multiplicityLineMultiple2.setEndX((super.entity.getWidth() / super.connectingAmount) + super.entity.getLayoutX() + xOffset);
+            multiplicityLineMultiple1.setStartX((super.entity.getWidth() * super.positionShift) - (scale * 2) + super.entity.getLayoutX() + xOffset);
+            multiplicityLineMultiple1.setEndX((super.entity.getWidth() * super.positionShift) + super.entity.getLayoutX() + xOffset);
+            multiplicityLineMultiple2.setStartX((super.entity.getWidth() * super.positionShift) + (scale * 2) + super.entity.getLayoutX() + xOffset);
+            multiplicityLineMultiple2.setEndX((super.entity.getWidth() * super.positionShift) + super.entity.getLayoutX() + xOffset);
         }
 
         @Override
@@ -449,8 +448,8 @@ public abstract class CrowsFootShape {
 
         @Override
         public void drawMultiplicityOne_X(double xOffset) {
-            multiplicityLineOne.setStartX((super.entity.getWidth() / super.connectingAmount) - (scale * 2) + super.entity.getLayoutX() + xOffset);
-            multiplicityLineOne.setEndX((super.entity.getWidth() / super.connectingAmount) + (scale * 2) + super.entity.getLayoutX() + xOffset);
+            multiplicityLineOne.setStartX((super.entity.getWidth() * super.positionShift) - (scale * 2) + super.entity.getLayoutX() + xOffset);
+            multiplicityLineOne.setEndX((super.entity.getWidth() * super.positionShift) + (scale * 2) + super.entity.getLayoutX() + xOffset);
         }
 
         @Override
@@ -475,8 +474,8 @@ public abstract class CrowsFootShape {
 
         @Override
         public void drawMandatory_X(double xOffset) {
-            mandatoryLine.setStartX((super.entity.getWidth() / super.connectingAmount) + super.entity.getLayoutX() - (scale * 2) + xOffset);
-            mandatoryLine.setEndX((super.entity.getWidth() / super.connectingAmount) + super.entity.getLayoutX() + (scale * 2) + xOffset);
+            mandatoryLine.setStartX((super.entity.getWidth() * super.positionShift) + super.entity.getLayoutX() - (scale * 2) + xOffset);
+            mandatoryLine.setEndX((super.entity.getWidth() * super.positionShift) + super.entity.getLayoutX() + (scale * 2) + xOffset);
         }
 
         @Override
@@ -501,7 +500,7 @@ public abstract class CrowsFootShape {
 
         @Override
         public void drawOptional_X(double xOffset) {
-            optionalCircle.setLayoutX(super.entity.getLayoutX() + (super.entity.getWidth() / super.connectingAmount) + xOffset);
+            optionalCircle.setLayoutX(super.entity.getLayoutX() + (super.entity.getWidth() * super.positionShift) + xOffset);
         }
 
         @Override
@@ -518,8 +517,8 @@ public abstract class CrowsFootShape {
     }
 
     public static class South extends CrowsFootShape {
-        public South(EntityView entity, int connectingAmount) {
-            super(entity, connectingAmount);
+        public South(EntityView entity, double positionShift) {
+            super(entity, positionShift);
         }
 
         @Override
@@ -531,10 +530,10 @@ public abstract class CrowsFootShape {
 
         @Override
         public void drawMultiplicityMany_X(double xOffset) {
-            multiplicityLineMultiple1.setStartX((super.entity.getWidth() / super.connectingAmount) - (scale * 2) + super.entity.getLayoutX() + xOffset);
-            multiplicityLineMultiple1.setEndX((super.entity.getWidth() / super.connectingAmount) + super.entity.getLayoutX() + xOffset);
-            multiplicityLineMultiple2.setStartX((super.entity.getWidth() / super.connectingAmount) + (scale * 2) + super.entity.getLayoutX() + xOffset);
-            multiplicityLineMultiple2.setEndX((super.entity.getWidth() / super.connectingAmount) + super.entity.getLayoutX() + xOffset);
+            multiplicityLineMultiple1.setStartX((super.entity.getWidth() * super.positionShift) - (scale * 2) + super.entity.getLayoutX() + xOffset);
+            multiplicityLineMultiple1.setEndX((super.entity.getWidth() * super.positionShift) + super.entity.getLayoutX() + xOffset);
+            multiplicityLineMultiple2.setStartX((super.entity.getWidth() * super.positionShift) + (scale * 2) + super.entity.getLayoutX() + xOffset);
+            multiplicityLineMultiple2.setEndX((super.entity.getWidth() * super.positionShift) + super.entity.getLayoutX() + xOffset);
         }
 
         @Override
@@ -561,8 +560,8 @@ public abstract class CrowsFootShape {
 
         @Override
         public void drawMultiplicityOne_X(double xOffset) {
-            multiplicityLineOne.setStartX((super.entity.getWidth() / super.connectingAmount) - (scale * 2) + super.entity.getLayoutX() + xOffset);
-            multiplicityLineOne.setEndX((super.entity.getWidth() / super.connectingAmount) + (scale * 2) + super.entity.getLayoutX() + xOffset);
+            multiplicityLineOne.setStartX((super.entity.getWidth() * super.positionShift) - (scale * 2) + super.entity.getLayoutX() + xOffset);
+            multiplicityLineOne.setEndX((super.entity.getWidth() * super.positionShift) + (scale * 2) + super.entity.getLayoutX() + xOffset);
         }
 
         @Override
@@ -587,8 +586,8 @@ public abstract class CrowsFootShape {
 
         @Override
         public void drawMandatory_X(double xOffset) {
-            mandatoryLine.setStartX((super.entity.getWidth() / super.connectingAmount) + super.entity.getLayoutX() - (scale * 2) + xOffset);
-            mandatoryLine.setEndX((super.entity.getWidth() / super.connectingAmount) + super.entity.getLayoutX() + (scale * 2) + xOffset);
+            mandatoryLine.setStartX((super.entity.getWidth() * super.positionShift) + super.entity.getLayoutX() - (scale * 2) + xOffset);
+            mandatoryLine.setEndX((super.entity.getWidth() * super.positionShift) + super.entity.getLayoutX() + (scale * 2) + xOffset);
         }
 
         @Override
@@ -613,7 +612,7 @@ public abstract class CrowsFootShape {
 
         @Override
         public void drawOptional_X(double xOffset) {
-            optionalCircle.setLayoutX(super.entity.getLayoutX() + (super.entity.getWidth() / super.connectingAmount) + xOffset);
+            optionalCircle.setLayoutX(super.entity.getLayoutX() + (super.entity.getWidth() * super.positionShift) + xOffset);
         }
 
         @Override
