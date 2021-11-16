@@ -256,11 +256,6 @@ public class MainController {
             var node2x = node2.getLayoutX();
             var node2y = node2.getLayoutY();
 
-            var node1mx = node1x + (node1w / 2.0);
-            var node1my = node1y + (node1h / 2.0);
-            var node2mx = node2x + (node2w / 2.0);
-            var node2my = node2y + (node2h / 2.0);
-
             double midPointX = node1x + node1w + (node2x - (node1x + node1w)) / 2;
             double midPointY = node1y + node1h + (node2y - (node1y + node1h)) / 2;
 
@@ -309,18 +304,18 @@ public class MainController {
                 case Q1_O:
                     entityALeftNorth = entityAConnections.getNorthConnectionsLeft();
                     entityBLeftSouth = entityBConnections.getSouthConnectionsLeft();
-                    line1.setStartX(node1mx);
-                    line1.setStartY(node1my - (node1h / 2));
-                    line1.setEndX(node1mx);
+                    line1.setStartX(node1x + (node1w * entityALeftNorth / entityAConnections.getNorthConnections()));
+                    line1.setStartY(node1y);
+                    line1.setEndX(node1x + (node1w * entityALeftNorth / entityAConnections.getNorthConnections()));
                     line1.setEndY(midPointY);
-                    line2.setStartX(node1mx);
+                    line2.setStartX(node1x + (node1w * entityALeftNorth / entityAConnections.getNorthConnections()));
                     line2.setStartY(midPointY);
-                    line2.setEndX(node2mx);
+                    line2.setEndX(node2x + (node2w * entityBLeftSouth / entityBConnections.getSouthConnections()));
                     line2.setEndY(midPointY);
-                    line3.setStartX(node2mx);
+                    line3.setStartX(node2x + (node2w * entityBLeftSouth / entityBConnections.getSouthConnections()));
                     line3.setStartY(midPointY);
-                    line3.setEndX(node2mx);
-                    line3.setEndY(node2my + (node2h / 2));
+                    line3.setEndX(node2x + (node2w * entityBLeftSouth / entityBConnections.getSouthConnections()));
+                    line3.setEndY(node2y + node2h);
                     line1.setVisible(true);
                     line2.setVisible(true);
                     line3.setVisible(true);
@@ -330,15 +325,15 @@ public class MainController {
                 case Q1_R1:
                     entityALeftEast = entityAConnections.getEastConnectionsLeft();
                     entityBLeftSouth = entityBConnections.getSouthConnectionsLeft();
-                    line1.setStartX(node1mx + (node1w / 2));
-                    line1.setStartY(node1my);
-                    line1.setEndX(node2mx);
-                    line1.setEndY(node1my);
+                    line1.setStartX(node1x + node1w);
+                    line1.setStartY(node1y + (node1h * entityALeftEast / entityAConnections.getEastConnections()));
+                    line1.setEndX(node2x + (node2w * entityBLeftSouth / entityBConnections.getSouthConnections()));
+                    line1.setEndY(node1y + (node1h * entityALeftEast / entityAConnections.getEastConnections()));
 
-                    line2.setStartX(node2mx);
-                    line2.setStartY(node1my);
-                    line2.setEndX(node2mx);
-                    line2.setEndY(node2my + (node2h / 2));
+                    line2.setStartX(node2x + (node2w * entityBLeftSouth / entityBConnections.getSouthConnections()));;
+                    line2.setStartY(node1y + (node1h * entityALeftEast / entityAConnections.getEastConnections()));
+                    line2.setEndX(node2x + (node2w * entityBLeftSouth / entityBConnections.getSouthConnections()));;
+                    line2.setEndY(node2y + node2h);
                     line1.setVisible(true);
                     line2.setVisible(true);
                     crowsFootA = new CrowsFootShape.East(node1, entityALeftEast / entityAConnections.getEastConnections());
@@ -347,15 +342,15 @@ public class MainController {
                 case Q1_R4:
                     entityALeftNorth = entityAConnections.getNorthConnectionsLeft();
                     entityBLeftWest = entityBConnections.getWestConnectionsLeft();
-                    line1.setStartX(node1mx);
-                    line1.setStartY(node1my - (node1h / 2));
-                    line1.setEndX(node1mx);
-                    line1.setEndY(node2my);
+                    line1.setStartX(node1x + (node1w * entityALeftNorth / entityAConnections.getNorthConnections()));
+                    line1.setStartY(node1y);
+                    line1.setEndX(node1x + (node1w * entityALeftNorth / entityAConnections.getNorthConnections()));
+                    line1.setEndY(node2y + (node2h * entityBLeftWest / entityBConnections.getWestConnections()));
 
-                    line2.setStartX(node1mx);
-                    line2.setStartY(node2my);
-                    line2.setEndX(node2mx - (node2w / 2));
-                    line2.setEndY(node2my);
+                    line2.setStartX(node1x + (node1w * entityALeftNorth / entityAConnections.getNorthConnections()));
+                    line2.setStartY(node2y + (node2h * entityBLeftWest / entityBConnections.getWestConnections()));
+                    line2.setEndX(node2x);
+                    line2.setEndY(node2y + (node2h * entityBLeftWest / entityBConnections.getWestConnections()));
                     line1.setVisible(true);
                     line2.setVisible(true);
                     crowsFootA = new CrowsFootShape.North(node1, entityALeftNorth / entityAConnections.getNorthConnections());
@@ -364,18 +359,18 @@ public class MainController {
                 case Q2_R:
                     entityALeftEast = entityAConnections.getEastConnectionsLeft();
                     entityBLeftWest = entityBConnections.getWestConnectionsLeft();
-                    line1.setStartX(node1mx + (node1w / 2));
-                    line1.setStartY(node1my);
+                    line1.setStartX(node1x + node1w);
+                    line1.setStartY(node1y + (node1h * entityALeftEast / entityAConnections.getEastConnections()));
                     line1.setEndX(midPointX);
-                    line1.setEndY(node1my);
+                    line1.setEndY(node1y + (node1h * entityALeftEast / entityAConnections.getEastConnections()));
                     line2.setStartX(midPointX);
-                    line2.setStartY(node1my);
+                    line2.setStartY(node1y + (node1h * entityALeftEast / entityAConnections.getEastConnections()));
                     line2.setEndX(midPointX);
-                    line2.setEndY(node2my);
+                    line2.setEndY(node2y + (node2h * entityBLeftWest / entityBConnections.getWestConnections()));
                     line3.setStartX(midPointX);
-                    line3.setStartY(node2my);
-                    line3.setEndX(node2mx - (node2w / 2));
-                    line3.setEndY(node2my);
+                    line3.setStartY(node2y + (node2h * entityBLeftWest / entityBConnections.getWestConnections()));
+                    line3.setEndX(node2x);
+                    line3.setEndY(node2y + (node2h * entityBLeftWest / entityBConnections.getWestConnections()));
                     line1.setVisible(true);
                     line2.setVisible(true);
                     line3.setVisible(true);
@@ -385,18 +380,18 @@ public class MainController {
                 case Q2_U:
                     entityALeftSouth = entityAConnections.getSouthConnectionsLeft();
                     entityBLeftNorth = entityBConnections.getNorthConnectionsLeft();
-                    line1.setStartX(node1mx);
-                    line1.setStartY(node1my + (node1h / 2));
-                    line1.setEndX(node1mx);
+                    line1.setStartX(node1x + (node1w * entityALeftSouth / entityAConnections.getSouthConnections()));
+                    line1.setStartY(node1y + node1h);
+                    line1.setEndX(node1x + (node1w * entityALeftSouth / entityAConnections.getSouthConnections()));
                     line1.setEndY(midPointY);
-                    line2.setStartX(node1mx);
+                    line2.setStartX(node1x + (node1w * entityALeftSouth / entityAConnections.getSouthConnections()));
                     line2.setStartY(midPointY);
-                    line2.setEndX(node2mx);
+                    line2.setEndX(node2x + (node2w * entityBLeftNorth / entityBConnections.getNorthConnections()));
                     line2.setEndY(midPointY);
-                    line3.setStartX(node2mx);
+                    line3.setStartX(node2x + (node2w * entityBLeftNorth / entityBConnections.getNorthConnections()));
                     line3.setStartY(midPointY);
-                    line3.setEndX(node2mx);
-                    line3.setEndY(node2my - (node2h / 2));
+                    line3.setEndX(node2x + (node2w * entityBLeftNorth / entityBConnections.getNorthConnections()));
+                    line3.setEndY(node2y);
                     line1.setVisible(true);
                     line2.setVisible(true);
                     line3.setVisible(true);
@@ -406,15 +401,15 @@ public class MainController {
                 case Q2_R1:
                     entityALeftEast = entityAConnections.getEastConnectionsLeft();
                     entityBLeftNorth = entityBConnections.getNorthConnectionsLeft();
-                    line1.setStartX(node1mx + (node1w / 2));
-                    line1.setStartY(node1my);
-                    line1.setEndX(node2mx);
-                    line1.setEndY(node1my);
+                    line1.setStartX(node1x + node1w);
+                    line1.setStartY(node1y + (node1h * entityALeftEast / entityAConnections.getEastConnections()));
+                    line1.setEndX(node2x + (node2w * entityBLeftNorth / entityBConnections.getNorthConnections()));
+                    line1.setEndY(node1y + (node1h * entityALeftEast / entityAConnections.getEastConnections()));
 
-                    line2.setStartX(node2mx);
-                    line2.setStartY(node1my);
-                    line2.setEndX(node2mx);
-                    line2.setEndY(node2my - (node2h / 2));
+                    line2.setStartX(node2x + (node2w * entityBLeftNorth / entityBConnections.getNorthConnections()));
+                    line2.setStartY(node1y + (node1h * entityALeftEast / entityAConnections.getEastConnections()));
+                    line2.setEndX(node2x + (node2w * entityBLeftNorth / entityBConnections.getNorthConnections()));
+                    line2.setEndY(node2y);
                     line1.setVisible(true);
                     line2.setVisible(true);
                     crowsFootA = new CrowsFootShape.East(node1, entityALeftEast / entityAConnections.getEastConnections());
@@ -423,15 +418,15 @@ public class MainController {
                 case Q2_R2:
                     entityALeftSouth = entityAConnections.getSouthConnectionsLeft();
                     entityBLeftWest = entityBConnections.getWestConnectionsLeft();
-                    line1.setStartX(node1mx);
-                    line1.setStartY(node1my + (node1h / 2));
-                    line1.setEndX(node1mx);
-                    line1.setEndY(node2my);
+                    line1.setStartX(node1x + (node1w * entityALeftSouth / entityAConnections.getSouthConnections()));
+                    line1.setStartY(node1y + node1h);
+                    line1.setEndX(node1x + (node1w * entityALeftSouth / entityAConnections.getSouthConnections()));
+                    line1.setEndY(node2y + (node2h * entityBLeftWest / entityBConnections.getWestConnections()));
 
-                    line2.setStartX(node1mx);
-                    line2.setStartY(node2my);
-                    line2.setEndX(node2mx - (node2w / 2));
-                    line2.setEndY(node2my);
+                    line2.setStartX(node1x + (node1w * entityALeftSouth / entityAConnections.getSouthConnections()));
+                    line2.setStartY(node2y + (node2h * entityBLeftWest / entityBConnections.getWestConnections()));
+                    line2.setEndX(node2x);
+                    line2.setEndY(node2y + (node2h * entityBLeftWest / entityBConnections.getWestConnections()));
                     line1.setVisible(true);
                     line2.setVisible(true);
                     crowsFootA = new CrowsFootShape.South(node1, entityALeftSouth / entityAConnections.getSouthConnections());
@@ -440,18 +435,18 @@ public class MainController {
                 case Q3_L:
                     entityALeftWest = entityAConnections.getWestConnectionsLeft();
                     entityBLeftEast = entityBConnections.getEastConnectionsLeft();
-                    line1.setStartX(node1mx - (node1w / 2));
-                    line1.setStartY(node1my);
+                    line1.setStartX(node1x);
+                    line1.setStartY(node1y + (node1h * entityALeftWest / entityAConnections.getWestConnections()));
                     line1.setEndX(midPointX);
-                    line1.setEndY(node1my);
+                    line1.setEndY(node1y + (node1h * entityALeftWest / entityAConnections.getWestConnections()));
                     line2.setStartX(midPointX);
-                    line2.setStartY(node1my);
+                    line2.setStartY(node1y + (node1h * entityALeftWest / entityAConnections.getWestConnections()));
                     line2.setEndX(midPointX);
-                    line2.setEndY(node2my);
+                    line2.setEndY(node2y + (node2h * entityBLeftEast / entityBConnections.getEastConnections()));
                     line3.setStartX(midPointX);
-                    line3.setStartY(node2my);
-                    line3.setEndX(node2mx + (node2w / 2));
-                    line3.setEndY(node2my);
+                    line3.setStartY(node2y + (node2h * entityBLeftEast / entityBConnections.getEastConnections()));
+                    line3.setEndX(node2x + node2w);
+                    line3.setEndY(node2y + (node2h * entityBLeftEast / entityBConnections.getEastConnections()));
                     line1.setVisible(true);
                     line2.setVisible(true);
                     line3.setVisible(true);
@@ -461,18 +456,18 @@ public class MainController {
                 case Q3_U:
                     entityALeftSouth = entityAConnections.getSouthConnectionsLeft();
                     entityBLeftNorth = entityBConnections.getNorthConnectionsLeft();
-                    line1.setStartX(node1mx);
-                    line1.setStartY(node1my + (node1h / 2));
-                    line1.setEndX(node1mx);
+                    line1.setStartX(node1x + (node1w * entityALeftSouth / entityAConnections.getSouthConnections()));
+                    line1.setStartY(node1y + node1h);
+                    line1.setEndX(node1x + (node1w * entityALeftSouth / entityAConnections.getSouthConnections()));
                     line1.setEndY(midPointY);
-                    line2.setStartX(node1mx);
+                    line2.setStartX(node1x + (node1w * entityALeftSouth / entityAConnections.getSouthConnections()));
                     line2.setStartY(midPointY);
-                    line2.setEndX(node2mx);
+                    line2.setEndX(node2x + (node2w * entityBLeftNorth / entityBConnections.getNorthConnections()));
                     line2.setEndY(midPointY);
-                    line3.setStartX(node2mx);
+                    line3.setStartX(node2x + (node2w * entityBLeftNorth / entityBConnections.getNorthConnections()));
                     line3.setStartY(midPointY);
-                    line3.setEndX(node2mx);
-                    line3.setEndY(node2my - (node2h / 2));
+                    line3.setEndX(node2x + (node2w * entityBLeftNorth / entityBConnections.getNorthConnections()));
+                    line3.setEndY(node2y);
                     line1.setVisible(true);
                     line2.setVisible(true);
                     line3.setVisible(true);
@@ -482,15 +477,15 @@ public class MainController {
                 case Q3_R3:
                     entityALeftWest = entityAConnections.getWestConnectionsLeft();
                     entityBLeftNorth = entityBConnections.getNorthConnectionsLeft();
-                    line1.setStartX(node1mx - (node1w / 2));
-                    line1.setStartY(node1my);
-                    line1.setEndX(node2mx);
-                    line1.setEndY(node1my);
+                    line1.setStartX(node1x);
+                    line1.setStartY(node1y + (node1h * entityALeftWest / entityAConnections.getWestConnections()));
+                    line1.setEndX(node2x + (node2w * entityBLeftNorth / entityBConnections.getNorthConnections()));
+                    line1.setEndY(node1y + (node1h * entityALeftWest / entityAConnections.getWestConnections()));
 
-                    line2.setStartX(node2mx);
-                    line2.setStartY(node1my);
-                    line2.setEndX(node2mx);
-                    line2.setEndY(node2my - (node2h / 2));
+                    line2.setStartX(node2x + (node2w * entityBLeftNorth / entityBConnections.getNorthConnections()));
+                    line2.setStartY(node1y + (node1h * entityALeftWest / entityAConnections.getWestConnections()));
+                    line2.setEndX(node2x + (node2w * entityBLeftNorth / entityBConnections.getNorthConnections()));
+                    line2.setEndY(node2y);
                     line1.setVisible(true);
                     line2.setVisible(true);
                     crowsFootA = new CrowsFootShape.West(node1, entityALeftWest / entityAConnections.getWestConnections());
@@ -499,15 +494,15 @@ public class MainController {
                 case Q3_R2:
                     entityALeftSouth = entityAConnections.getSouthConnectionsLeft();
                     entityBLeftEast = entityBConnections.getEastConnectionsLeft();
-                    line1.setStartX(node1mx);
-                    line1.setStartY(node1my + (node1h / 2));
-                    line1.setEndX(node1mx);
-                    line1.setEndY(node2my);
+                    line1.setStartX(node1x + (node1w * entityALeftSouth / entityAConnections.getSouthConnections()));
+                    line1.setStartY(node1y + node1h);
+                    line1.setEndX(node1x + (node1w * entityALeftSouth / entityAConnections.getSouthConnections()));
+                    line1.setEndY(node2y + (node2h * entityBLeftEast / entityBConnections.getEastConnections()));
 
-                    line2.setStartX(node1mx);
-                    line2.setStartY(node2my);
-                    line2.setEndX(node2mx + (node2w / 2));
-                    line2.setEndY(node2my);
+                    line2.setStartX(node1x + (node1w * entityALeftSouth / entityAConnections.getSouthConnections()));
+                    line2.setStartY(node2y + (node2h * entityBLeftEast / entityBConnections.getEastConnections()));
+                    line2.setEndX(node2x + node2w);
+                    line2.setEndY(node2y + (node2h * entityBLeftEast / entityBConnections.getEastConnections()));
                     line1.setVisible(true);
                     line2.setVisible(true);
                     crowsFootA = new CrowsFootShape.South(node1, entityALeftSouth / entityAConnections.getSouthConnections());
@@ -516,18 +511,18 @@ public class MainController {
                 case Q4_L:
                     entityALeftWest = entityAConnections.getWestConnectionsLeft();
                     entityBLeftEast = entityBConnections.getEastConnectionsLeft();
-                    line1.setStartX(node1mx - (node1w / 2));
-                    line1.setStartY(node1my);
+                    line1.setStartX(node1x);
+                    line1.setStartY(node1y + (node1h * entityALeftWest / entityAConnections.getWestConnections()));
                     line1.setEndX(midPointX);
-                    line1.setEndY(node1my);
+                    line1.setEndY(node1y + (node1h * entityALeftWest / entityAConnections.getWestConnections()));
                     line2.setStartX(midPointX);
-                    line2.setStartY(node1my);
+                    line2.setStartY(node1y + (node1h * entityALeftWest / entityAConnections.getWestConnections()));
                     line2.setEndX(midPointX);
-                    line2.setEndY(node2my);
+                    line2.setEndY(node2y + (node2h * entityBLeftEast / entityBConnections.getEastConnections()));
                     line3.setStartX(midPointX);
-                    line3.setStartY(node2my);
-                    line3.setEndX(node2mx + (node2w / 2));
-                    line3.setEndY(node2my);
+                    line3.setStartY(node2y + (node2h * entityBLeftEast / entityBConnections.getEastConnections()));
+                    line3.setEndX(node2x + node2w);
+                    line3.setEndY(node2y + (node2h * entityBLeftEast / entityBConnections.getEastConnections()));
                     line1.setVisible(true);
                     line2.setVisible(true);
                     line3.setVisible(true);
@@ -537,18 +532,18 @@ public class MainController {
                 case Q4_O:
                     entityALeftNorth = entityAConnections.getNorthConnectionsLeft();
                     entityBLeftSouth = entityBConnections.getSouthConnectionsLeft();
-                    line1.setStartX(node1mx);
-                    line1.setStartY(node1my - (node1h / 2));
-                    line1.setEndX(node1mx);
+                    line1.setStartX(node1x + (node1w * entityALeftNorth / entityAConnections.getNorthConnections()));
+                    line1.setStartY(node1y);
+                    line1.setEndX(node1x + (node1w * entityALeftNorth / entityAConnections.getNorthConnections()));
                     line1.setEndY(midPointY);
-                    line2.setStartX(node1mx);
+                    line2.setStartX(node1x + (node1w * entityALeftNorth / entityAConnections.getNorthConnections()));
                     line2.setStartY(midPointY);
-                    line2.setEndX(node2mx);
+                    line2.setEndX(node2x + (node2w * entityBLeftSouth / entityBConnections.getSouthConnections()));
                     line2.setEndY(midPointY);
-                    line3.setStartX(node2mx);
+                    line3.setStartX(node2x + (node2w * entityBLeftSouth / entityBConnections.getSouthConnections()));
                     line3.setStartY(midPointY);
-                    line3.setEndX(node2mx);
-                    line3.setEndY(node2my + (node2h / 2));
+                    line3.setEndX(node2x + (node2w * entityBLeftSouth / entityBConnections.getSouthConnections()));
+                    line3.setEndY(node2y + node2h);
                     line1.setVisible(true);
                     line2.setVisible(true);
                     line3.setVisible(true);
@@ -558,15 +553,15 @@ public class MainController {
                 case Q4_R3:
                     entityALeftWest = entityAConnections.getWestConnectionsLeft();
                     entityBLeftSouth = entityBConnections.getSouthConnectionsLeft();
-                    line1.setStartX(node1mx - (node1w / 2));
-                    line1.setStartY(node1my);
-                    line1.setEndX(node2mx);
-                    line1.setEndY(node1my);
+                    line1.setStartX(node1x);
+                    line1.setStartY(node1y + (node1h * entityALeftWest / entityAConnections.getWestConnections()));
+                    line1.setEndX(node2x + (node2w * entityBLeftSouth / entityBConnections.getSouthConnections()));
+                    line1.setEndY(node1y + (node1h * entityALeftWest / entityAConnections.getWestConnections()));
 
-                    line2.setStartX(node2mx);
-                    line2.setStartY(node1my);
-                    line2.setEndX(node2mx);
-                    line2.setEndY(node2my + (node2h / 2));
+                    line2.setStartX(node2x + (node2w * entityBLeftSouth / entityBConnections.getSouthConnections()));
+                    line2.setStartY(node1y + (node1h * entityALeftWest / entityAConnections.getWestConnections()));
+                    line2.setEndX(node2x + (node2w * entityBLeftSouth / entityBConnections.getSouthConnections()));
+                    line2.setEndY(node2y + node2h);
                     line1.setVisible(true);
                     line2.setVisible(true);
                     crowsFootA = new CrowsFootShape.West(node1, entityALeftWest / entityAConnections.getWestConnections());
@@ -575,15 +570,15 @@ public class MainController {
                 case Q4_R4:
                     entityALeftNorth = entityAConnections.getNorthConnectionsLeft();
                     entityBLeftEast = entityBConnections.getEastConnectionsLeft();
-                    line1.setStartX(node1mx);
-                    line1.setStartY(node1my - (node1h / 2));
-                    line1.setEndX(node1mx);
-                    line1.setEndY(node2my);
+                    line1.setStartX(node1x + (node1w * entityALeftNorth / entityAConnections.getNorthConnections()));
+                    line1.setStartY(node1y);
+                    line1.setEndX(node1x + (node1w * entityALeftNorth / entityAConnections.getNorthConnections()));
+                    line1.setEndY(node2y + (node2h * entityBLeftEast / entityBConnections.getEastConnections()));
 
-                    line2.setStartX(node1mx);
-                    line2.setStartY(node2my);
-                    line2.setEndX(node2mx + (node2w / 2));
-                    line2.setEndY(node2my);
+                    line2.setStartX(node1x + (node1w * entityALeftNorth / entityAConnections.getNorthConnections()));
+                    line2.setStartY(node2y + (node2h * entityBLeftEast / entityBConnections.getEastConnections()));
+                    line2.setEndX(node2x + node2w);
+                    line2.setEndY(node2y + (node2h * entityBLeftEast / entityBConnections.getEastConnections()));
                     line1.setVisible(true);
                     line2.setVisible(true);
                     crowsFootA = new CrowsFootShape.North(node1, entityALeftNorth / entityAConnections.getNorthConnections());
