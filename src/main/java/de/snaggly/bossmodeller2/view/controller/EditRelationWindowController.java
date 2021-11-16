@@ -258,11 +258,11 @@ public class EditRelationWindowController implements ViewController<Relation> {
 
             if (crowsFootTableA != null)
                 crowsFootTableA.unbindCrowsFootView(windowAnchorPane);
-            crowsFootTableA = new CrowsFootShape.East(tableAexample, 2);
+            crowsFootTableA = new CrowsFootShape.East(tableAexample, .5);
 
             if (crowsFootTableB != null)
                 crowsFootTableB.unbindCrowsFootView(windowAnchorPane);
-            crowsFootTableB = new CrowsFootShape.West(tableBexample, 2);
+            crowsFootTableB = new CrowsFootShape.West(tableBexample, .5);
 
             handleRelationLines();
         } catch (IOException e) {
