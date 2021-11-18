@@ -13,6 +13,8 @@ import de.snaggly.bossmodeller2.view.RelationLineView;
 import de.snaggly.bossmodeller2.view.factory.*;
 import de.snaggly.bossmodeller2.view.viewtypes.CustomNode;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SeparatorMenuItem;
@@ -597,25 +599,17 @@ public class MainController {
     }
 
     @FXML
-    private void testCusNode() {
-        var attribute1 = new Attribute("Primär Attribut 1", "integer", true, true, true, "", "", "", "");
-        var attribute2 = new Attribute("Attribut 2", "integer", false, true, true, "", "", "", "");
-        var attribute3 = new Attribute("Attribut 3", "integer", false, false, true, "", "", "", "");
-        var attributesList = new ArrayList<Attribute>();
-        attributesList.add(attribute1);
-        attributesList.add(attribute2);
-        attributesList.add(attribute3);
-        var testEntity = new Entity("Entität", attributesList, false);
-
-        EntityView entityView = null;
+    private void showAboutUsWindow() {
         try {
-            entityView = EntityBuilder.buildEntity(testEntity, mainWorkbench, currentProject.getSelectionHandler);
+            var fxmlLoader = new FXMLLoader(Main.class.getResource("view/AboutUs.fxml"));
+            var scene = new Scene(fxmlLoader.load());
+            var stage = new Stage();
+            stage.setTitle("Über uns");
+            stage.setScene(scene);
+            stage.show();
         } catch (IOException e) {
-            e.printStackTrace();
+            GUIMethods.showError(MainController.class.getSimpleName(), "BOSSModeller 2", e.getLocalizedMessage());
         }
-        entityView.setLayoutX(10);
-        entityView.setLayoutY(10);
-        saveNewEntity(entityView);
     }
 
     @FXML
@@ -641,7 +635,7 @@ public class MainController {
                 var separator = new SeparatorMenuItem();
                 mainWorkbenchContextMenu.getItems().addAll(editCommentMenu, removeCommentMenu, separator);
             } else if (currentSelection instanceof RelationLineView) {
-
+                //ToDO: Highlight relation connection
             }
 
             if (currentSelection instanceof CustomNode) {

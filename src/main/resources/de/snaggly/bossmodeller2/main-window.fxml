@@ -118,23 +118,11 @@
                            <items>
                               <MenuItem mnemonicParsing="false" text="FAQ" />
                               <MenuItem mnemonicParsing="false" text="Bedienungsanleitung" />
-                              <MenuItem mnemonicParsing="false" text="Über Uns" />
+                              <MenuItem mnemonicParsing="false" onAction="#showAboutUsWindow" text="Über Uns" />
                            </items>
                         </Menu>
                      </menus>
                   </MenuBar>
-                  <HBox spacing="25.0">
-                     <children>
-                        <Button mnemonicParsing="false" text="Button" />
-                        <Button mnemonicParsing="false" text="Button" />
-                        <Button mnemonicParsing="false" onAction="#testCusNode" text="Button" />
-                        <Button mnemonicParsing="false" onAction="#testRelation" text="Button" />
-                        <Button mnemonicParsing="false" text="Button" />
-                     </children>
-                     <padding>
-                        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
-                     </padding>
-                  </HBox>
                </children>
             </VBox>
          </top>
