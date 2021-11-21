@@ -9,6 +9,7 @@ module de.snaggly.bossmodeller2 {
     requires org.kordamp.ikonli.javafx;
     requires org.kordamp.bootstrapfx.core;
     requires eu.hansolo.tilesfx;
+    requires com.google.gson;
 
     opens de.snaggly.bossmodeller2 to javafx.fxml;
     exports de.snaggly.bossmodeller2;

@@ -7,6 +7,7 @@ import de.snaggly.bossmodeller2.model.Relation;
 import de.snaggly.bossmodeller2.view.viewtypes.CustomNode;
 import javafx.scene.Node;
 import javafx.scene.layout.Pane;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 
@@ -88,5 +89,13 @@ public class Project {
         }
 
         this.currentSelected = newSelection;
+    }
+
+    public String serializeToJson() {
+        return new Gson().toJson(this);
+    }
+
+    public static Project deserializeFromJson(String json) {
+        return new Gson().fromJson(json, Project.class);
     }
 }
