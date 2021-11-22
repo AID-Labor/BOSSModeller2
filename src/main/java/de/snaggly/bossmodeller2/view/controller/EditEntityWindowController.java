@@ -6,6 +6,7 @@ import de.snaggly.bossmodeller2.model.Attribute;
 import de.snaggly.bossmodeller2.model.Entity;
 import de.snaggly.bossmodeller2.view.AttributeEditor;
 import de.snaggly.bossmodeller2.view.factory.nodetype.AttributeEditorBuilder;
+import de.snaggly.bossmodeller2.view.factory.windowtype.UniqueCombinationEditorWindowBuilder;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -17,6 +18,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -172,6 +174,15 @@ public class EditEntityWindowController implements ViewController<Entity> {
 
     @FXML
     private void editUniqueComboClick(ActionEvent actionEvent) {
+        try {
+            var uniqueEditorWindow = UniqueCombinationEditorWindowBuilder.buildEntityEditor();
+            var stage = new Stage();
+            stage.setScene(uniqueEditorWindow.getKey());
+            stage.setTitle("UniqueCombo Editor");
+            stage.show();
+        } catch (IOException e) {
+            GUIMethods.showError(EditEntityWindowController.class.getSimpleName(), "BOSSModellerFX", e.getLocalizedMessage());
+        }
     }
 
     @Override

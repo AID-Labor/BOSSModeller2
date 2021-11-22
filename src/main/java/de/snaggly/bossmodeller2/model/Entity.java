@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 public class Entity extends DataModel {
     private ArrayList<Attribute> attributes;
+    private UniqueCombination uniqueCombination;
     private boolean isWeakType;
 
     public Entity() {
@@ -22,12 +23,19 @@ public class Entity extends DataModel {
         this.isWeakType = isWeakType;
     }
 
-    public ArrayList<Attribute> getAttributes() {
-        return attributes;
+    public Entity(String name, double xCoordinate, double yCoordinate, ArrayList<Attribute> attributes, UniqueCombination uniqueCombination, boolean isWeakType) {
+        super(name, xCoordinate, yCoordinate);
+        this.attributes = attributes;
+        this.uniqueCombination = uniqueCombination;
+        this.isWeakType = isWeakType;
     }
 
     public Attribute getPrimaryKey() {
         return attributes.stream().filter(Attribute::isPrimary).findFirst().orElse(null);
+    }
+
+    public ArrayList<Attribute> getAttributes() {
+        return attributes;
     }
 
     public void setAttributes(ArrayList<Attribute> attributes) {
@@ -44,6 +52,14 @@ public class Entity extends DataModel {
 
     public void removeAttribute(int index) {
         attributes.remove(index);
+    }
+
+    public UniqueCombination getUniqueCombination() {
+        return uniqueCombination;
+    }
+
+    public void setUniqueCombination(UniqueCombination uniqueCombination) {
+        this.uniqueCombination = uniqueCombination;
     }
 
     public boolean isWeakType() {
