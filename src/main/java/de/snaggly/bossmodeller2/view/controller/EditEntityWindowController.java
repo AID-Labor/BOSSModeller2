@@ -143,25 +143,7 @@ public class EditEntityWindowController implements ViewController<Entity> {
                         "Die Entität muss mindestens ein Attribut besitzen!");
             }
         } else {
-            var attributes = new ArrayList<Attribute>();
-            for (var attribute : attributesListVBOX.getChildren()) {
-                if (!(attribute instanceof AttributeEditor))
-                    continue;
-                var attributeController = ((AttributeEditor)attribute).getController();
-                if (attributeController.getNameTF().getText().equals(""))
-                    continue;
-                attributes.add(new Attribute(
-                        attributeController.getNameTF().getText(),
-                        "integer",
-                        attributeController.getIsPrimaryCheck().isSelected(),
-                        attributeController.getIsNonNullCheck().isSelected(),
-                        attributeController.getIsUniqueCheck().isSelected(),
-                        attributeController.getCheckTF().getText(),
-                        attributeController.getDefaultTF().getText(),
-                        "",
-                        ""));
-            }
-            entity.setAttributes(attributes);
+            entity.setAttributes(readAttributes());
         }
 
         entity.setWeakType(isWeakTypeCheckBox.isSelected());
@@ -175,7 +157,7 @@ public class EditEntityWindowController implements ViewController<Entity> {
     @FXML
     private void editUniqueComboClick(ActionEvent actionEvent) {
         try {
-            var uniqueEditorWindow = UniqueCombinationEditorWindowBuilder.buildEntityEditor();
+            var uniqueEditorWindow = UniqueCombinationEditorWindowBuilder.buildEntityEditor(readAttributes());
             var stage = new Stage();
             stage.setScene(uniqueEditorWindow.getKey());
             stage.setTitle("UniqueCombo Editor");
@@ -204,6 +186,28 @@ public class EditEntityWindowController implements ViewController<Entity> {
             }
         }
         attributesListVBOX.getChildren().remove(attributesListVBOX.getChildren().size()-1);
+    }
+
+    private ArrayList<Attribute> readAttributes() {
+        var attributes = new ArrayList<Attribute>();
+        for (var attribute : attributesListVBOX.getChildren()) {
+            if (!(attribute instanceof AttributeEditor))
+                continue;
+            var attributeController = ((AttributeEditor)attribute).getController();
+            if (attributeController.getNameTF().getText().equals(""))
+                continue;
+            attributes.add(new Attribute(
+                    attributeController.getNameTF().getText(),
+                    "integer",
+                    attributeController.getIsPrimaryCheck().isSelected(),
+                    attributeController.getIsNonNullCheck().isSelected(),
+                    attributeController.getIsUniqueCheck().isSelected(),
+                    attributeController.getCheckTF().getText(),
+                    attributeController.getDefaultTF().getText(),
+                    "",
+                    ""));
+        }
+        return attributes;
     }
 
     private final EventHandler<MouseEvent> attributeEditorDownClick = mouseEvent ->  {
