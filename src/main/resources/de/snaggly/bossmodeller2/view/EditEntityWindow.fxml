@@ -51,6 +51,9 @@
                      </children>
                   </HBox>
                </right>
+               <center>
+                  <Button mnemonicParsing="false" onAction="#editUniqueComboClick" text="Unique Kombination bearbeiten..." BorderPane.alignment="CENTER" />
+               </center>
             </BorderPane>
             <ScrollPane fitToWidth="true" focusTraversable="false" hbarPolicy="NEVER" VBox.vgrow="ALWAYS">
                <content>

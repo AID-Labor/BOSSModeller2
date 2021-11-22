@@ -10,7 +10,10 @@ import de.snaggly.bossmodeller2.struct.relations.RelationViewStruct;
 import de.snaggly.bossmodeller2.view.CommentView;
 import de.snaggly.bossmodeller2.view.EntityView;
 import de.snaggly.bossmodeller2.view.RelationLineView;
-import de.snaggly.bossmodeller2.view.factory.*;
+import de.snaggly.bossmodeller2.view.factory.nodetype.CommentBuilder;
+import de.snaggly.bossmodeller2.view.factory.nodetype.EntityBuilder;
+import de.snaggly.bossmodeller2.view.factory.windowtype.EntityEditorWindowBuilder;
+import de.snaggly.bossmodeller2.view.factory.windowtype.RelationEditorWindowBuilder;
 import de.snaggly.bossmodeller2.view.viewtypes.CustomNode;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -24,7 +27,6 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 public class MainController {

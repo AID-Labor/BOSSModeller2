@@ -5,7 +5,7 @@ import de.snaggly.bossmodeller2.guiLogic.GUIMethods;
 import de.snaggly.bossmodeller2.model.Attribute;
 import de.snaggly.bossmodeller2.model.Entity;
 import de.snaggly.bossmodeller2.view.AttributeEditor;
-import de.snaggly.bossmodeller2.view.factory.AttributeEditorBuilder;
+import de.snaggly.bossmodeller2.view.factory.nodetype.AttributeEditorBuilder;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -168,6 +168,10 @@ public class EditEntityWindowController implements ViewController<Entity> {
             parentObserver.notify(entity);
             GUIMethods.closeWindow(actionEvent);
         }
+    }
+
+    @FXML
+    private void editUniqueComboClick(ActionEvent actionEvent) {
     }
 
     @Override

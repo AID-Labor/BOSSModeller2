@@ -1,8 +1,9 @@
-package de.snaggly.bossmodeller2.view.factory;
+package de.snaggly.bossmodeller2.view.factory.windowtype;
 
 import de.snaggly.bossmodeller2.Main;
 import de.snaggly.bossmodeller2.model.Entity;
 import de.snaggly.bossmodeller2.view.controller.EditEntityWindowController;
+import de.snaggly.bossmodeller2.view.factory.WindowFactory;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 

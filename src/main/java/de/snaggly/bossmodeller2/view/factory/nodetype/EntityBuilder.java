@@ -1,9 +1,10 @@
-package de.snaggly.bossmodeller2.view.factory;
+package de.snaggly.bossmodeller2.view.factory.nodetype;
 
 import de.snaggly.bossmodeller2.guiLogic.GUIMethods;
 import de.snaggly.bossmodeller2.guiLogic.SelectionHandler;
 import de.snaggly.bossmodeller2.model.Entity;
 import de.snaggly.bossmodeller2.view.EntityView;
+import de.snaggly.bossmodeller2.view.factory.ViewFactory;
 import javafx.scene.layout.Region;
 
 import java.io.IOException;

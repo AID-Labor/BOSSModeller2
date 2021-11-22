@@ -1,7 +1,8 @@
-package de.snaggly.bossmodeller2.view.factory;
+package de.snaggly.bossmodeller2.view.factory.nodetype;
 
 import de.snaggly.bossmodeller2.model.Attribute;
 import de.snaggly.bossmodeller2.view.AttributeEditor;
+import de.snaggly.bossmodeller2.view.factory.ViewFactory;
 
 import java.io.IOException;
 

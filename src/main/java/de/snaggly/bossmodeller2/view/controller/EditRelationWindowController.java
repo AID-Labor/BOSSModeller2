@@ -5,7 +5,7 @@ import de.snaggly.bossmodeller2.model.Attribute;
 import de.snaggly.bossmodeller2.model.Entity;
 import de.snaggly.bossmodeller2.model.Relation;
 import de.snaggly.bossmodeller2.view.EntityView;
-import de.snaggly.bossmodeller2.view.factory.EntityBuilder;
+import de.snaggly.bossmodeller2.view.factory.nodetype.EntityBuilder;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.CheckBox;

@@ -1,9 +1,10 @@
-package de.snaggly.bossmodeller2.view.factory;
+package de.snaggly.bossmodeller2.view.factory.windowtype;
 
 import de.snaggly.bossmodeller2.Main;
 import de.snaggly.bossmodeller2.guiLogic.Project;
 import de.snaggly.bossmodeller2.model.Relation;
 import de.snaggly.bossmodeller2.view.controller.EditRelationWindowController;
+import de.snaggly.bossmodeller2.view.factory.WindowFactory;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 
@@ -11,7 +12,7 @@ import java.io.IOException;
 import java.util.AbstractMap;
 import java.util.Map;
 
-public class RelationEditorWindowBuilder implements WindowFactory<Relation, EditRelationWindowController>{
+public class RelationEditorWindowBuilder implements WindowFactory<Relation, EditRelationWindowController> {
     private static RelationEditorWindowBuilder instance;
     private final Project workspace;
 

@@ -1,15 +1,15 @@
-package de.snaggly.bossmodeller2.view.factory;
+package de.snaggly.bossmodeller2.view.factory.nodetype;
 
 import de.snaggly.bossmodeller2.guiLogic.GUIMethods;
-import de.snaggly.bossmodeller2.guiLogic.Project;
 import de.snaggly.bossmodeller2.guiLogic.SelectionHandler;
 import de.snaggly.bossmodeller2.model.Comment;
 import de.snaggly.bossmodeller2.view.CommentView;
+import de.snaggly.bossmodeller2.view.factory.ViewFactory;
 import javafx.scene.layout.Region;
 
 import java.io.IOException;
 
-public class CommentBuilder implements ViewFactory<Comment, CommentView>{
+public class CommentBuilder implements ViewFactory<Comment, CommentView> {
 
     private final SelectionHandler selectionHandler;
     private final Region parentRegion;
