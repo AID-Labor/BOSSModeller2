@@ -83,14 +83,18 @@ public class EditEntityWindowController implements ViewController<Entity> {
         addAttrbBtn.requestFocus();
     }
 
+    private void bindAttributeToGui(Attribute attribute, AttributeEditor guiEditor) {
+        guiEditor.getController().getNameTF().textProperty().addListener((observableValue, s, newValue) -> attribute.setName(newValue));
+        guiEditor.getController().getIsPrimaryCheck().selectedProperty().addListener((observableValue, s, newValue) -> attribute.setPrimary(newValue));
+        guiEditor.getController().getIsNonNullCheck().selectedProperty().addListener((observableValue, s, newValue) -> attribute.setNonNull(newValue));
+        guiEditor.getController().getIsUniqueCheck().selectedProperty().addListener((observableValue, s, newValue) -> attribute.setUnique(newValue));
+        guiEditor.getController().getCheckTF().textProperty().addListener((observableValue, s, newValue) -> attribute.setCheckName(newValue));
+        guiEditor.getController().getDefaultTF().textProperty().addListener((observableValue, s, newValue) -> attribute.setDefaultName(newValue));
+    }
+
     private void addNewAttributeToEntity(AttributeEditor attributeEditor, int index) {
         var newAttribute = new Attribute();
-        attributeEditor.getController().getNameTF().textProperty().addListener((observableValue, s, newValue) -> newAttribute.setName(newValue));
-        attributeEditor.getController().getIsPrimaryCheck().selectedProperty().addListener((observableValue, s, newValue) -> newAttribute.setPrimary(newValue));
-        attributeEditor.getController().getIsNonNullCheck().selectedProperty().addListener((observableValue, s, newValue) -> newAttribute.setNonNull(newValue));
-        attributeEditor.getController().getIsUniqueCheck().selectedProperty().addListener((observableValue, s, newValue) -> newAttribute.setUnique(newValue));
-        attributeEditor.getController().getCheckTF().textProperty().addListener((observableValue, s, newValue) -> newAttribute.setCheckName(newValue));
-        attributeEditor.getController().getDefaultTF().textProperty().addListener((observableValue, s, newValue) -> newAttribute.setDefaultName(newValue));
+        bindAttributeToGui(newAttribute, attributeEditor);
         entity.getAttributes().add(index, newAttribute);
     }
 
@@ -162,9 +166,7 @@ public class EditEntityWindowController implements ViewController<Entity> {
                         "Keine Attribute",
                         "Die Entität muss mindestens ein Attribut besitzen!");
             }
-        } /*else {
-            entity.setAttributes(readAttributes());
-        }*/
+        }
 
         entity.setWeakType(isWeakTypeCheckBox.isSelected());
 
@@ -209,6 +211,7 @@ public class EditEntityWindowController implements ViewController<Entity> {
                 attributesListVBOX.getChildren().add(attributeEditor);
                 attributeEditor.getController().handleDownBtnClick(attributeEditorDownClick);
                 attributeEditor.getController().handleUpBtnClick(attributeEditorUpClick);
+                bindAttributeToGui(attributeModel, attributeEditor);
                 attributesListVBOX.getChildren().add(new Separator());
             } catch (IOException e) {
                 GUIMethods.showError(EditEntityWindowController.class.getSimpleName(), "BOSSModeller 2", e.getLocalizedMessage());
@@ -217,30 +220,7 @@ public class EditEntityWindowController implements ViewController<Entity> {
         attributesListVBOX.getChildren().remove(attributesListVBOX.getChildren().size()-1);
     }
 
-    /*private ArrayList<Attribute> readAttributes() {
-        var attributes = new ArrayList<Attribute>();
-        for (var attribute : attributesListVBOX.getChildren()) {
-            if (!(attribute instanceof AttributeEditor))
-                continue;
-            var attributeController = ((AttributeEditor)attribute).getController();
-            if (attributeController.getNameTF().getText().equals(""))
-                continue;
-            attributes.add(new Attribute(
-                    attributeController.getNameTF().getText(),
-                    "integer",
-                    attributeController.getIsPrimaryCheck().isSelected(),
-                    attributeController.getIsNonNullCheck().isSelected(),
-                    attributeController.getIsUniqueCheck().isSelected(),
-                    attributeController.getCheckTF().getText(),
-                    attributeController.getDefaultTF().getText(),
-                    "",
-                    ""));
-        }
-        return attributes;
-    }*/
-
     private final EventHandler<MouseEvent> attributeEditorDownClick = mouseEvent ->  {
-        //Das ist nicht besonders eine effiziente Art den Index zu ermitteln. Schade.
         var attributeEditor = getFocusedAttribute(attributesListVBOX.getScene().getFocusOwner());
         var index = attributesListVBOX.getChildren().indexOf(attributeEditor);
 
