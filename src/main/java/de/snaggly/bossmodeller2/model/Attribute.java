@@ -12,16 +12,12 @@ public class Attribute extends DataModel {
     private String fkTableName;
     private String fkColumnName;
 
+    public Attribute(){
+        this(null, "", false, false, false, "", "", "", "");
+    }
+
     public Attribute(String name, String type, boolean isPrimary, boolean isNonNull, boolean isUnique, String checkName, String defaultName, String fkTableName, String fkColumnName) {
-        super(name, 0.0, 0.0);
-        this.type = type;
-        this.isPrimary = isPrimary;
-        this.isNonNull = isNonNull;
-        this.isUnique = isUnique;
-        this.checkName = checkName;
-        this.defaultName = defaultName;
-        this.fkTableName = fkTableName;
-        this.fkColumnName = fkColumnName;
+        this(name, 0.0, 0.0, type, isPrimary, isNonNull, isUnique, checkName, defaultName, fkTableName, fkColumnName);
     }
 
     public Attribute(String name, double xCoordinate, double yCoordinate, String type, boolean isPrimary, boolean isNonNull, boolean isUnique, String checkName, String defaultName, String fkTableName, String fkColumnName) {

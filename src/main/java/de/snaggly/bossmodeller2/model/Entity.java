@@ -8,7 +8,7 @@ public class Entity extends DataModel {
     private boolean isWeakType;
 
     public Entity() {
-        this(null, null, false);
+        this(null, new ArrayList<>(), false);
     }
 
     public Entity(String name, ArrayList<Attribute> attributes, boolean isWeakType) {

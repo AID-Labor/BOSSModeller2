@@ -7,6 +7,8 @@ import de.snaggly.bossmodeller2.model.Entity;
 import de.snaggly.bossmodeller2.view.AttributeEditor;
 import de.snaggly.bossmodeller2.view.factory.nodetype.AttributeEditorBuilder;
 import de.snaggly.bossmodeller2.view.factory.windowtype.UniqueCombinationEditorWindowBuilder;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -25,7 +27,7 @@ import java.util.ArrayList;
 
 
 public class EditEntityWindowController implements ViewController<Entity> {
-    private Entity entity;
+    private Entity entity = new Entity();
 
     public GUIActionListener<Entity> parentObserver;
 
@@ -65,10 +67,13 @@ public class EditEntityWindowController implements ViewController<Entity> {
             if (index >= 1) {
                 attributesListVBOX.getChildren().add(index, new Separator());
                 attributesListVBOX.getChildren().add(index + 1, attributeEditor);
+                addNewAttributeToEntity(attributeEditor, (index + 1) / 2);
             } else if (attributesListVBOX.getChildren().size() >= 1){
+                addNewAttributeToEntity(attributeEditor, 0);
                 attributesListVBOX.getChildren().add(index, attributeEditor);
                 attributesListVBOX.getChildren().add(index + 1, new Separator());
             } else {
+                addNewAttributeToEntity(attributeEditor, 0);
                 attributesListVBOX.getChildren().add(index, attributeEditor);
             }
         } catch (IOException e) {
@@ -76,6 +81,17 @@ public class EditEntityWindowController implements ViewController<Entity> {
         }
         removeAttrbBtn.setDisable(attributesListVBOX.getChildren().size() < 1);
         addAttrbBtn.requestFocus();
+    }
+
+    private void addNewAttributeToEntity(AttributeEditor attributeEditor, int index) {
+        var newAttribute = new Attribute();
+        attributeEditor.getController().getNameTF().textProperty().addListener((observableValue, s, newValue) -> newAttribute.setName(newValue));
+        attributeEditor.getController().getIsPrimaryCheck().selectedProperty().addListener((observableValue, s, newValue) -> newAttribute.setPrimary(newValue));
+        attributeEditor.getController().getIsNonNullCheck().selectedProperty().addListener((observableValue, s, newValue) -> newAttribute.setNonNull(newValue));
+        attributeEditor.getController().getIsUniqueCheck().selectedProperty().addListener((observableValue, s, newValue) -> newAttribute.setUnique(newValue));
+        attributeEditor.getController().getCheckTF().textProperty().addListener((observableValue, s, newValue) -> newAttribute.setCheckName(newValue));
+        attributeEditor.getController().getDefaultTF().textProperty().addListener((observableValue, s, newValue) -> newAttribute.setDefaultName(newValue));
+        entity.getAttributes().add(index, newAttribute);
     }
 
     @FXML
@@ -88,17 +104,24 @@ public class EditEntityWindowController implements ViewController<Entity> {
             var selectedIndex = attributesListVBOX.getChildren().indexOf(attributeEditor);
             if (selectedIndex == 0 && attributesListVBOX.getChildren().size() == 1) {
                 attributesListVBOX.getChildren().remove(selectedIndex);
+                removeAttributeFromEntity(selectedIndex);
             }
             else if (selectedIndex >= 1) {
                 attributesListVBOX.getChildren().remove(--selectedIndex);
                 attributesListVBOX.getChildren().remove(selectedIndex);
+                removeAttributeFromEntity((selectedIndex + 1) / 2);
             } else {
                 attributesListVBOX.getChildren().remove(selectedIndex);
                 attributesListVBOX.getChildren().remove(selectedIndex);
+                removeAttributeFromEntity(selectedIndex);
             }
             removeAttrbBtn.setDisable(attributesListVBOX.getChildren().size() < 1);
             removeAttrbBtn.requestFocus();
         }
+    }
+
+    private void removeAttributeFromEntity(int index) {
+        entity.removeAttribute(index);
     }
 
     private void removeAllAttributesAction() {
@@ -108,9 +131,6 @@ public class EditEntityWindowController implements ViewController<Entity> {
 
     @FXML
     private void initialize() {
-        if (entity == null) {
-            entity = new Entity();
-        }
         addAttributeAction();
         removeAttrbBtn.setDisable(attributesListVBOX.getChildren().size() < 1);
     }
@@ -142,9 +162,9 @@ public class EditEntityWindowController implements ViewController<Entity> {
                         "Keine Attribute",
                         "Die Entität muss mindestens ein Attribut besitzen!");
             }
-        } else {
+        } /*else {
             entity.setAttributes(readAttributes());
-        }
+        }*/
 
         entity.setWeakType(isWeakTypeCheckBox.isSelected());
 
@@ -156,14 +176,23 @@ public class EditEntityWindowController implements ViewController<Entity> {
 
     @FXML
     private void editUniqueComboClick(ActionEvent actionEvent) {
-        try {
-            var uniqueEditorWindow = UniqueCombinationEditorWindowBuilder.buildEntityEditor(entity.getUniqueCombination(), readAttributes());
-            var stage = new Stage();
-            stage.setScene(uniqueEditorWindow.getKey());
-            stage.setTitle("UniqueCombo Editor");
-            stage.show();
-        } catch (IOException e) {
-            GUIMethods.showError(EditEntityWindowController.class.getSimpleName(), "BOSSModellerFX", e.getLocalizedMessage());
+        if (attributesListVBOX.getChildren().size() < 1 || !checkAttributesContent()) {
+            GUIMethods.showWarning(
+                Entity.class.getSimpleName(),
+                "Keine Attribute",
+                "Die Entität muss mindestens ein Attribut besitzen!"
+            );
+        }
+        else {
+            try {
+                var uniqueEditorWindow = UniqueCombinationEditorWindowBuilder.buildEntityEditor(entity.getUniqueCombination(), entity.getAttributes());
+                var stage = new Stage();
+                stage.setScene(uniqueEditorWindow.getKey());
+                stage.setTitle("UniqueCombo Editor");
+                stage.show();
+            } catch (IOException e) {
+                GUIMethods.showError(EditEntityWindowController.class.getSimpleName(), "BOSSModellerFX", e.getLocalizedMessage());
+            }
         }
     }
 
@@ -188,7 +217,7 @@ public class EditEntityWindowController implements ViewController<Entity> {
         attributesListVBOX.getChildren().remove(attributesListVBOX.getChildren().size()-1);
     }
 
-    private ArrayList<Attribute> readAttributes() {
+    /*private ArrayList<Attribute> readAttributes() {
         var attributes = new ArrayList<Attribute>();
         for (var attribute : attributesListVBOX.getChildren()) {
             if (!(attribute instanceof AttributeEditor))
@@ -208,7 +237,7 @@ public class EditEntityWindowController implements ViewController<Entity> {
                     ""));
         }
         return attributes;
-    }
+    }*/
 
     private final EventHandler<MouseEvent> attributeEditorDownClick = mouseEvent ->  {
         //Das ist nicht besonders eine effiziente Art den Index zu ermitteln. Schade.
