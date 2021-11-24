@@ -4,6 +4,7 @@ import de.snaggly.bossmodeller2.guiLogic.*;
 import de.snaggly.bossmodeller2.model.Attribute;
 import de.snaggly.bossmodeller2.model.Entity;
 import de.snaggly.bossmodeller2.model.Relation;
+import de.snaggly.bossmodeller2.view.CrowsFootShape;
 import de.snaggly.bossmodeller2.view.EntityView;
 import de.snaggly.bossmodeller2.view.factory.nodetype.EntityBuilder;
 import javafx.event.ActionEvent;

@@ -1,7 +1,7 @@
-package de.snaggly.bossmodeller2.guiLogic;
+package de.snaggly.bossmodeller2.view;
 
 import de.snaggly.bossmodeller2.model.Relation;
-import de.snaggly.bossmodeller2.view.EntityView;
+import de.snaggly.bossmodeller2.view.viewtypes.Highlightable;
 import javafx.beans.value.ChangeListener;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
@@ -12,7 +12,7 @@ import javafx.scene.shape.Shape;
 import java.util.ArrayList;
 import java.util.Collection;
 
-public abstract class CrowsFootShape {
+public abstract class CrowsFootShape implements Highlightable {
     private static final int scale = 5;
 
     private final double positionShift;
@@ -27,6 +27,24 @@ public abstract class CrowsFootShape {
 
     public Line mandatoryLine = new Line();
     public Circle optionalCircle = new Circle();
+
+    @Override
+    public void highlight() {
+        multiplicityLineOne.setStroke(Color.rgb(3,158,211));
+        multiplicityLineMultiple1.setStroke(Color.rgb(3,158,211));
+        multiplicityLineMultiple2.setStroke(Color.rgb(3,158,211));
+        mandatoryLine.setStroke(Color.rgb(3,158,211));
+        optionalCircle.setStroke(Color.rgb(3,158,211));
+    }
+
+    @Override
+    public void deHighlight() {
+        multiplicityLineOne.setStroke(Color.BLACK);
+        multiplicityLineMultiple1.setStroke(Color.BLACK);
+        multiplicityLineMultiple2.setStroke(Color.BLACK);
+        mandatoryLine.setStroke(Color.BLACK);
+        optionalCircle.setStroke(Color.BLACK);
+    }
 
     public CrowsFootShape(EntityView entity, double positionShift) {
         multiplicityLineOne.setStrokeWidth(3);

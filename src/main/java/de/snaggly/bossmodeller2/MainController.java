@@ -1,6 +1,6 @@
 package de.snaggly.bossmodeller2;
 
-import de.snaggly.bossmodeller2.guiLogic.CrowsFootShape;
+import de.snaggly.bossmodeller2.view.CrowsFootShape;
 import de.snaggly.bossmodeller2.guiLogic.GUIMethods;
 import de.snaggly.bossmodeller2.guiLogic.Project;
 import de.snaggly.bossmodeller2.model.*;
@@ -17,6 +17,7 @@ import de.snaggly.bossmodeller2.view.factory.windowtype.RelationEditorWindowBuil
 import de.snaggly.bossmodeller2.view.viewtypes.CustomNode;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
@@ -83,9 +84,9 @@ public class MainController {
 
             if (relationViewStruct == null) {
                 relationViewStruct = new RelationViewStruct();
-                relationViewStruct.line1 = new RelationLineView();
-                relationViewStruct.line2 = new RelationLineView();
-                relationViewStruct.line3 = new RelationLineView();
+                relationViewStruct.line1 = new RelationLineView(relation, this::highlightRelation);
+                relationViewStruct.line2 = new RelationLineView(relation, this::highlightRelation);
+                relationViewStruct.line3 = new RelationLineView(relation, this::highlightRelation);
                 relationsOverview.put(relation, relationViewStruct);
 
                 mainWorkbench.getChildren().addAll(relationViewStruct.line1, relationViewStruct.line2, relationViewStruct.line3);
@@ -600,6 +601,11 @@ public class MainController {
         }
     }
 
+    private void highlightRelation(Relation selectedRelation) {
+        var relationStruct = relationsOverview.get(selectedRelation);
+        currentProject.highlightRelation(relationStruct);
+    }
+
     @FXML
     private void showAboutUsWindow() {
         try {
@@ -874,9 +880,5 @@ public class MainController {
         } catch (IOException e) {
             GUIMethods.showError(MainController.class.getSimpleName(), "BOSSModeller 2", e.getLocalizedMessage());
         }
-    }
-
-    public void testRelation() {
-        relationLineDrawer();
     }
 }
