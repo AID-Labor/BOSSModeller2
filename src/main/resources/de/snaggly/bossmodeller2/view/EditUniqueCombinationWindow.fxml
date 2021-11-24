@@ -13,8 +13,8 @@
                   <Insets bottom="10.0" top="10.0" />
                </padding>
                <children>
-                  <Button mnemonicParsing="false" onAction="#newUniqueComboClick" text="Neue Unique-Kombination" />
-                  <Button mnemonicParsing="false" onAction="#deleteUniqueComboClick" text="Unique-Kombination löschen" />
+                  <Button focusTraversable="false" mnemonicParsing="false" onAction="#newUniqueComboClick" text="Neue Unique-Kombination" />
+                  <Button focusTraversable="false" mnemonicParsing="false" onAction="#deleteUniqueComboClick" text="Unique-Kombination löschen" />
                </children></HBox>
             <SplitPane dividerPositions="0.29797979797979796" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" VBox.vgrow="ALWAYS">
               <items>

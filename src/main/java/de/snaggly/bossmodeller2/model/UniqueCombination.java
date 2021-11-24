@@ -6,6 +6,7 @@ public class UniqueCombination extends DataModel {
     private ArrayList<AttributeCombination> combinations = new ArrayList<>();
 
     public UniqueCombination() {
+        super("simple", 0.0, 0.0);
     }
 
     public UniqueCombination(String name, ArrayList<AttributeCombination> combinations) {
@@ -23,7 +24,15 @@ public class UniqueCombination extends DataModel {
 
     public static class AttributeCombination {
         private String combinationName;
-        private ArrayList<Attribute> attributes;
+        private ArrayList<Attribute> attributes = new ArrayList<>();
+
+        public String getCombinationName() {
+            return combinationName;
+        }
+
+        public void setCombinationName(String combinationName) {
+            this.combinationName = combinationName;
+        }
 
         public ArrayList<Attribute> getAttributes() {
             return attributes;

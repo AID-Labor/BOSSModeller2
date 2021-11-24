@@ -42,15 +42,9 @@ public class UniqueCombinationEditorWindowBuilder implements WindowFactory<Uniqu
         return new AbstractMap.SimpleEntry<>(scene, controller);
     }
 
-    public static Map.Entry<Scene, EditUniqueCombinationWindowController> buildEntityEditor(ArrayList<Attribute> attributes) throws IOException {
-        if (instance == null)
-            instance = new UniqueCombinationEditorWindowBuilder();
-        return instance.buildWindow(attributes);
-    }
-
     public static Map.Entry<Scene, EditUniqueCombinationWindowController> buildEntityEditor(UniqueCombination model, ArrayList<Attribute> attributes) throws IOException {
         if (instance == null)
             instance = new UniqueCombinationEditorWindowBuilder();
-        return instance.buildWindow(model);
+        return instance.buildWindow(model, attributes);
     }
 }

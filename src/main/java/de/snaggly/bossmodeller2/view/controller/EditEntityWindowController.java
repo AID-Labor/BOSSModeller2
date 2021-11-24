@@ -157,7 +157,7 @@ public class EditEntityWindowController implements ViewController<Entity> {
     @FXML
     private void editUniqueComboClick(ActionEvent actionEvent) {
         try {
-            var uniqueEditorWindow = UniqueCombinationEditorWindowBuilder.buildEntityEditor(readAttributes());
+            var uniqueEditorWindow = UniqueCombinationEditorWindowBuilder.buildEntityEditor(entity.getUniqueCombination(), readAttributes());
             var stage = new Stage();
             stage.setScene(uniqueEditorWindow.getKey());
             stage.setTitle("UniqueCombo Editor");

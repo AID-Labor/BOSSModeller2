@@ -8,19 +8,15 @@ public class Entity extends DataModel {
     private boolean isWeakType;
 
     public Entity() {
-
+        this(null, null, false);
     }
 
     public Entity(String name, ArrayList<Attribute> attributes, boolean isWeakType) {
-        super(name, 0.0, 0.0);
-        this.attributes = attributes;
-        this.isWeakType = isWeakType;
+        this(name, 0.0, 0.0, attributes, isWeakType);
     }
 
     public Entity(String name, double xCoordinate, double yCoordinate, ArrayList<Attribute> attributes, boolean isWeakType) {
-        super(name, xCoordinate, yCoordinate);
-        this.attributes = attributes;
-        this.isWeakType = isWeakType;
+        this(name, xCoordinate, yCoordinate, attributes, new UniqueCombination(), isWeakType);
     }
 
     public Entity(String name, double xCoordinate, double yCoordinate, ArrayList<Attribute> attributes, UniqueCombination uniqueCombination, boolean isWeakType) {
