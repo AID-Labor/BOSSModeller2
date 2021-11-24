@@ -24,6 +24,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 
 
 public class EditEntityWindowController implements ViewController<Entity> {
@@ -229,6 +230,7 @@ public class EditEntityWindowController implements ViewController<Entity> {
             attributesListVBOX.getChildren().remove(index);
             attributesListVBOX.getChildren().add(index + 1, new Separator());
             attributesListVBOX.getChildren().add(index + 2, attributeEditor);
+            Collections.swap(entity.getAttributes(), index/2, (index/2)+1);
         }
     };
 
@@ -241,6 +243,7 @@ public class EditEntityWindowController implements ViewController<Entity> {
             attributesListVBOX.getChildren().remove(index - 1);
             attributesListVBOX.getChildren().add(index - 2, attributeEditor);
             attributesListVBOX.getChildren().add(index - 1, new Separator());
+            Collections.swap(entity.getAttributes(), index/2, (index/2)-1);
         }
     };
 
