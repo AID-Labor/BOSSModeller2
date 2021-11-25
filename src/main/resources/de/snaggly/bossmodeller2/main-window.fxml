@@ -2,6 +2,7 @@
 
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
@@ -9,28 +10,49 @@
    <children>
       <BorderPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <left>
-            <Accordion maxHeight="500.0" prefHeight="300.0" BorderPane.alignment="TOP_LEFT">
+            <Accordion maxHeight="370.0" maxWidth="100.0" BorderPane.alignment="TOP_LEFT">
                <panes>
                   <TitledPane alignment="TOP_LEFT" text="Entität">
                      <content>
                         <AnchorPane>
                            <children>
-                              <VBox alignment="CENTER" layoutX="34.0" layoutY="14.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                              <VBox alignment="TOP_CENTER" layoutX="34.0" layoutY="14.0" spacing="15.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                  <children>
-                                    <Button fx:id="newEntityBtn" alignment="CENTER" mnemonicParsing="false" onAction="#newEntityClick" style="-fx-background-image: url(&quot;file:src/main/resources/de/snaggly/bossmodeller2/view/entity_new.png&quot;); -fx-background-repeat: no-repeat; -fx-min-width: 120; -fx-min-height: 120; -fx-scale-x: 0.65; -fx-scale-y: 0.65;" textAlignment="CENTER">
+                                    <Button fx:id="newEntityBtn" alignment="CENTER" maxHeight="78.0" maxWidth="78.0" minHeight="78.0" minWidth="78.0" mnemonicParsing="false" onAction="#newEntityClick" textAlignment="CENTER" VBox.vgrow="NEVER">
                                        <font>
                                           <Font name="System Bold" size="31.0" />
                                        </font>
+                                       <graphic>
+                                          <ImageView pickOnBounds="true" preserveRatio="true" scaleX="0.65" scaleY="0.65" smooth="false">
+                                             <image>
+                                                <Image url="@entity_new.png" />
+                                             </image>
+                                          </ImageView>
+                                       </graphic>
                                     </Button>
-                                    <Button fx:id="editEntityBtn" layoutX="40.0" layoutY="87.0" mnemonicParsing="false" onAction="#editEntityClick" style="-fx-background-image: url(&quot;file:src/main/resources/de/snaggly/bossmodeller2/view/entity_edit.png&quot;); -fx-background-repeat: no-repeat; -fx-min-width: 120; -fx-min-height: 120; -fx-scale-x: 0.65; -fx-scale-y: 0.65;" textAlignment="CENTER">
+                                    <Button fx:id="editEntityBtn" layoutX="40.0" layoutY="87.0" maxHeight="78.0" maxWidth="78.0" minHeight="78.0" minWidth="78.0" mnemonicParsing="false" onAction="#editEntityClick" textAlignment="CENTER">
                                        <font>
                                           <Font name="System Bold" size="31.0" />
                                        </font>
+                                       <graphic>
+                                          <ImageView pickOnBounds="true" preserveRatio="true" scaleX="0.65" scaleY="0.65">
+                                             <image>
+                                                <Image url="@entity_edit.png" />
+                                             </image>
+                                          </ImageView>
+                                       </graphic>
                                     </Button>
-                                    <Button fx:id="deleteEntityBtn" layoutX="50.0" layoutY="97.0" mnemonicParsing="false" onAction="#deleteEntityClick" style="-fx-background-image: url(&quot;file:src/main/resources/de/snaggly/bossmodeller2/view/entity_delete.png&quot;); -fx-background-repeat: no-repeat; -fx-min-width: 120; -fx-min-height: 120; -fx-scale-x: 0.65; -fx-scale-y: 0.65;" textAlignment="CENTER">
+                                    <Button fx:id="deleteEntityBtn" layoutX="50.0" layoutY="97.0" maxHeight="78.0" maxWidth="78.0" minHeight="78.0" minWidth="78.0" mnemonicParsing="false" onAction="#deleteEntityClick" textAlignment="CENTER">
                                        <font>
                                           <Font name="System Bold" size="31.0" />
                                        </font>
+                                       <graphic>
+                                          <ImageView pickOnBounds="true" preserveRatio="true" scaleX="0.65" scaleY="0.65">
+                                             <image>
+                                                <Image url="@entity_delete.png" />
+                                             </image>
+                                          </ImageView>
+                                       </graphic>
                                     </Button>
                                  </children>
                               </VBox>
@@ -39,12 +61,96 @@
                   </TitledPane>
                   <TitledPane text="Relation">
                      <content>
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                           <children>
+                              <VBox alignment="TOP_CENTER" spacing="15.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                 <children>
+                                    <Button fx:id="newEntityBtn1" alignment="CENTER" maxHeight="78.0" maxWidth="78.0" minHeight="78.0" minWidth="78.0" mnemonicParsing="false" onAction="#newRelationClick" textAlignment="CENTER" VBox.vgrow="NEVER">
+                                       <font>
+                                          <Font name="System Bold" size="31.0" />
+                                       </font>
+                                       <graphic>
+                                          <ImageView pickOnBounds="true" preserveRatio="true" scaleX="0.65" scaleY="0.65" smooth="false">
+                                             <image>
+                                                <Image url="@relation_new.png" />
+                                             </image>
+                                          </ImageView>
+                                       </graphic>
+                                    </Button>
+                                    <Button fx:id="editEntityBtn1" layoutX="40.0" layoutY="87.0" maxHeight="78.0" maxWidth="78.0" minHeight="78.0" minWidth="78.0" mnemonicParsing="false" onAction="#editRelationClick" textAlignment="CENTER">
+                                       <font>
+                                          <Font name="System Bold" size="31.0" />
+                                       </font>
+                                       <graphic>
+                                          <ImageView pickOnBounds="true" preserveRatio="true" scaleX="0.65" scaleY="0.65">
+                                             <image>
+                                                <Image url="@relation_edit.png" />
+                                             </image>
+                                          </ImageView>
+                                       </graphic>
+                                    </Button>
+                                    <Button fx:id="deleteEntityBtn1" layoutX="50.0" layoutY="97.0" maxHeight="78.0" maxWidth="78.0" minHeight="78.0" minWidth="78.0" mnemonicParsing="false" onAction="#deleteRelationClick" textAlignment="CENTER">
+                                       <font>
+                                          <Font name="System Bold" size="31.0" />
+                                       </font>
+                                       <graphic>
+                                          <ImageView pickOnBounds="true" preserveRatio="true" scaleX="0.65" scaleY="0.65">
+                                             <image>
+                                                <Image url="@relation_delete.png" />
+                                             </image>
+                                          </ImageView>
+                                       </graphic>
+                                    </Button>
+                                 </children>
+                              </VBox>
+                           </children></AnchorPane>
                      </content>
                   </TitledPane>
                   <TitledPane layoutX="10.0" layoutY="62.0" text="Kommentar">
                      <content>
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                           <children>
+                              <VBox alignment="TOP_CENTER" spacing="15.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                 <children>
+                                    <Button fx:id="newEntityBtn11" alignment="CENTER" maxHeight="78.0" maxWidth="78.0" minHeight="78.0" minWidth="78.0" mnemonicParsing="false" onAction="#newCommentClick" textAlignment="CENTER" VBox.vgrow="NEVER">
+                                       <font>
+                                          <Font name="System Bold" size="31.0" />
+                                       </font>
+                                       <graphic>
+                                          <ImageView pickOnBounds="true" preserveRatio="true" scaleX="0.65" scaleY="0.65" smooth="false">
+                                             <image>
+                                                <Image url="@comment_new.png" />
+                                             </image>
+                                          </ImageView>
+                                       </graphic>
+                                    </Button>
+                                    <Button fx:id="editEntityBtn11" layoutX="40.0" layoutY="87.0" maxHeight="78.0" maxWidth="78.0" minHeight="78.0" minWidth="78.0" mnemonicParsing="false" onAction="#editCommentClick" textAlignment="CENTER">
+                                       <font>
+                                          <Font name="System Bold" size="31.0" />
+                                       </font>
+                                       <graphic>
+                                          <ImageView pickOnBounds="true" preserveRatio="true" scaleX="0.65" scaleY="0.65">
+                                             <image>
+                                                <Image url="@comment_edit.png" />
+                                             </image>
+                                          </ImageView>
+                                       </graphic>
+                                    </Button>
+                                    <Button fx:id="deleteEntityBtn11" layoutX="50.0" layoutY="97.0" maxHeight="78.0" maxWidth="78.0" minHeight="78.0" minWidth="78.0" mnemonicParsing="false" onAction="#deleteCommentClick" textAlignment="CENTER">
+                                       <font>
+                                          <Font name="System Bold" size="31.0" />
+                                       </font>
+                                       <graphic>
+                                          <ImageView pickOnBounds="true" preserveRatio="true" scaleX="0.65" scaleY="0.65">
+                                             <image>
+                                                <Image url="@comment_delete.png" />
+                                             </image>
+                                          </ImageView>
+                                       </graphic>
+                                    </Button>
+                                 </children>
+                              </VBox>
+                           </children></AnchorPane>
                      </content>
                   </TitledPane>
                </panes>
