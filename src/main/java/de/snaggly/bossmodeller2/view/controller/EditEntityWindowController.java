@@ -169,6 +169,16 @@ public class EditEntityWindowController implements ViewController<Entity> {
             }
         }
 
+        if (!checkContainsPrimaryKey()) {
+            if (canClose) {
+                canClose = false;
+                GUIMethods.showWarning(
+                        Entity.class.getSimpleName(),
+                        "Keine Primärschlüssel",
+                        "Die Entität muss mindestens ein Primärschlüssel besitzen!");
+            }
+        }
+
         entity.setWeakType(isWeakTypeCheckBox.isSelected());
 
         if (canClose) {
@@ -252,6 +262,16 @@ public class EditEntityWindowController implements ViewController<Entity> {
         for (int i = 0; i < attributesListVBOX.getChildren().size() && !result; i++) {
             var attributeEditView = (AttributeEditor)(attributesListVBOX.getChildren().get(i));
             result = !attributeEditView.getController().getNameTF().getText().equals("");
+        }
+
+        return result;
+    }
+
+    private boolean checkContainsPrimaryKey() {
+        boolean result = false;
+        for (int i = 0; i < attributesListVBOX.getChildren().size() && !result; i++) {
+            var attributeEditView = (AttributeEditor)(attributesListVBOX.getChildren().get(i));
+            result = attributeEditView.getController().getIsPrimaryCheck().isSelected();
         }
 
         return result;
