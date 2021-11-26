@@ -1,4 +1,4 @@
-module de.snaggly.bossmodeller2 {
+module de.snaggly.bossmodellerfx {
     requires javafx.controls;
     requires javafx.fxml;
     requires javafx.web;

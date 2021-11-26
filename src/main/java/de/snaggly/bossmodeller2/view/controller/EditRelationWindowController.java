@@ -290,7 +290,7 @@ public class EditRelationWindowController implements ViewController<Relation> {
 
             handleRelationLines();
         } catch (IOException e) {
-            GUIMethods.showError(EditRelationWindowController.class.getSimpleName(), "BOSSModeller 2", e.getLocalizedMessage());
+            GUIMethods.showError(EditRelationWindowController.class.getSimpleName(), "BOSSModellerFX", e.getLocalizedMessage());
         }
     }
 

@@ -78,7 +78,7 @@ public class EditEntityWindowController implements ViewController<Entity> {
                 attributesListVBOX.getChildren().add(index, attributeEditor);
             }
         } catch (IOException e) {
-            GUIMethods.showError(EditEntityWindowController.class.getSimpleName(), "BOSSModeller 2", e.getLocalizedMessage());
+            GUIMethods.showError(EditEntityWindowController.class.getSimpleName(), "BOSSModellerFX", e.getLocalizedMessage());
         }
         removeAttrbBtn.setDisable(attributesListVBOX.getChildren().size() < 1);
         addAttrbBtn.requestFocus();
@@ -225,7 +225,7 @@ public class EditEntityWindowController implements ViewController<Entity> {
                 bindAttributeToGui(attributeModel, attributeEditor);
                 attributesListVBOX.getChildren().add(new Separator());
             } catch (IOException e) {
-                GUIMethods.showError(EditEntityWindowController.class.getSimpleName(), "BOSSModeller 2", e.getLocalizedMessage());
+                GUIMethods.showError(EditEntityWindowController.class.getSimpleName(), "BOSSModellerFX", e.getLocalizedMessage());
             }
         }
         attributesListVBOX.getChildren().remove(attributesListVBOX.getChildren().size()-1);

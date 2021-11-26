@@ -610,7 +610,7 @@ public class MainController {
             stage.setScene(scene);
             stage.show();
         } catch (IOException e) {
-            GUIMethods.showError(MainController.class.getSimpleName(), "BOSSModeller 2", e.getLocalizedMessage());
+            GUIMethods.showError(MainController.class.getSimpleName(), "BOSSModellerFX", e.getLocalizedMessage());
         }
     }
 
@@ -709,7 +709,7 @@ public class MainController {
     private void editEntityClick() {
         var currentSelection = currentProject.getCurrentSelected();
         if (!(currentSelection instanceof EntityView)){
-            GUIMethods.showWarning(MainController.class.getSimpleName(), "BOSSModeller 2", "Keine Entität ausgewählt!");
+            GUIMethods.showWarning(MainController.class.getSimpleName(), "BOSSModellerFX", "Keine Entität ausgewählt!");
             return;
         }
         editEntity((EntityView)currentSelection);
@@ -719,7 +719,7 @@ public class MainController {
     private void deleteEntityClick() {
         var currentSelection = currentProject.getCurrentSelected();
         if (!(currentProject.getCurrentSelected() instanceof EntityView)){
-            GUIMethods.showWarning(MainController.class.getSimpleName(), "BOSSModeller 2", "Keine Entität ausgewählt!");
+            GUIMethods.showWarning(MainController.class.getSimpleName(), "BOSSModellerFX", "Keine Entität ausgewählt!");
             return;
         }
         deleteEntity((EntityView) currentSelection);
@@ -734,7 +734,7 @@ public class MainController {
     private void editCommentClick() {
         var currentSelection = currentProject.getCurrentSelected();
         if (!(currentProject.getCurrentSelected() instanceof CommentView)){
-            GUIMethods.showWarning(MainController.class.getSimpleName(), "BOSSModeller 2", "Kein Kommentar ausgewählt!");
+            GUIMethods.showWarning(MainController.class.getSimpleName(), "BOSSModellerFX", "Kein Kommentar ausgewählt!");
             return;
         }
         editComment((CommentView) currentSelection);
@@ -744,7 +744,7 @@ public class MainController {
     private void deleteCommentClick() {
         var currentSelection = currentProject.getCurrentSelected();
         if (!(currentProject.getCurrentSelected() instanceof CommentView)){
-            GUIMethods.showWarning(MainController.class.getSimpleName(), "BOSSModeller 2", "Kein Kommentar ausgewählt!");
+            GUIMethods.showWarning(MainController.class.getSimpleName(), "BOSSModellerFX", "Kein Kommentar ausgewählt!");
             return;
         }
         deleteComment((CommentView) currentSelection);
@@ -789,13 +789,13 @@ public class MainController {
                     var entityView = EntityBuilder.buildEntity(resultedEntity, mainWorkbench, currentProject.getSelectionHandler);
                     saveNewEntity(entityView);
                 } catch (IOException e) {
-                    GUIMethods.showError(MainController.class.getSimpleName(), "BOSSModeller 2", e.getLocalizedMessage());
+                    GUIMethods.showError(MainController.class.getSimpleName(), "BOSSModellerFX", e.getLocalizedMessage());
                 }
             };
         }
         catch (Exception e) {
             e.printStackTrace();
-            GUIMethods.showError(MainController.class.getSimpleName(), "BOSSModeller 2", e.getLocalizedMessage());
+            GUIMethods.showError(MainController.class.getSimpleName(), "BOSSModellerFX", e.getLocalizedMessage());
         }
     }
 
@@ -814,11 +814,11 @@ public class MainController {
 
                     saveNewEntity(entityView);
                 } catch (IOException e) {
-                    GUIMethods.showError(MainController.class.getSimpleName(), "BOSSModeller 2", e.getLocalizedMessage());
+                    GUIMethods.showError(MainController.class.getSimpleName(), "BOSSModellerFX", e.getLocalizedMessage());
                 }
             };
         } catch (Exception e) {
-            GUIMethods.showError(MainController.class.getSimpleName(), "BOSSModeller 2", e.getLocalizedMessage());
+            GUIMethods.showError(MainController.class.getSimpleName(), "BOSSModellerFX", e.getLocalizedMessage());
         }
     }
 
@@ -830,7 +830,7 @@ public class MainController {
             currentProject.addComment(commentModel);
             mainWorkbench.getChildren().add(commentView);
         } catch (IOException e) {
-            GUIMethods.showError(MainController.class.getSimpleName(), "BOSSModeller 2", e.getLocalizedMessage());
+            GUIMethods.showError(MainController.class.getSimpleName(), "BOSSModellerFX", e.getLocalizedMessage());
         }
     }
 
@@ -851,7 +851,7 @@ public class MainController {
             stage.setScene(relationBuilderWindow.getKey());
             stage.show();
         } catch (IOException e) {
-            GUIMethods.showError(MainController.class.getSimpleName(), "BOSSModeller 2", e.getLocalizedMessage());
+            GUIMethods.showError(MainController.class.getSimpleName(), "BOSSModellerFX", e.getLocalizedMessage());
         }
     }
 
@@ -890,7 +890,7 @@ public class MainController {
 
             relationLineDrawer();
         } catch (IOException e) {
-            GUIMethods.showError(MainController.class.getSimpleName(), "BOSSModeller 2", e.getLocalizedMessage());
+            GUIMethods.showError(MainController.class.getSimpleName(), "BOSSModellerFX", e.getLocalizedMessage());
         }
     }
 
@@ -914,7 +914,7 @@ public class MainController {
             stage.setScene(relationBuilderWindow.getKey());
             stage.show();
         } catch (IOException e) {
-            GUIMethods.showError(MainController.class.getSimpleName(), "BOSSModeller 2", e.getLocalizedMessage());
+            GUIMethods.showError(MainController.class.getSimpleName(), "BOSSModellerFX", e.getLocalizedMessage());
         }
     }
 }
