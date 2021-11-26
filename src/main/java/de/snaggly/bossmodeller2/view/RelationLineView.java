@@ -3,6 +3,7 @@ package de.snaggly.bossmodeller2.view;
 import de.snaggly.bossmodeller2.guiLogic.GUIMethods;
 import de.snaggly.bossmodeller2.guiLogic.RelationLineClickHandler;
 import de.snaggly.bossmodeller2.model.Relation;
+import de.snaggly.bossmodeller2.struct.relations.RelationViewStruct;
 import de.snaggly.bossmodeller2.view.viewtypes.Controllable;
 import de.snaggly.bossmodeller2.view.viewtypes.Highlightable;
 import javafx.beans.value.ChangeListener;
@@ -14,8 +15,8 @@ import javafx.scene.shape.Line;
 
 public class RelationLineView extends Line implements Controllable, Highlightable {
     private final RelationLineClickHandler clicker;
-    private final Relation parentRelation;
-    public RelationLineView(Relation parent, RelationLineClickHandler relationLineClickHandler) {
+    private final RelationViewStruct parentRelation;
+    public RelationLineView(RelationViewStruct parent, RelationLineClickHandler relationLineClickHandler) {
         this.setStrokeWidth(3.0);
         clicker = relationLineClickHandler;
         parentRelation = parent;

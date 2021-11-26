@@ -1,7 +1,7 @@
 package de.snaggly.bossmodeller2.guiLogic;
 
-import de.snaggly.bossmodeller2.model.Relation;
+import de.snaggly.bossmodeller2.struct.relations.RelationViewStruct;
 
 public interface RelationLineClickHandler {
-    void handleClick(Relation selectedRelation);
+    void handleClick(RelationViewStruct selectedRelation);
 }

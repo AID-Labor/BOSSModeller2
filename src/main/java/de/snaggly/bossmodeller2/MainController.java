@@ -84,9 +84,9 @@ public class MainController {
 
             if (relationViewStruct == null) {
                 relationViewStruct = new RelationViewStruct();
-                relationViewStruct.line1 = new RelationLineView(relation, this::highlightRelation);
-                relationViewStruct.line2 = new RelationLineView(relation, this::highlightRelation);
-                relationViewStruct.line3 = new RelationLineView(relation, this::highlightRelation);
+                relationViewStruct.line1 = new RelationLineView(relationViewStruct, currentProject::highlightRelation);
+                relationViewStruct.line2 = new RelationLineView(relationViewStruct, currentProject::highlightRelation);
+                relationViewStruct.line3 = new RelationLineView(relationViewStruct, currentProject::highlightRelation);
                 relationsOverview.put(relation, relationViewStruct);
 
                 mainWorkbench.getChildren().addAll(relationViewStruct.line1, relationViewStruct.line2, relationViewStruct.line3);
@@ -599,11 +599,6 @@ public class MainController {
                 crowsFootB.draw(mainWorkbench, relation.getTableB_Cardinality(), relation.getTableB_Obligation(), 0, 0);
             }
         }
-    }
-
-    private void highlightRelation(Relation selectedRelation) {
-        var relationStruct = relationsOverview.get(selectedRelation);
-        currentProject.highlightRelation(relationStruct);
     }
 
     @FXML
