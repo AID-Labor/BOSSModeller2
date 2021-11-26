@@ -218,6 +218,8 @@ public class EditRelationWindowController implements ViewController<Relation> {
         radioBtnPolyB1.setSelected(model.getTableB_Cardinality() == Relation.Cardinality.ONE);
         radioBtnObligationBMust.setSelected(model.getTableB_Obligation() == Relation.Obligation.MUST);
         radioBtnObligationBCan.setSelected(model.getTableB_Obligation() == Relation.Obligation.CAN);
+        tableAIsWeakChkBox.setSelected(model.getTableA().isWeakType());
+        tableBIsWeakChkBox.setSelected(model.getTableB().isWeakType());
         rebuildEntityView();
     }
 
