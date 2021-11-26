@@ -752,10 +752,6 @@ public class MainController {
 
     @FXML
     private void newRelationClick() {
-        if (currentProject.getEntities().size() <= 1) {
-            GUIMethods.showWarning(MainController.class.getSimpleName(), "BOSSModeller FX", "Es muss mindestens eine Relation existieren!");
-            return;
-        }
         createNewRelation();
     }
 
@@ -844,7 +840,7 @@ public class MainController {
 
     private void createNewRelation() {
         if (currentProject.getEntities().size() < 1) {
-            GUIMethods.showWarning(MainController.class.getSimpleName(), "BOSSModeller 2", "Es muss mindestens eine Entität existieren!");
+            GUIMethods.showWarning(MainController.class.getSimpleName(), "BOSSModeller FX", "Es muss mindestens eine Entität existieren!");
             return;
         }
         try {
