@@ -636,11 +636,17 @@ public class MainController {
                 removeCommentMenu.setOnAction(actionEvent -> deleteComment(commentView));
                 var separator = new SeparatorMenuItem();
                 mainWorkbenchContextMenu.getItems().addAll(editCommentMenu, removeCommentMenu, separator);
-            } else if (currentSelection instanceof RelationLineView) {
-                //ToDO: Highlight relation connection
+            } else if (currentSelection instanceof RelationViewNode) {
+                var relationView = (RelationViewNode)(currentProject.getCurrentSelected());
+                var editRelationMenu = new MenuItem("Relation bearbeiten");
+                editRelationMenu.setOnAction(actionEvent -> editRelation(relationView));
+                var removeRelation = new MenuItem("Relation löschen");
+                removeRelation.setOnAction(actionEvent -> deleteRelation(relationView));
+                var separator = new SeparatorMenuItem();
+                mainWorkbenchContextMenu.getItems().addAll(editRelationMenu, removeRelation, separator);
             }
 
-            if (currentSelection instanceof CustomNode) {
+            if (currentSelection instanceof EntityView || currentSelection instanceof CommentView) {
                 var editCommentMenu = new MenuItem("Element vor rücken");
                 editCommentMenu.setOnAction(actionEvent -> currentSelection.toFront());
                 var removeCommentMenu = new MenuItem("Element zu rücken");
@@ -755,10 +761,22 @@ public class MainController {
 
     @FXML
     private void editRelationClick() {
+        var currentSelection = currentProject.getCurrentSelected();
+        if (!(currentProject.getCurrentSelected() instanceof RelationViewNode)){
+            GUIMethods.showWarning(MainController.class.getSimpleName(), "BOSSModeller FX", "Keine Relation ausgewählt!");
+            return;
+        }
+        editRelation((RelationViewNode) currentSelection);
     }
 
     @FXML
     private void deleteRelationClick() {
+        var currentSelection = currentProject.getCurrentSelected();
+        if (!(currentProject.getCurrentSelected() instanceof RelationViewNode)){
+            GUIMethods.showWarning(MainController.class.getSimpleName(), "BOSSModeller FX", "Keine Relation ausgewählt!");
+            return;
+        }
+        deleteRelation((RelationViewNode) currentSelection);
     }
 
     private void createNewEntity(double xCoordinate, double yCoordinate) {
@@ -878,5 +896,12 @@ public class MainController {
         } catch (IOException e) {
             GUIMethods.showError(MainController.class.getSimpleName(), "BOSSModeller 2", e.getLocalizedMessage());
         }
+    }
+
+
+    private void deleteRelation(RelationViewNode relationView) {
+    }
+
+    private void editRelation(RelationViewNode relationView) {
     }
 }
