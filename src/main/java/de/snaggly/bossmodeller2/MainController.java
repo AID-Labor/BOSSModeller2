@@ -896,8 +896,25 @@ public class MainController {
 
 
     private void deleteRelation(RelationViewNode relationView) {
+        mainWorkbench.getChildren().removeAll(relationView.getAllNodes());
+        currentProject.getRelations().remove(relationView.getModel());
     }
 
     private void editRelation(RelationViewNode relationView) {
+        var selectedRelationModel = relationView.getModel();
+
+        try {
+            var relationBuilderWindow = RelationEditorWindowBuilder.buildRelationEditor(selectedRelationModel, currentProject);
+            relationBuilderWindow.getValue().parentObserver = dataset -> {
+                deleteRelation(relationView);
+                saveNewRelation(dataset);
+            };
+            var stage = new Stage();
+            stage.setTitle("Relation bearbeiten");
+            stage.setScene(relationBuilderWindow.getKey());
+            stage.show();
+        } catch (IOException e) {
+            GUIMethods.showError(MainController.class.getSimpleName(), "BOSSModeller 2", e.getLocalizedMessage());
+        }
     }
 }

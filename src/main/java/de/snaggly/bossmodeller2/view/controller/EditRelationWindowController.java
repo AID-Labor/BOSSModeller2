@@ -197,7 +197,28 @@ public class EditRelationWindowController implements ViewController<Relation> {
 
     @Override
     public void loadModel(Relation model) {
-        this.relation = model;
+        this.relation = new Relation(
+                model.getName(),
+                model.getTableA(),
+                model.getTableB(),
+                model.getTableA_Cardinality(),
+                model.getTableB_Cardinality(),
+                model.getTableA_Obligation(),
+                model.getTableB_Obligation()
+        );
+        entityAModelReference = relation.getTableA();
+        entityBModelReference = relation.getTableB();
+        tableAEntityCmboBox.getSelectionModel().select(workspace.getEntities().indexOf(model.getTableA()));
+        radioBtnPolyAN.setSelected(model.getTableA_Cardinality() == Relation.Cardinality.MANY);
+        radioBtnPolyA1.setSelected(model.getTableA_Cardinality() == Relation.Cardinality.ONE);
+        radioBtnObligationAMust.setSelected(model.getTableA_Obligation() == Relation.Obligation.MUST);
+        radioBtnObligationACan.setSelected(model.getTableA_Obligation() == Relation.Obligation.CAN);
+        tableBEntityCmboBox.getSelectionModel().select(workspace.getEntities().indexOf(model.getTableB()));
+        radioBtnPolyBN.setSelected(model.getTableB_Cardinality() == Relation.Cardinality.MANY);
+        radioBtnPolyB1.setSelected(model.getTableB_Cardinality() == Relation.Cardinality.ONE);
+        radioBtnObligationBMust.setSelected(model.getTableB_Obligation() == Relation.Obligation.MUST);
+        radioBtnObligationBCan.setSelected(model.getTableB_Obligation() == Relation.Obligation.CAN);
+        rebuildEntityView();
     }
 
     private void handleRelationLines() {

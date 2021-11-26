@@ -3,6 +3,9 @@ package de.snaggly.bossmodeller2.view;
 import de.snaggly.bossmodeller2.model.Relation;
 import de.snaggly.bossmodeller2.view.controller.ViewController;
 import de.snaggly.bossmodeller2.view.viewtypes.CustomNode;
+import javafx.scene.Node;
+
+import java.util.ArrayList;
 
 public class RelationViewNode extends CustomNode<Relation> {
     private final Relation model;
@@ -14,6 +17,32 @@ public class RelationViewNode extends CustomNode<Relation> {
 
     public RelationViewNode(Relation model) {
         this.model = model;
+    }
+
+    public ArrayList<Node> getAllNodes() {
+        var result = new ArrayList<Node>();
+        if (line1 != null)
+            result.add(line1);
+        if (line2 != null)
+            result.add(line2);
+        if (line3 != null)
+            result.add(line3);
+        if (crowsFootA != null) {
+            result.add(crowsFootA.multiplicityLineOne);
+            result.add(crowsFootA.mandatoryLine);
+            result.add(crowsFootA.optionalCircle);
+            result.add(crowsFootA.multiplicityLineMultiple1);
+            result.add(crowsFootA.multiplicityLineMultiple2);
+        }
+        if (crowsFootB != null) {
+            result.add(crowsFootB.multiplicityLineOne);
+            result.add(crowsFootB.mandatoryLine);
+            result.add(crowsFootB.optionalCircle);
+            result.add(crowsFootB.multiplicityLineMultiple1);
+            result.add(crowsFootB.multiplicityLineMultiple2);
+        }
+
+        return result;
     }
 
     @Override
