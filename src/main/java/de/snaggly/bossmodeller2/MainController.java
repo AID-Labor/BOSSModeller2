@@ -6,7 +6,7 @@ import de.snaggly.bossmodeller2.guiLogic.Project;
 import de.snaggly.bossmodeller2.model.*;
 import de.snaggly.bossmodeller2.struct.relations.ConnectingOrientation;
 import de.snaggly.bossmodeller2.struct.relations.EntityViewConnections;
-import de.snaggly.bossmodeller2.struct.relations.RelationViewStruct;
+import de.snaggly.bossmodeller2.view.RelationViewNode;
 import de.snaggly.bossmodeller2.view.CommentView;
 import de.snaggly.bossmodeller2.view.EntityView;
 import de.snaggly.bossmodeller2.view.RelationLineView;
@@ -17,7 +17,6 @@ import de.snaggly.bossmodeller2.view.factory.windowtype.RelationEditorWindowBuil
 import de.snaggly.bossmodeller2.view.viewtypes.CustomNode;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
@@ -36,7 +35,7 @@ public class MainController {
 
     private Project currentProject;
     private final HashMap<Entity, EntityView> entitiesOverview = new HashMap<>();
-    private final HashMap<Relation, RelationViewStruct> relationsOverview = new HashMap<>();
+    private final HashMap<Relation, RelationViewNode> relationsOverview = new HashMap<>();
 
     private final ContextMenu mainWorkbenchContextMenu = new ContextMenu();
 
@@ -57,43 +56,43 @@ public class MainController {
             var node1 = entitiesOverview.get(relation.getTableA());
             var node2 = entitiesOverview.get(relation.getTableB());
 
-            var relationViewStruct = relationsOverview.get(relation);
+            var relationViewNode = relationsOverview.get(relation);
 
             if (node1 == null || node2 == null) {
                 currentProject.removeRelation(relation);
 
-                if (relationViewStruct != null) {
-                    if (relationViewStruct.crowsFootA != null) {
-                        mainWorkbench.getChildren().removeAll(relationViewStruct.crowsFootA.getAllNodes());
+                if (relationViewNode != null) {
+                    if (relationViewNode.crowsFootA != null) {
+                        mainWorkbench.getChildren().removeAll(relationViewNode.crowsFootA.getAllNodes());
                     }
-                    if (relationViewStruct.crowsFootB != null) {
-                        mainWorkbench.getChildren().removeAll(relationViewStruct.crowsFootB.getAllNodes());
+                    if (relationViewNode.crowsFootB != null) {
+                        mainWorkbench.getChildren().removeAll(relationViewNode.crowsFootB.getAllNodes());
                     }
-                    if (relationViewStruct.line1 != null) {
-                        mainWorkbench.getChildren().remove(relationViewStruct.line1);
+                    if (relationViewNode.line1 != null) {
+                        mainWorkbench.getChildren().remove(relationViewNode.line1);
                     }
-                    if (relationViewStruct.line2 != null) {
-                        mainWorkbench.getChildren().remove(relationViewStruct.line2);
+                    if (relationViewNode.line2 != null) {
+                        mainWorkbench.getChildren().remove(relationViewNode.line2);
                     }
-                    if (relationViewStruct.line3 != null) {
-                        mainWorkbench.getChildren().remove(relationViewStruct.line3);
+                    if (relationViewNode.line3 != null) {
+                        mainWorkbench.getChildren().remove(relationViewNode.line3);
                     }
                 }
                 continue;
             }
 
-            if (relationViewStruct == null) {
-                relationViewStruct = new RelationViewStruct();
-                relationViewStruct.line1 = new RelationLineView(relationViewStruct, currentProject::highlightRelation);
-                relationViewStruct.line2 = new RelationLineView(relationViewStruct, currentProject::highlightRelation);
-                relationViewStruct.line3 = new RelationLineView(relationViewStruct, currentProject::highlightRelation);
-                relationsOverview.put(relation, relationViewStruct);
+            if (relationViewNode == null) {
+                relationViewNode = new RelationViewNode(relation);
+                relationViewNode.line1 = new RelationLineView(relationViewNode, currentProject::setCurrentSelected);
+                relationViewNode.line2 = new RelationLineView(relationViewNode, currentProject::setCurrentSelected);
+                relationViewNode.line3 = new RelationLineView(relationViewNode, currentProject::setCurrentSelected);
+                relationsOverview.put(relation, relationViewNode);
 
-                mainWorkbench.getChildren().addAll(relationViewStruct.line1, relationViewStruct.line2, relationViewStruct.line3);
+                mainWorkbench.getChildren().addAll(relationViewNode.line1, relationViewNode.line2, relationViewNode.line3);
             }
 
-            var crowsFootA = relationViewStruct.crowsFootA;
-            var crowsFootB = relationViewStruct.crowsFootB;
+            var crowsFootA = relationViewNode.crowsFootA;
+            var crowsFootB = relationViewNode.crowsFootB;
 
             if (crowsFootA != null) {
                 mainWorkbench.getChildren().removeAll(crowsFootA.getAllNodes());

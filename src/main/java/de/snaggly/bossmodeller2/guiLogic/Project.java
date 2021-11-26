@@ -4,7 +4,7 @@ import de.snaggly.bossmodeller2.model.Comment;
 import de.snaggly.bossmodeller2.model.DataModel;
 import de.snaggly.bossmodeller2.model.Entity;
 import de.snaggly.bossmodeller2.model.Relation;
-import de.snaggly.bossmodeller2.struct.relations.RelationViewStruct;
+import de.snaggly.bossmodeller2.view.RelationViewNode;
 import de.snaggly.bossmodeller2.view.viewtypes.CustomNode;
 import javafx.scene.Node;
 import javafx.scene.layout.Pane;
@@ -89,28 +89,6 @@ public class Project {
         }
 
         this.currentSelected = newSelection;
-
-        if (previouslySelectionRelation != null) {
-            deHighlightRelation();
-        }
-    }
-
-    private RelationViewStruct previouslySelectionRelation;
-    public void highlightRelation(RelationViewStruct relationViewStruct) {
-        relationViewStruct.crowsFootA.highlight();
-        relationViewStruct.crowsFootB.highlight();
-        relationViewStruct.line1.highlight();
-        relationViewStruct.line2.highlight();
-        relationViewStruct.line3.highlight();
-        previouslySelectionRelation = relationViewStruct;
-    }
-    public void deHighlightRelation() {
-        previouslySelectionRelation.crowsFootA.deHighlight();
-        previouslySelectionRelation.crowsFootB.deHighlight();
-        previouslySelectionRelation.line1.deHighlight();
-        previouslySelectionRelation.line2.deHighlight();
-        previouslySelectionRelation.line3.deHighlight();
-        previouslySelectionRelation = null;
     }
 
     public String serializeToJson() {

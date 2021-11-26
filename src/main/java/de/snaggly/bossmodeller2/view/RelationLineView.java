@@ -1,22 +1,16 @@
 package de.snaggly.bossmodeller2.view;
 
-import de.snaggly.bossmodeller2.guiLogic.GUIMethods;
-import de.snaggly.bossmodeller2.guiLogic.RelationLineClickHandler;
-import de.snaggly.bossmodeller2.model.Relation;
-import de.snaggly.bossmodeller2.struct.relations.RelationViewStruct;
+import de.snaggly.bossmodeller2.guiLogic.SelectionHandler;
 import de.snaggly.bossmodeller2.view.viewtypes.Controllable;
 import de.snaggly.bossmodeller2.view.viewtypes.Highlightable;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.event.EventHandler;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 
 public class RelationLineView extends Line implements Controllable, Highlightable {
-    private final RelationLineClickHandler clicker;
-    private final RelationViewStruct parentRelation;
-    public RelationLineView(RelationViewStruct parent, RelationLineClickHandler relationLineClickHandler) {
+    private final SelectionHandler clicker;
+    private final RelationViewNode parentRelation;
+    public RelationLineView(RelationViewNode parent, SelectionHandler relationLineClickHandler) {
         this.setStrokeWidth(3.0);
         clicker = relationLineClickHandler;
         parentRelation = parent;
@@ -34,7 +28,7 @@ public class RelationLineView extends Line implements Controllable, Highlightabl
 
     @Override
     public void setOnClick() {
-        clicker.handleClick(parentRelation);
+        clicker.setCurrentSelected(parentRelation);
     }
 
     @Override
