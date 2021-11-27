@@ -59,7 +59,7 @@ public abstract class EntityView extends CustomNode<Entity> implements Draggable
         for (var attribute : entity.getAttributes()) {
             var attributeLabel = new Label(attribute.getName());
             attributeLabel.setUnderline(attribute.isPrimary());
-            if (!attribute.getFkTableName().equals(""))
+            if (attribute.getFkTableColumn() != null)
                 attributeLabel.setStyle("-fx-font-style: italic; ");
             attributeLabel.setPadding(new Insets(2, 15, 2, 15));
             attributesList.getChildren().add(attributeLabel);

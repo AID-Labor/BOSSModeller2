@@ -105,25 +105,35 @@ public class EditEntityWindowController implements ViewController<Entity> {
         if (attributeEditor != null) {
             var selectedIndex = attributesListVBOX.getChildren().indexOf(attributeEditor);
             if (selectedIndex == 0 && attributesListVBOX.getChildren().size() == 1) {
-                attributesListVBOX.getChildren().remove(selectedIndex);
-                removeAttributeFromEntity(selectedIndex);
+                if (removeAttributeFromEntity(selectedIndex)) {
+                    attributesListVBOX.getChildren().remove(selectedIndex);
+                }
             }
             else if (selectedIndex >= 1) {
-                attributesListVBOX.getChildren().remove(--selectedIndex);
-                attributesListVBOX.getChildren().remove(selectedIndex);
-                removeAttributeFromEntity((selectedIndex + 1) / 2);
+                if (removeAttributeFromEntity((selectedIndex + 1) / 2)) {
+                    attributesListVBOX.getChildren().remove(--selectedIndex);
+                    attributesListVBOX.getChildren().remove(selectedIndex);
+                }
             } else {
-                attributesListVBOX.getChildren().remove(selectedIndex);
-                attributesListVBOX.getChildren().remove(selectedIndex);
-                removeAttributeFromEntity(selectedIndex);
+                if (removeAttributeFromEntity(selectedIndex)) {
+                    attributesListVBOX.getChildren().remove(selectedIndex);
+                    attributesListVBOX.getChildren().remove(selectedIndex);
+                }
             }
             removeAttrbBtn.setDisable(attributesListVBOX.getChildren().size() < 1);
             removeAttrbBtn.requestFocus();
         }
     }
 
-    private void removeAttributeFromEntity(int index) {
-        entity.removeAttribute(index);
+    private boolean removeAttributeFromEntity(int index) {
+        if (entity.getAttributes().get(index).getFkTableColumn() == null) {
+            entity.removeAttribute(index);
+            return true;
+        }
+        else {
+            GUIMethods.showWarning(EditEntityWindowController.class.getSimpleName(), "BOSSModellerFX", "Fremdschlüssel können von hier nicht entfernt werden!\nBitte die Relation löschen.");
+            return false;
+        }
     }
 
     private void removeAllAttributesAction() {
