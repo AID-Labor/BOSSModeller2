@@ -896,7 +896,35 @@ public class MainController {
 
     private void deleteRelation(RelationViewNode relationView) {
         mainWorkbench.getChildren().removeAll(relationView.getAllNodes());
+
+        var relation = relationView.getModel();
+        var fkA = relation.getFkAttributeA();
+        if (fkA != null) {
+            try {
+                relation.getTableA().getAttributes().remove(fkA);
+                var entityView = EntityBuilder.buildEntity(relation.getTableA(), mainWorkbench, currentProject.getSelectionHandler);
+                deleteEntity(entitiesOverview.get(relation.getTableA()));
+
+                saveNewEntity(entityView);
+            } catch (IOException e) {
+                GUIMethods.showError(MainController.class.getSimpleName(), "BOSSModellerFX", e.getLocalizedMessage());
+            }
+        }
+        var fkB = relation.getFkAttributeB();
+        if (fkB != null) {
+            try {
+                relation.getTableB().getAttributes().remove(fkB);
+                var entityView = EntityBuilder.buildEntity(relation.getTableB(), mainWorkbench, currentProject.getSelectionHandler);
+                deleteEntity(entitiesOverview.get(relation.getTableB()));
+
+                saveNewEntity(entityView);
+            } catch (IOException e) {
+                GUIMethods.showError(MainController.class.getSimpleName(), "BOSSModellerFX", e.getLocalizedMessage());
+            }
+        }
+
         currentProject.getRelations().remove(relationView.getModel());
+        relationLineDrawer();
     }
 
     private void editRelation(RelationViewNode relationView) {
