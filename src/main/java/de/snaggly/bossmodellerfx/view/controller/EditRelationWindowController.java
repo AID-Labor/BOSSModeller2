@@ -237,7 +237,15 @@ public class EditRelationWindowController implements ViewController<Relation> {
 
         crowsFootTableA.bindCrowsFootView(windowAnchorPane, relation.getTableA_Cardinality(), relation.getTableA_Obligation());
         crowsFootTableB.bindCrowsFootView(windowAnchorPane, relation.getTableB_Cardinality(), relation.getTableB_Obligation());
-    };
+    }
+
+    private boolean checkFkAttribute(ArrayList<Attribute> attributesList, Attribute fkAttribute) {
+        for (var attribute : attributesList) {
+            if (attribute.getFkTableColumn() != null && attribute.getFkTableColumn().equals(fkAttribute))
+                return true;
+        }
+        return false;
+    }
 
     private void rebuildEntityView() {
         handleCheckBoxesDisable();
@@ -247,31 +255,33 @@ public class EditRelationWindowController implements ViewController<Relation> {
 
             if (relation.getTableA_Cardinality() == Relation.Cardinality.MANY) {
                 var fkAttribute = relation.getTableA().getPrimaryKey();
-                relation.getTableB().addAttribute(new Attribute(
-                        fkAttribute.getName(),
-                        fkAttribute.getType(),
-                        false,
-                        fkAttribute.isNonNull(),
-                        fkAttribute.isUnique(),
-                        fkAttribute.getCheckName(),
-                        fkAttribute.getDefaultName(),
-                        relation.getTableA().getName(),
-                        fkAttribute.getName()
-                ));
+                if (!checkFkAttribute(relation.getTableB().getAttributes(), fkAttribute)) {
+                    relation.getTableB().addAttribute(new Attribute(
+                            fkAttribute.getName(),
+                            fkAttribute.getType(),
+                            false,
+                            fkAttribute.isNonNull(),
+                            fkAttribute.isUnique(),
+                            fkAttribute.getCheckName(),
+                            fkAttribute.getDefaultName(),
+                            fkAttribute
+                    ));
+                }
             }
             if (relation.getTableB_Cardinality() == Relation.Cardinality.MANY) {
                 var fkAttribute = relation.getTableB().getPrimaryKey();
-                relation.getTableA().addAttribute(new Attribute(
-                        fkAttribute.getName(),
-                        fkAttribute.getType(),
-                        false,
-                        fkAttribute.isNonNull(),
-                        fkAttribute.isUnique(),
-                        fkAttribute.getCheckName(),
-                        fkAttribute.getDefaultName(),
-                        relation.getTableB().getName(),
-                        fkAttribute.getName()
-                ));
+                if (!checkFkAttribute(relation.getTableA().getAttributes(), fkAttribute)) {
+                    relation.getTableA().addAttribute(new Attribute(
+                            fkAttribute.getName(),
+                            fkAttribute.getType(),
+                            false,
+                            fkAttribute.isNonNull(),
+                            fkAttribute.isUnique(),
+                            fkAttribute.getCheckName(),
+                            fkAttribute.getDefaultName(),
+                            fkAttribute
+                    ));
+                }
             }
 
             tableAexample = EntityBuilder.buildEntity(relation.getTableA(), windowAnchorPane, workspace.getSelectionHandler);
