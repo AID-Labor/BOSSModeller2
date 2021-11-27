@@ -1,6 +1,7 @@
 package de.snaggly.bossmodellerfx.view;
 
 import de.snaggly.bossmodellerfx.model.Entity;
+import de.snaggly.bossmodellerfx.view.controller.EntityViewController;
 import de.snaggly.bossmodellerfx.view.controller.ViewController;
 import de.snaggly.bossmodellerfx.view.viewtypes.Controllable;
 import de.snaggly.bossmodellerfx.view.viewtypes.CustomNode;
@@ -16,13 +17,15 @@ import java.io.IOException;
 public abstract class EntityView extends CustomNode<Entity> implements Draggable, Controllable {
     private final Entity model;
     private final FXMLLoader fxmlLoader;
+    private final EntityViewController controller;
 
     public EntityView(Entity entity) throws IOException {
         this.model = entity;
         fxmlLoader = new FXMLLoader(EntityView.class.getResource("Entity.fxml"));
         fxmlLoader.setRoot(this);
         fxmlLoader.load();
-        loadModel(entity);
+        controller = fxmlLoader.getController();
+        controller.loadModel(entity);
 
         setOnClick();
         setDraggable();
@@ -37,8 +40,8 @@ public abstract class EntityView extends CustomNode<Entity> implements Draggable
     }
 
     @Override
-    public ViewController<Entity> getController() {
-        return this::loadModel;
+    public EntityViewController getController() {
+        return controller;
     }
 
     @Override
@@ -49,31 +52,5 @@ public abstract class EntityView extends CustomNode<Entity> implements Draggable
     @Override
     public void setDeFocusStyle() {
         this.setStyle("");
-    }
-
-    private void loadModel(Entity entity) {
-        var headLabel = (Label) fxmlLoader.getNamespace().get("entityHeadTitle");
-        headLabel.setText(entity.getName());
-
-        var attributesList = (VBox) fxmlLoader.getNamespace().get("entityAttributesVBox");
-        for (var attribute : entity.getAttributes()) {
-            var attributeLabel = new Label(attribute.getName());
-            attributeLabel.setUnderline(attribute.isPrimary());
-            if (attribute.getFkTableColumn() != null)
-                attributeLabel.setStyle("-fx-font-style: italic; ");
-            attributeLabel.setPadding(new Insets(2, 15, 2, 15));
-            attributesList.getChildren().add(attributeLabel);
-        }
-
-        if (!entity.isWeakType()) {
-            var line = (Line)fxmlLoader.getNamespace().get("weakLineNW");
-            line.setVisible(false);
-            line = (Line)fxmlLoader.getNamespace().get("weakLineNE");
-            line.setVisible(false);
-            line = (Line)fxmlLoader.getNamespace().get("weakLineSW");
-            line.setVisible(false);
-            line = (Line)fxmlLoader.getNamespace().get("weakLineSE");
-            line.setVisible(false);
-        }
     }
 }

@@ -6,37 +6,41 @@
 <?import javafx.scene.shape.*?>
 <?import javafx.scene.text.*?>
 
-<!--fx:root type="de.snaggly.bossmodellerfx.view.viewtypes.CustomNode""-->
-
-<fx:root type="de.snaggly.bossmodellerfx.view.viewtypes.CustomNode" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1">
-   <children>
-      <VBox alignment="CENTER" style="-fx-border-color: black; -fx-border-width: 3; -fx-border-radius: 7; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 10, 0, 0, 0);" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-         <children>
-            <VBox alignment="CENTER" style="-fx-border-color: black; -fx-border-width: 2; -fx-background-color: c8c8c8;" VBox.vgrow="NEVER">
-               <children>
-                  <Label fx:id="entityHeadTitle" alignment="CENTER" contentDisplay="CENTER" text="Mockup Entity" textAlignment="CENTER">
-                     <font>
-                        <Font size="18.0" />
-                     </font>
-                     <padding>
-                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                     </padding>
-                  </Label>
-               </children>
-            </VBox>
-            <VBox fx:id="entityAttributesVBox" alignment="CENTER_LEFT" style="-fx-border-color: black; -fx-border-width: 2; -fx-background-color: f1f1f1;" VBox.vgrow="ALWAYS">
-               <VBox.margin>
-                  <Insets />
-               </VBox.margin>
-               <padding>
-                  <Insets bottom="10.0" top="5.0" />
-               </padding>
-            </VBox>
-         </children>
+<fx:root type="de.snaggly.bossmodellerfx.view.viewtypes.CustomNode" xmlns="http://javafx.com/javafx/11.0.2"
+         xmlns:fx="http://javafx.com/fxml/1"
+         fx:controller="de.snaggly.bossmodellerfx.view.controller.EntityViewController">
+   <VBox alignment="CENTER"
+         style="-fx-border-color: black; -fx-border-width: 3; -fx-border-radius: 7; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 10, 0, 0, 0);"
+         AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
+         AnchorPane.topAnchor="0.0">
+      <VBox alignment="CENTER" style="-fx-border-color: black; -fx-border-width: 2; -fx-background-color: c8c8c8;"
+            VBox.vgrow="NEVER">
+         <Label fx:id="entityHeadTitle" alignment="CENTER" contentDisplay="CENTER" text="Mockup Entity"
+                textAlignment="CENTER">
+            <font>
+               <Font size="18.0"/>
+            </font>
+            <padding>
+               <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+            </padding>
+         </Label>
       </VBox>
-      <Line fx:id="weakLineNW" endX="25.0" startY="25.0" strokeWidth="3.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" />
-      <Line fx:id="weakLineNE" endY="25.0" startX="-25.0" strokeWidth="3.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-      <Line fx:id="weakLineSW" endX="25.0" startY="-25.0" strokeWidth="3.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" />
-      <Line fx:id="weakLineSE" endY="-25.0" startX="-25.0" strokeWidth="3.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" />
-   </children>
+      <VBox fx:id="entityAttributesVBox" alignment="CENTER_LEFT"
+            style="-fx-border-color: black; -fx-border-width: 2; -fx-background-color: f1f1f1;" VBox.vgrow="ALWAYS">
+         <VBox.margin>
+            <Insets/>
+         </VBox.margin>
+         <padding>
+            <Insets bottom="10.0" top="5.0"/>
+         </padding>
+      </VBox>
+   </VBox>
+   <Line fx:id="weakLineNW" endX="25.0" startY="25.0" strokeWidth="3.0" AnchorPane.leftAnchor="0.0"
+         AnchorPane.topAnchor="0.0"/>
+   <Line fx:id="weakLineNE" endY="25.0" startX="-25.0" strokeWidth="3.0" AnchorPane.rightAnchor="0.0"
+         AnchorPane.topAnchor="0.0"/>
+   <Line fx:id="weakLineSW" endX="25.0" startY="-25.0" strokeWidth="3.0" AnchorPane.bottomAnchor="0.0"
+         AnchorPane.leftAnchor="0.0"/>
+   <Line fx:id="weakLineSE" endY="-25.0" startX="-25.0" strokeWidth="3.0" AnchorPane.bottomAnchor="0.0"
+         AnchorPane.rightAnchor="0.0"/>
 </fx:root>
