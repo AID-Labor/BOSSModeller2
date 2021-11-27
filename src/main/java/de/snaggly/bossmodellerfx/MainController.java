@@ -14,6 +14,7 @@ import de.snaggly.bossmodellerfx.view.factory.nodetype.CommentBuilder;
 import de.snaggly.bossmodellerfx.view.factory.nodetype.EntityBuilder;
 import de.snaggly.bossmodellerfx.view.factory.windowtype.EntityEditorWindowBuilder;
 import de.snaggly.bossmodellerfx.view.factory.windowtype.RelationEditorWindowBuilder;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -921,5 +922,17 @@ public class MainController {
         } catch (IOException e) {
             GUIMethods.showError(MainController.class.getSimpleName(), "BOSSModellerFX", e.getLocalizedMessage());
         }
+    }
+
+    @FXML
+    private void openFileClick(ActionEvent actionEvent) {
+    }
+
+    @FXML
+    private void saveFileClick(ActionEvent actionEvent) {
+    }
+
+    @FXML
+    private void exportPictureClick(ActionEvent actionEvent) {
     }
 }
