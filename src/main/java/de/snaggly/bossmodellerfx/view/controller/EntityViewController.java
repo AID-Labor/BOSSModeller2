@@ -35,11 +35,9 @@ public class EntityViewController implements ViewController<Entity> {
             entityAttributesVBox.getChildren().add(attributeLabel);
         }
 
-        if (!model.isWeakType()) {
-            weakLineNW.setVisible(false);
-            weakLineNE.setVisible(false);
-            weakLineSW.setVisible(false);
-            weakLineSE.setVisible(false);
-        }
+        weakLineNW.setVisible(model.isWeakType());
+        weakLineNE.setVisible(model.isWeakType());
+        weakLineSW.setVisible(model.isWeakType());
+        weakLineSE.setVisible(model.isWeakType());
     }
 }

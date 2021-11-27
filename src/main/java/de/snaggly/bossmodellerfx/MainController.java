@@ -888,11 +888,11 @@ public class MainController {
         mainWorkbench.getChildren().removeAll(relationView.getAllNodes());
 
         var relation = relationView.getModel();
+        relation.getTableA().setWeakType(false);
+        relation.getTableB().setWeakType(false);
         var fkA = relation.getFkAttributeA();
         if (fkA != null) {
             relation.getTableA().getAttributes().remove(fkA);
-            var entityView = entitiesOverview.get(relation.getTableA());
-            entityView.getController().loadModel(relation.getTableA());
         }
         var fkB = relation.getFkAttributeB();
         if (fkB != null) {
@@ -900,6 +900,10 @@ public class MainController {
             var entityView = entitiesOverview.get(relation.getTableB());
             entityView.getController().loadModel(relation.getTableB());
         }
+        var entityViewA = entitiesOverview.get(relation.getTableA());
+        entityViewA.getController().loadModel(relation.getTableA());
+        var entityViewB = entitiesOverview.get(relation.getTableB());
+        entityViewB.getController().loadModel(relation.getTableB());
 
         relationsOverview.remove(relation);
         currentProject.getRelations().remove(relationView.getModel());
