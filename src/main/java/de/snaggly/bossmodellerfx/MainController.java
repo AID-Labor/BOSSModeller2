@@ -806,16 +806,7 @@ public class MainController {
             stage.setTitle("Entität bearbeiten");
             stage.setScene(entityBuilder.getKey());
             stage.show();
-            entityBuilder.getValue().parentObserver = resultedEntity -> {
-                try {
-                    var entityView = EntityBuilder.buildEntity(resultedEntity, mainWorkbench, currentProject.getSelectionHandler);
-                    deleteEntity(selectedEntityView);
-
-                    saveNewEntity(entityView);
-                } catch (IOException e) {
-                    GUIMethods.showError(MainController.class.getSimpleName(), "BOSSModellerFX", e.getLocalizedMessage());
-                }
-            };
+            entityBuilder.getValue().parentObserver = resultedEntity -> selectedEntityView.getController().loadModel(resultedEntity);
         } catch (Exception e) {
             GUIMethods.showError(MainController.class.getSimpleName(), "BOSSModellerFX", e.getLocalizedMessage());
         }
@@ -870,27 +861,25 @@ public class MainController {
 
     private void deleteEntity(EntityView selectedEntityView) {
         var selectedEntity = selectedEntityView.getModel();
+        for (var relatedRelation : selectedEntity.getInvolvedRelations(currentProject.getRelations())) {
+            deleteRelation(relationsOverview.get(relatedRelation));
+        }
+
         entitiesOverview.remove(selectedEntity);
         mainWorkbench.getChildren().remove(selectedEntityView);
         currentProject.removeEntity(selectedEntity);
     }
 
     private void saveNewRelation(Relation dataset) {
-        currentProject.addRelation(dataset);
         var tableAView = entitiesOverview.get(dataset.getTableA());
         var tableBView = entitiesOverview.get(dataset.getTableB());
-        try {
-            deleteEntity(tableAView);
-            saveNewEntity(EntityBuilder.buildEntity(dataset.getTableA(), mainWorkbench, currentProject.getSelectionHandler));
-            if (tableAView != tableBView) {
-                deleteEntity(tableBView);
-                saveNewEntity(EntityBuilder.buildEntity(dataset.getTableB(), mainWorkbench, currentProject.getSelectionHandler));
-            }
-
-            relationLineDrawer();
-        } catch (IOException e) {
-            GUIMethods.showError(MainController.class.getSimpleName(), "BOSSModellerFX", e.getLocalizedMessage());
+        tableAView.getController().loadModel(dataset.getTableA());
+        if (tableAView != tableBView) {
+            tableBView.getController().loadModel(dataset.getTableB());
         }
+
+        currentProject.addRelation(dataset);
+        relationLineDrawer();
     }
 
 
@@ -900,27 +889,15 @@ public class MainController {
         var relation = relationView.getModel();
         var fkA = relation.getFkAttributeA();
         if (fkA != null) {
-            try {
-                relation.getTableA().getAttributes().remove(fkA);
-                var entityView = EntityBuilder.buildEntity(relation.getTableA(), mainWorkbench, currentProject.getSelectionHandler);
-                deleteEntity(entitiesOverview.get(relation.getTableA()));
-
-                saveNewEntity(entityView);
-            } catch (IOException e) {
-                GUIMethods.showError(MainController.class.getSimpleName(), "BOSSModellerFX", e.getLocalizedMessage());
-            }
+            relation.getTableA().getAttributes().remove(fkA);
+            var entityView = entitiesOverview.get(relation.getTableA());
+            entityView.getController().loadModel(relation.getTableA());
         }
         var fkB = relation.getFkAttributeB();
         if (fkB != null) {
-            try {
-                relation.getTableB().getAttributes().remove(fkB);
-                var entityView = EntityBuilder.buildEntity(relation.getTableB(), mainWorkbench, currentProject.getSelectionHandler);
-                deleteEntity(entitiesOverview.get(relation.getTableB()));
-
-                saveNewEntity(entityView);
-            } catch (IOException e) {
-                GUIMethods.showError(MainController.class.getSimpleName(), "BOSSModellerFX", e.getLocalizedMessage());
-            }
+            relation.getTableB().getAttributes().remove(fkB);
+            var entityView = entitiesOverview.get(relation.getTableB());
+            entityView.getController().loadModel(relation.getTableB());
         }
 
         relationsOverview.remove(relation);

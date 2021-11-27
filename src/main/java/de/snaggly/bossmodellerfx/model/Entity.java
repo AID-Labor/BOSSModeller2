@@ -30,6 +30,16 @@ public class Entity extends DataModel {
         return attributes.stream().filter(Attribute::isPrimary).findFirst().orElse(null);
     }
 
+    public ArrayList<Relation> getInvolvedRelations(ArrayList<Relation> relations) {
+        var result = new ArrayList<Relation>();
+        for (var relation : relations) {
+            if (relation.getTableA() == this || relation.getTableB() == this) {
+                result.add(relation);
+            }
+        }
+        return result;
+    }
+
     public ArrayList<Attribute> getAttributes() {
         return attributes;
     }
