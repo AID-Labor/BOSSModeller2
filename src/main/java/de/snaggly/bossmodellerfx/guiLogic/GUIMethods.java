@@ -12,6 +12,7 @@ import javafx.event.EventHandler;
 import javafx.scene.Cursor;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Region;
 import javafx.stage.Stage;
@@ -134,9 +135,10 @@ public class GUIMethods {
 
     private static void showAlert(Alert.AlertType type, String origin, String header, String info) {
         var alert = new Alert(type);
+        alert.setResizable(true);
         alert.setTitle(origin);
         alert.setHeaderText(header);
-        alert.setContentText(info);
+        alert.getDialogPane().setContent(new Label(info));
         alert.showAndWait();
     }
 
