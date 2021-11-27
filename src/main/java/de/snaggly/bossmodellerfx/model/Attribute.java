@@ -9,18 +9,17 @@ public class Attribute extends DataModel {
     private boolean isUnique;
     private String checkName;
     private String defaultName;
-    private String fkTableName;
-    private String fkColumnName;
+    private Attribute fkTableColumn;
 
     public Attribute(){
-        this(null, "", false, false, false, "", "", "", "");
+        this(null, "", false, false, false, "", "", null);
     }
 
-    public Attribute(String name, String type, boolean isPrimary, boolean isNonNull, boolean isUnique, String checkName, String defaultName, String fkTableName, String fkColumnName) {
-        this(name, 0.0, 0.0, type, isPrimary, isNonNull, isUnique, checkName, defaultName, fkTableName, fkColumnName);
+    public Attribute(String name, String type, boolean isPrimary, boolean isNonNull, boolean isUnique, String checkName, String defaultName, Attribute fkTableColumn) {
+        this(name, 0.0, 0.0, type, isPrimary, isNonNull, isUnique, checkName, defaultName, fkTableColumn);
     }
 
-    public Attribute(String name, double xCoordinate, double yCoordinate, String type, boolean isPrimary, boolean isNonNull, boolean isUnique, String checkName, String defaultName, String fkTableName, String fkColumnName) {
+    public Attribute(String name, double xCoordinate, double yCoordinate, String type, boolean isPrimary, boolean isNonNull, boolean isUnique, String checkName, String defaultName, Attribute fkTableColumn) {
         super(name, xCoordinate, yCoordinate);
         this.type = type;
         this.isPrimary = isPrimary;
@@ -28,8 +27,7 @@ public class Attribute extends DataModel {
         this.isUnique = isUnique;
         this.checkName = checkName;
         this.defaultName = defaultName;
-        this.fkTableName = fkTableName;
-        this.fkColumnName = fkColumnName;
+        this.fkTableColumn = fkTableColumn;
     }
 
     public String getType() {
@@ -80,20 +78,12 @@ public class Attribute extends DataModel {
         this.defaultName = defaultName;
     }
 
-    public String getFkTableName() {
-        return fkTableName;
+    public Attribute getFkTableColumn() {
+        return fkTableColumn;
     }
 
-    public void setFkTableName(String fkTableName) {
-        this.fkTableName = fkTableName;
-    }
-
-    public String getFkColumnName() {
-        return fkColumnName;
-    }
-
-    public void setFkColumnName(String fkColumnName) {
-        this.fkColumnName = fkColumnName;
+    public void setFkTableColumn(Attribute fkTableColumn) {
+        this.fkTableColumn = fkTableColumn;
     }
 
     public static class UniqueCombination {
