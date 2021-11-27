@@ -5,10 +5,14 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.VBox;
 
 public class EditAttributeController implements ViewController<Attribute> {
+    @FXML
+    private VBox nameVBox;
     @FXML
     private Button upBtn;
     @FXML
@@ -77,6 +81,15 @@ public class EditAttributeController implements ViewController<Attribute> {
 
         if (model.isPrimary()) {
             onPrimarySelected();
+        }
+
+        if (model.getFkTableColumn() != null) {
+            this.checkTF.setDisable(true);
+            this.defaultTF.setDisable(true);
+            this.isPrimaryCheck.setDisable(true);
+            this.isNonNullCheck.setDisable(true);
+            this.isUniqueCheck.setDisable(true);
+            nameVBox.getChildren().add(new Label("*Fremdschlüssel zu: " + model.getFkTableColumn().getName()));
         }
     }
 }
