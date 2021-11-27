@@ -239,47 +239,54 @@ public class EditRelationWindowController implements ViewController<Relation> {
         crowsFootTableB.bindCrowsFootView(windowAnchorPane, relation.getTableB_Cardinality(), relation.getTableB_Obligation());
     }
 
-    private boolean checkFkAttribute(ArrayList<Attribute> attributesList, Attribute fkAttribute) {
-        for (var attribute : attributesList) {
-            if (attribute.getFkTableColumn() != null && attribute.getFkTableColumn().equals(fkAttribute))
-                return true;
-        }
-        return false;
-    }
-
     private void rebuildEntityView() {
         handleCheckBoxesDisable();
 
         try {
             examplePane.getChildren().clear();
 
-            if (relation.getTableA_Cardinality() == Relation.Cardinality.MANY) {
-                var fkAttribute = relation.getTableA().getPrimaryKey();
-                if (!checkFkAttribute(relation.getTableB().getAttributes(), fkAttribute)) {
+            //Handle ForeignKey in TableB
+            var foreignPrimaryAttributeA = relation.getTableA().getPrimaryKey();
+            var foreignAttributeB = relation.getFkAttributeB(foreignPrimaryAttributeA);
+            if (foreignAttributeB != null) { //ForeignKey exist already in TableB
+                if (relation.getTableA_Cardinality() == Relation.Cardinality.ONE) { //When changed to cardinality ONE, remove ForeignKey
+                    relation.getTableB().getAttributes().remove(foreignAttributeB);
+                }
+            }
+            else { //ForeignKey does not exist in TableB
+                if (relation.getTableA_Cardinality() == Relation.Cardinality.MANY) { //When has cardinality MANY, add new ForeignKey
                     relation.getTableB().addAttribute(new Attribute(
-                            fkAttribute.getName(),
-                            fkAttribute.getType(),
+                            foreignPrimaryAttributeA.getName(),
+                            foreignPrimaryAttributeA.getType(),
                             false,
-                            fkAttribute.isNonNull(),
-                            fkAttribute.isUnique(),
-                            fkAttribute.getCheckName(),
-                            fkAttribute.getDefaultName(),
-                            fkAttribute
+                            foreignPrimaryAttributeA.isNonNull(),
+                            foreignPrimaryAttributeA.isUnique(),
+                            foreignPrimaryAttributeA.getCheckName(),
+                            foreignPrimaryAttributeA.getDefaultName(),
+                            foreignPrimaryAttributeA
                     ));
                 }
             }
-            if (relation.getTableB_Cardinality() == Relation.Cardinality.MANY) {
-                var fkAttribute = relation.getTableB().getPrimaryKey();
-                if (!checkFkAttribute(relation.getTableA().getAttributes(), fkAttribute)) {
+
+            //Handle ForeignKey in TableA
+            var foreignPrimaryAttributeB = relation.getTableB().getPrimaryKey();
+            var foreignAttributeA = relation.getFkAttributeA(foreignPrimaryAttributeB);
+            if (foreignAttributeA != null) { //ForeignKey exist already in TableA
+                if (relation.getTableB_Cardinality() == Relation.Cardinality.ONE) { //When changed to cardinality ONE, remove ForeignKey
+                    relation.getTableA().getAttributes().remove(foreignAttributeA);
+                }
+            }
+            else { //ForeignKey does not exist in TableA
+                if (relation.getTableB_Cardinality() == Relation.Cardinality.MANY) { //When has cardinality MANY, add new ForeignKey
                     relation.getTableA().addAttribute(new Attribute(
-                            fkAttribute.getName(),
-                            fkAttribute.getType(),
+                            foreignPrimaryAttributeB.getName(),
+                            foreignPrimaryAttributeB.getType(),
                             false,
-                            fkAttribute.isNonNull(),
-                            fkAttribute.isUnique(),
-                            fkAttribute.getCheckName(),
-                            fkAttribute.getDefaultName(),
-                            fkAttribute
+                            foreignPrimaryAttributeB.isNonNull(),
+                            foreignPrimaryAttributeB.isUnique(),
+                            foreignPrimaryAttributeB.getCheckName(),
+                            foreignPrimaryAttributeB.getDefaultName(),
+                            foreignPrimaryAttributeB
                     ));
                 }
             }

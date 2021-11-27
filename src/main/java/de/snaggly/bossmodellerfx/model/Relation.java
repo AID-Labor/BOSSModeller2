@@ -2,6 +2,8 @@ package de.snaggly.bossmodellerfx.model;
 
 import de.snaggly.bossmodellerfx.struct.relations.ConnectingOrientation;
 
+import java.util.ArrayList;
+
 public class Relation extends DataModel{
     private Entity tableA;
     private Entity tableB;
@@ -77,6 +79,30 @@ public class Relation extends DataModel{
 
     public void setTableB_Obligation(Obligation tableB_Obligation) {
         this.tableB_Obligation = tableB_Obligation;
+    }
+
+    public Attribute getFkAttributeA() {
+        return getFkAttribute(tableA.getAttributes(), tableB.getPrimaryKey());
+    }
+
+    public Attribute getFkAttributeB() {
+        return getFkAttribute(tableB.getAttributes(), tableA.getPrimaryKey());
+    }
+
+    public Attribute getFkAttributeA(Attribute foreignPrimaryKey) {
+        return getFkAttribute(tableA.getAttributes(), foreignPrimaryKey);
+    }
+
+    public Attribute getFkAttributeB(Attribute foreignPrimaryKey) {
+        return getFkAttribute(tableB.getAttributes(), foreignPrimaryKey);
+    }
+
+    private Attribute getFkAttribute(ArrayList<Attribute> attributes, Attribute primaryKey) {
+        for (var attribute : attributes) {
+            if (attribute.getFkTableColumn() != null && attribute.getFkTableColumn().equals(primaryKey))
+                return attribute;
+        }
+        return null;
     }
 
     public enum Cardinality {
