@@ -15,7 +15,11 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Region;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javafx.stage.Window;
+
+import java.io.File;
 
 public class GUIMethods {
     //Bei Design sollen alle universell gleich behandelt werden bei einem Resize.
@@ -152,5 +156,21 @@ public class GUIMethods {
 
     public static void showError(String origin, String header, String info) {
         showAlert(Alert.AlertType.ERROR, origin, header, info);
+    }
+
+    public static File showJSONFileSaveDialog(String title, Window window) {
+        return getJSONFileChooser(title, window).showSaveDialog(window);
+    }
+
+    public static File showJSONFileOpenDialog(String title, Window window) {
+        return getJSONFileChooser(title, window).showOpenDialog(window);
+    }
+
+    private static FileChooser getJSONFileChooser(String title, Window window) {
+        var fileChooser = new FileChooser();
+        fileChooser.setTitle(title);
+        fileChooser.setInitialFileName("BOSS-Project.json");
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("JSON-Datei", "*.json"));
+        return fileChooser;
     }
 }

@@ -28,7 +28,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
-import java.io.IOException;
+import java.io.*;
 import java.util.HashMap;
 
 public class MainController {
@@ -856,8 +856,12 @@ public class MainController {
     }
 
     private void saveNewEntity(EntityView entityView) {
-        entitiesOverview.put(entityView.getModel(), entityView);
         currentProject.addEntity(entityView.getModel());
+        showNewEntity(entityView);
+    }
+
+    private void showNewEntity(EntityView entityView) {
+        entitiesOverview.put(entityView.getModel(), entityView);
         GUIMethods.bindEntityToRelationLineHandler(entityView, this::relationLineDrawer);
         mainWorkbench.getChildren().add(entityView);
     }
@@ -874,17 +878,20 @@ public class MainController {
     }
 
     private void saveNewRelation(Relation dataset) {
-        var tableAView = entitiesOverview.get(dataset.getTableA());
-        var tableBView = entitiesOverview.get(dataset.getTableB());
-        tableAView.getController().loadModel(dataset.getTableA());
-        if (tableAView != tableBView) {
-            tableBView.getController().loadModel(dataset.getTableB());
-        }
-
         currentProject.addRelation(dataset);
-        relationLineDrawer();
+        showNewRelation(dataset);
     }
 
+    private void showNewRelation(Relation relation) {
+        var tableAView = entitiesOverview.get(relation.getTableA());
+        var tableBView = entitiesOverview.get(relation.getTableB());
+        tableAView.getController().loadModel(relation.getTableA());
+        if (tableAView != tableBView) {
+            tableBView.getController().loadModel(relation.getTableB());
+        }
+
+        relationLineDrawer();
+    }
 
     private void deleteRelation(RelationViewNode relationView) {
         mainWorkbench.getChildren().removeAll(relationView.getAllNodes());
@@ -930,14 +937,57 @@ public class MainController {
         }
     }
 
+    private void reInitProject() throws IOException {
+        for (var entity : currentProject.getEntities()) {
+            var entityView = EntityBuilder.buildEntity(entity, mainWorkbench, currentProject.getSelectionHandler);
+            showNewEntity(entityView);
+        }
+
+        for (var comment : currentProject.getComments()) {
+            var commentView = CommentBuilder.buildComment(comment, mainWorkbench, currentProject.getSelectionHandler);
+            mainWorkbench.getChildren().add(commentView);
+        }
+
+        for (var relation : currentProject.getRelations()) {
+            showNewRelation(relation);
+        }
+    }
+
     @FXML
     private void openFileClick(ActionEvent actionEvent) {
-        var test = Project.deserializeFromJson(jsonTest, mainWorkbench);
+        var file = GUIMethods.showJSONFileOpenDialog("Projekt öffnen", mainWorkbench.getScene().getWindow());
+        if (file == null)
+            return;
+        try {
+            var bufferedReader = new BufferedReader(new FileReader(file));
+            StringBuilder json = new StringBuilder();
+            while (bufferedReader.ready()) {
+                json.append(bufferedReader.readLine());
+            }
+            bufferedReader.close();
+            mainWorkbench.getChildren().clear();
+            currentProject = Project.deserializeFromJson(json.toString(), mainWorkbench);
+            reInitProject();
+
+        } catch (Exception e) {
+            GUIMethods.showError(MainController.class.getSimpleName(), "BOSSModellerFX", e.getLocalizedMessage());
+        }
     }
 
     @FXML
     private void saveFileClick(ActionEvent actionEvent) {
-        var test = currentProject.serializeToJson();
+        var file = GUIMethods.showJSONFileSaveDialog("Projekt speichern", mainWorkbench.getScene().getWindow());
+        if (file == null)
+            return;
+
+        var json = currentProject.serializeToJson();
+        try {
+            var fileWriter = new BufferedWriter(new FileWriter(file));
+            fileWriter.write(json);
+            fileWriter.close();
+        } catch (Exception e) {
+            GUIMethods.showError(MainController.class.getSimpleName(), "BOSSModellerFX", e.getLocalizedMessage());
+        }
     }
 
     @FXML
