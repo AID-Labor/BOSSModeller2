@@ -5,9 +5,9 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>de.snaggly</groupId>
-    <artifactId>BOSSModeller2</artifactId>
-    <version>1.0-SNAPSHOT</version>
-    <name>BOSSModeller2</name>
+    <artifactId>BOSSModellerFX</artifactId>
+    <version>2.0.3a</version>
+    <name>BOSSModellerFX</name>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -117,7 +117,7 @@
                         <!-- Default configuration for running with: mvn clean javafx:run -->
                         <id>default-cli</id>
                         <configuration>
-                            <mainClass>de.snaggly.bossmodeller2/de.snaggly.bossmodeller2.Main</mainClass>
+                            <mainClass>de.snaggly.bossmodeller2/de.snaggly.bossmodellerfx.Main</mainClass>
                         </configuration>
                     </execution>
                 </executions>

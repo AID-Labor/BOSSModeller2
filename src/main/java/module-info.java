@@ -1,4 +1,4 @@
-module de.snaggly.bossmodeller2 {
+module de.snaggly.bossmodellerfx {
     requires javafx.controls;
     requires javafx.fxml;
     requires javafx.web;
@@ -11,13 +11,17 @@ module de.snaggly.bossmodeller2 {
     requires eu.hansolo.tilesfx;
     requires com.google.gson;
 
-    opens de.snaggly.bossmodeller2 to javafx.fxml;
-    exports de.snaggly.bossmodeller2;
-    exports de.snaggly.bossmodeller2.view.controller;
-    opens de.snaggly.bossmodeller2.view.controller to javafx.fxml;
-    exports de.snaggly.bossmodeller2.model;
-    exports de.snaggly.bossmodeller2.guiLogic;
-    exports de.snaggly.bossmodeller2.view;
-    exports de.snaggly.bossmodeller2.view.viewtypes;
-    exports de.snaggly.bossmodeller2.struct.relations;
+    opens de.snaggly.bossmodellerfx to javafx.fxml;
+    exports de.snaggly.bossmodellerfx;
+    exports de.snaggly.bossmodellerfx.view.controller;
+    opens de.snaggly.bossmodellerfx.view.controller to javafx.fxml;
+    exports de.snaggly.bossmodellerfx.model;
+    exports de.snaggly.bossmodellerfx.guiLogic;
+    exports de.snaggly.bossmodellerfx.view;
+    exports de.snaggly.bossmodellerfx.view.viewtypes;
+    exports de.snaggly.bossmodellerfx.struct.relations;
+    exports de.snaggly.bossmodellerfx.model.view;
+    exports de.snaggly.bossmodellerfx.model.subdata;
+    exports de.snaggly.bossmodellerfx.model.serializable;
+    exports de.snaggly.bossmodellerfx.model.abstraction;
 }
