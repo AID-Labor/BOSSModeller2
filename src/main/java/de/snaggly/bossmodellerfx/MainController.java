@@ -1,9 +1,11 @@
 package de.snaggly.bossmodellerfx;
 
+import de.snaggly.bossmodellerfx.model.subdata.Relation;
+import de.snaggly.bossmodellerfx.model.view.Comment;
+import de.snaggly.bossmodellerfx.model.view.Entity;
 import de.snaggly.bossmodellerfx.view.CrowsFootShape;
 import de.snaggly.bossmodellerfx.guiLogic.GUIMethods;
 import de.snaggly.bossmodellerfx.guiLogic.Project;
-import de.snaggly.bossmodellerfx.model.*;
 import de.snaggly.bossmodellerfx.struct.relations.ConnectingOrientation;
 import de.snaggly.bossmodellerfx.struct.relations.EntityViewConnections;
 import de.snaggly.bossmodellerfx.view.RelationViewNode;
@@ -930,13 +932,17 @@ public class MainController {
 
     @FXML
     private void openFileClick(ActionEvent actionEvent) {
+        var test = Project.deserializeFromJson(jsonTest, mainWorkbench);
     }
 
     @FXML
     private void saveFileClick(ActionEvent actionEvent) {
+        var test = currentProject.serializeToJson();
     }
 
     @FXML
     private void exportPictureClick(ActionEvent actionEvent) {
     }
+
+    private final static String jsonTest = "{\"entities\":[{\"uniqueCombination\":{\"attributeCombination\":[]},\"name\":\"Test1\",\"attributes\":[{\"name\":\"Attr1\",\"type\":\"\",\"isPrimary\":true,\"isNonNull\":true,\"isUnique\":true,\"checkName\":\"\",\"defaultName\":\"\"},{\"name\":\"Attr1\",\"type\":\"\",\"isPrimary\":false,\"isNonNull\":true,\"isUnique\":true,\"checkName\":\"\",\"defaultName\":\"\",\"fkTableColumn\":{\"name\":\"Attr1\",\"type\":\"\",\"isPrimary\":true,\"isNonNull\":true,\"isUnique\":true,\"checkName\":\"\",\"defaultName\":\"\"}}],\"isWeakType\":false,\"xCoordinate\":10.0,\"yCoordinate\":10.0},{\"uniqueCombination\":{\"attributeCombination\":[{\"attributeCombinations\":[1,2],\"combinationName\":\"Combo1\"}]},\"name\":\"Test2\",\"attributes\":[{\"name\":\"Attr1\",\"type\":\"\",\"isPrimary\":true,\"isNonNull\":true,\"isUnique\":true,\"checkName\":\"\",\"defaultName\":\"\"},{\"name\":\"Attr2\",\"type\":\"\",\"isPrimary\":false,\"isNonNull\":false,\"isUnique\":false,\"checkName\":\"\",\"defaultName\":\"\"},{\"name\":\"Attr3\",\"type\":\"\",\"isPrimary\":false,\"isNonNull\":false,\"isUnique\":false,\"checkName\":\"\",\"defaultName\":\"\"}],\"isWeakType\":false,\"xCoordinate\":118.0,\"yCoordinate\":182.0},{\"uniqueCombination\":{\"attributeCombination\":[]},\"name\":\"Test3\",\"attributes\":[{\"name\":\"Attr1\",\"type\":\"\",\"isPrimary\":true,\"isNonNull\":true,\"isUnique\":true,\"checkName\":\"\",\"defaultName\":\"\"},{\"name\":\"Attr2\",\"type\":\"\",\"isPrimary\":false,\"isNonNull\":true,\"isUnique\":true,\"checkName\":\"dfs\",\"defaultName\":\"dsf\"},{\"name\":\"Attr1\",\"type\":\"\",\"isPrimary\":false,\"isNonNull\":true,\"isUnique\":true,\"checkName\":\"\",\"defaultName\":\"\",\"fkTableColumn\":{\"name\":\"Attr1\",\"type\":\"\",\"isPrimary\":true,\"isNonNull\":true,\"isUnique\":true,\"checkName\":\"\",\"defaultName\":\"\"}}],\"isWeakType\":true,\"xCoordinate\":293.0,\"yCoordinate\":54.0}],\"comments\":[{\"text\":\"Comment\\n1\\n2\\n\\u003c\\u003e\",\"width\":0.0,\"height\":0.0,\"xCoordinate\":272.0,\"yCoordinate\":210.0}],\"relations\":[{\"tableAIndex\":0,\"tableBIndex\":1,\"tableA_Cardinality\":\"ONE\",\"tableB_Cardinality\":\"MANY\",\"tableA_Obligation\":\"CAN\",\"tableB_Obligation\":\"CAN\",\"orientation\":\"Q2_R2\"},{\"tableAIndex\":1,\"tableBIndex\":2,\"tableA_Cardinality\":\"MANY\",\"tableB_Cardinality\":\"ONE\",\"tableA_Obligation\":\"CAN\",\"tableB_Obligation\":\"CAN\",\"orientation\":\"Q1_R\"}]}";
 }

@@ -1,6 +1,6 @@
 package de.snaggly.bossmodellerfx.view;
 
-import de.snaggly.bossmodellerfx.model.Attribute;
+import de.snaggly.bossmodellerfx.model.subdata.Attribute;
 import de.snaggly.bossmodellerfx.view.controller.EditAttributeController;
 import de.snaggly.bossmodellerfx.view.viewtypes.CustomNode;
 import javafx.fxml.FXMLLoader;

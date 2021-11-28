@@ -1,8 +1,11 @@
-package de.snaggly.bossmodellerfx.model;
+package de.snaggly.bossmodellerfx.model.subdata;
+
+import de.snaggly.bossmodellerfx.model.BOSSModel;
 
 import java.util.ArrayList;
 
-public class Attribute extends DataModel {
+public class Attribute implements BOSSModel {
+    private String name;
     private String type;
     private boolean isPrimary;
     private boolean isNonNull;
@@ -16,11 +19,7 @@ public class Attribute extends DataModel {
     }
 
     public Attribute(String name, String type, boolean isPrimary, boolean isNonNull, boolean isUnique, String checkName, String defaultName, Attribute fkTableColumn) {
-        this(name, 0.0, 0.0, type, isPrimary, isNonNull, isUnique, checkName, defaultName, fkTableColumn);
-    }
-
-    public Attribute(String name, double xCoordinate, double yCoordinate, String type, boolean isPrimary, boolean isNonNull, boolean isUnique, String checkName, String defaultName, Attribute fkTableColumn) {
-        super(name, xCoordinate, yCoordinate);
+        this.name = name;
         this.type = type;
         this.isPrimary = isPrimary;
         this.isNonNull = isNonNull;
@@ -28,6 +27,14 @@ public class Attribute extends DataModel {
         this.checkName = checkName;
         this.defaultName = defaultName;
         this.fkTableColumn = fkTableColumn;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getType() {
@@ -84,21 +91,5 @@ public class Attribute extends DataModel {
 
     public void setFkTableColumn(Attribute fkTableColumn) {
         this.fkTableColumn = fkTableColumn;
-    }
-
-    public static class UniqueCombination {
-        private ArrayList<Attribute> uniqueCombinationList;
-
-        public ArrayList<Attribute> getUniqueCombinationList() {
-            return uniqueCombinationList;
-        }
-
-        public void setUniqueCombinationList(ArrayList<Attribute> uniqueCombinationList) {
-            this.uniqueCombinationList = uniqueCombinationList;
-        }
-
-        public UniqueCombination(ArrayList<Attribute> uniqueCombinationList) {
-            this.uniqueCombinationList = uniqueCombinationList;
-        }
     }
 }

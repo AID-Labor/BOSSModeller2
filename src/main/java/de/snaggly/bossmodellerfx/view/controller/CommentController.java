@@ -1,13 +1,11 @@
 package de.snaggly.bossmodellerfx.view.controller;
 
-import de.snaggly.bossmodellerfx.model.Comment;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
+import de.snaggly.bossmodellerfx.model.view.Comment;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextArea;
 import javafx.scene.input.MouseEvent;
 
-public class CommentController implements ViewController<Comment> {
+public class CommentController implements ModelController<Comment> {
     private boolean isEditable = false;
     private Comment model;
 
@@ -17,14 +15,14 @@ public class CommentController implements ViewController<Comment> {
     @Override
     public void loadModel(Comment model) {
         this.model = model;
-        commentTextArea.setText(model.getName());
+        commentTextArea.setText(model.getText());
     }
 
     @FXML
     private void initialize(){
         commentTextArea.textProperty().addListener((observableValue, s, newText) -> {
             if (model != null)
-                model.setName(newText);
+                model.setText(newText);
         });
     }
 

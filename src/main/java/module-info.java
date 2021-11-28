@@ -20,4 +20,8 @@ module de.snaggly.bossmodellerfx {
     exports de.snaggly.bossmodellerfx.view;
     exports de.snaggly.bossmodellerfx.view.viewtypes;
     exports de.snaggly.bossmodellerfx.struct.relations;
+    exports de.snaggly.bossmodellerfx.model.view;
+    exports de.snaggly.bossmodellerfx.model.subdata;
+    exports de.snaggly.bossmodellerfx.model.serializable;
+    exports de.snaggly.bossmodellerfx.model.abstraction;
 }

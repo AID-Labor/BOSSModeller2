@@ -1,6 +1,6 @@
 package de.snaggly.bossmodellerfx.view;
 
-import de.snaggly.bossmodellerfx.model.Comment;
+import de.snaggly.bossmodellerfx.model.view.Comment;
 import de.snaggly.bossmodellerfx.view.controller.CommentController;
 import de.snaggly.bossmodellerfx.view.viewtypes.Controllable;
 import de.snaggly.bossmodellerfx.view.viewtypes.CustomNode;

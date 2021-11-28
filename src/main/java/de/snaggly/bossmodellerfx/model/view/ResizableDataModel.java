@@ -1,15 +1,15 @@
-package de.snaggly.bossmodellerfx.model;
+package de.snaggly.bossmodellerfx.model.view;
 
-public class ResizableDataModel extends DataModel{
+public abstract class ResizableDataModel extends ViewModel {
     private double width;
     private double height;
 
-    public ResizableDataModel(String name, double xCoordinate, double yCoordinate) {
-        super(name, xCoordinate, yCoordinate);
+    public ResizableDataModel(double xCoordinate, double yCoordinate) {
+        super(xCoordinate, yCoordinate);
     }
 
-    public ResizableDataModel(String name, double xCoordinate, double yCoordinate, double width, double height) {
-        super(name, xCoordinate, yCoordinate);
+    public ResizableDataModel(double xCoordinate, double yCoordinate, double width, double height) {
+        super(xCoordinate, yCoordinate);
         this.width = width;
         this.height = height;
     }

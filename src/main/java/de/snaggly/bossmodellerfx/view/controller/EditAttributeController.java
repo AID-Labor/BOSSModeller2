@@ -1,6 +1,6 @@
 package de.snaggly.bossmodellerfx.view.controller;
 
-import de.snaggly.bossmodellerfx.model.Attribute;
+import de.snaggly.bossmodellerfx.model.subdata.Attribute;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -10,7 +10,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 
-public class EditAttributeController implements ViewController<Attribute> {
+public class EditAttributeController implements ModelController<Attribute> {
     @FXML
     private VBox nameVBox;
     @FXML

@@ -1,13 +1,13 @@
 package de.snaggly.bossmodellerfx.view.controller;
 
-import de.snaggly.bossmodellerfx.model.Entity;
+import de.snaggly.bossmodellerfx.model.view.Entity;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Line;
 
-public class EntityViewController implements ViewController<Entity> {
+public class EntityViewController implements ModelController<Entity> {
     @FXML
     private Label entityHeadTitle;
     @FXML

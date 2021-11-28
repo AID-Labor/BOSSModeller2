@@ -1,6 +1,6 @@
 package de.snaggly.bossmodellerfx.view.factory.nodetype;
 
-import de.snaggly.bossmodellerfx.model.Attribute;
+import de.snaggly.bossmodellerfx.model.subdata.Attribute;
 import de.snaggly.bossmodellerfx.view.AttributeEditor;
 import de.snaggly.bossmodellerfx.view.factory.ViewFactory;
 

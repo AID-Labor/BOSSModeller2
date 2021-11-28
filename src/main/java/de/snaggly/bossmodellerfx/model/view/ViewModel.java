@@ -1,28 +1,19 @@
-package de.snaggly.bossmodellerfx.model;
+package de.snaggly.bossmodellerfx.model.view;
 
-public abstract class DataModel {
-    private String name;
+import de.snaggly.bossmodellerfx.model.BOSSModel;
+
+public abstract class ViewModel implements BOSSModel {
     private double xCoordinate;
     private double yCoordinate;
 
-    public DataModel() {
-        this.name = "Placeholder";
+    public ViewModel() {
         this.xCoordinate = 10.0;
         this.yCoordinate = 10.0;
     }
 
-    public DataModel(String name, double xCoordinate, double yCoordinate) {
-        this.name = name;
+    public ViewModel(double xCoordinate, double yCoordinate) {
         this.xCoordinate = xCoordinate;
         this.yCoordinate = yCoordinate;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public double getXCoordinate() {

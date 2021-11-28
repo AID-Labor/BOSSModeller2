@@ -2,8 +2,8 @@ package de.snaggly.bossmodellerfx.view.controller;
 
 import de.snaggly.bossmodellerfx.guiLogic.GUIActionListener;
 import de.snaggly.bossmodellerfx.guiLogic.GUIMethods;
-import de.snaggly.bossmodellerfx.model.Attribute;
-import de.snaggly.bossmodellerfx.model.Entity;
+import de.snaggly.bossmodellerfx.model.subdata.Attribute;
+import de.snaggly.bossmodellerfx.model.view.Entity;
 import de.snaggly.bossmodellerfx.view.AttributeEditor;
 import de.snaggly.bossmodellerfx.view.factory.nodetype.AttributeEditorBuilder;
 import de.snaggly.bossmodellerfx.view.factory.windowtype.UniqueCombinationEditorWindowBuilder;
@@ -24,7 +24,7 @@ import java.io.IOException;
 import java.util.Collections;
 
 
-public class EditEntityWindowController implements ViewController<Entity> {
+public class EditEntityWindowController implements ModelController<Entity> {
     private Entity entity = new Entity();
 
     public GUIActionListener<Entity> parentObserver;
@@ -277,7 +277,10 @@ public class EditEntityWindowController implements ViewController<Entity> {
     private boolean checkContainsPrimaryKey() {
         boolean result = false;
         for (int i = 0; i < attributesListVBOX.getChildren().size() && !result; i++) {
-            var attributeEditView = (AttributeEditor)(attributesListVBOX.getChildren().get(i));
+            var node = attributesListVBOX.getChildren().get(i);
+            if (!(node instanceof  AttributeEditor))
+                continue;
+            var attributeEditView = (AttributeEditor)(node);
             result = attributeEditView.getController().getIsPrimaryCheck().isSelected();
         }
 

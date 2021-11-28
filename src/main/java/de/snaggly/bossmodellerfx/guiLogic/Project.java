@@ -1,9 +1,10 @@
 package de.snaggly.bossmodellerfx.guiLogic;
 
-import de.snaggly.bossmodellerfx.model.Comment;
-import de.snaggly.bossmodellerfx.model.DataModel;
-import de.snaggly.bossmodellerfx.model.Entity;
-import de.snaggly.bossmodellerfx.model.Relation;
+import de.snaggly.bossmodellerfx.model.*;
+import de.snaggly.bossmodellerfx.model.serializable.*;
+import de.snaggly.bossmodellerfx.model.subdata.Relation;
+import de.snaggly.bossmodellerfx.model.view.Comment;
+import de.snaggly.bossmodellerfx.model.view.Entity;
 import de.snaggly.bossmodellerfx.view.viewtypes.CustomNode;
 import javafx.scene.Node;
 import javafx.scene.layout.Pane;
@@ -14,14 +15,12 @@ import java.util.ArrayList;
 public class Project {
     private Pane workField;
     private Node currentSelected;
-    private final ArrayList<Entity> entities;
-    private final ArrayList<Comment> comments;
-    private final ArrayList<Relation> relations;
+
+    private final ArrayList<Entity> entities = new ArrayList<>();
+    private final ArrayList<Comment> comments = new ArrayList<>();
+    private final ArrayList<Relation> relations = new ArrayList<>();
 
     public Project(Pane workField) {
-        this.entities = new ArrayList<>();
-        this.comments = new ArrayList<>();
-        this.relations = new ArrayList<>();
         this.workField = workField;
         this.currentSelected = workField;
     }
@@ -39,11 +38,11 @@ public class Project {
     }
 
     public void addEntity(Entity entity) {
-        this.entities.add(entity);
+        entities.add(entity);
     }
 
     public void removeEntity(Entity entity) {
-        this.entities.remove(entity);
+        entities.remove(entity);
         currentSelected = workField;
     }
 
@@ -52,11 +51,11 @@ public class Project {
     }
 
     public void addComment(Comment comment) {
-        this.comments.add(comment);
+        comments.add(comment);
     }
 
     public void removeComment(Comment comment) {
-        this.comments.remove(comment);
+        comments.remove(comment);
         currentSelected = workField;
     }
 
@@ -65,11 +64,11 @@ public class Project {
     }
 
     public void addRelation(Relation relation) {
-        this.relations.add(relation);
+        relations.add(relation);
     }
 
     public void removeRelation(Relation relation) {
-        this.relations.remove(relation);
+        relations.remove(relation);
         currentSelected = workField;
     }
 
@@ -81,20 +80,54 @@ public class Project {
 
     public synchronized void setCurrentSelected(Node newSelection) {
         if (this.currentSelected instanceof CustomNode) {
-            ((CustomNode<? extends DataModel>) this.currentSelected).setDeFocusStyle();
+            ((CustomNode<? extends BOSSModel>) this.currentSelected).setDeFocusStyle();
         }
         if (newSelection instanceof CustomNode) {
-            ((CustomNode<? extends DataModel>) newSelection).setFocusStyle();
+            ((CustomNode<? extends BOSSModel>) newSelection).setFocusStyle();
         }
 
         this.currentSelected = newSelection;
     }
 
-    public String serializeToJson() {
-        return new Gson().toJson(this);
+    private static class ProjectData {
+        private ArrayList<SerializableEntity> entities;
+        private ArrayList<SerializableComment> comments;
+        private ArrayList<SerializableRelation> relations;
     }
 
-    public static Project deserializeFromJson(String json) {
-        return new Gson().fromJson(json, Project.class);
+    public String serializeToJson() {
+        var serializableData = new ProjectData();
+
+        serializableData.entities = new ArrayList<>();
+        for (var entity : entities) {
+            serializableData.entities.add(SerializableEntity.serializableEntity(entity));
+        }
+
+        serializableData.comments = new ArrayList<>();
+        for (var comment : comments) {
+            serializableData.comments.add(SerializableComment.serializableComment(comment));
+        }
+
+        serializableData.relations = new ArrayList<>();
+        for (var relation : relations) {
+            serializableData.relations.add(SerializableRelation.serializableRelation(relation, entities));
+        }
+
+        return new Gson().toJson(serializableData);
+    }
+
+    public static Project deserializeFromJson(String json, Pane workField) {
+        var project = new Project(workField);
+        var serializableData = new Gson().fromJson(json, ProjectData.class);
+        for (var serEntities : serializableData.entities) {
+            project.addEntity(SerializableEntity.deserializableEntity(serEntities));
+        }
+        for (var serComment : serializableData.comments) {
+            project.addComment(SerializableComment.deserializableComment(serComment));
+        }
+        for (var serRelation : serializableData.relations) {
+            project.addRelation(SerializableRelation.deserializableRelation(serRelation, project.entities));
+        }
+        return project;
     }
 }

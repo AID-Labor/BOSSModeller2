@@ -1,7 +1,7 @@
 package de.snaggly.bossmodellerfx.guiLogic;
 
-import de.snaggly.bossmodellerfx.model.DataModel;
-import de.snaggly.bossmodellerfx.model.ResizableDataModel;
+import de.snaggly.bossmodellerfx.model.view.ResizableDataModel;
+import de.snaggly.bossmodellerfx.model.view.ViewModel;
 import de.snaggly.bossmodellerfx.view.EntityView;
 import de.snaggly.bossmodellerfx.view.viewtypes.CustomNode;
 import de.snaggly.bossmodellerfx.view.viewtypes.Draggable;
@@ -23,7 +23,7 @@ public class GUIMethods {
     private static final double NULLZONE = 8.0;
     private static boolean isDragging = false;
 
-    public static <T extends DataModel> void enableDrag(CustomNode<T> nodeToDrag, Region parent, T model) {
+    public static <T extends ViewModel> void enableDrag(CustomNode<T> nodeToDrag, Region parent, T model) {
         nodeToDrag.addEventHandler(MouseEvent.ANY, new EventHandler<>() {
             private double lastMouseX = 0, lastMouseY = 0;
 
@@ -69,7 +69,7 @@ public class GUIMethods {
         });
     }
 
-    public static <T extends DataModel> void enableClick(CustomNode<T> nodeToDrag, SelectionHandler workspace) {
+    public static <T extends ViewModel> void enableClick(CustomNode<T> nodeToDrag, SelectionHandler workspace) {
         nodeToDrag.addEventFilter(MouseEvent.ANY, mouseEvent -> {
             if (MouseEvent.MOUSE_CLICKED == mouseEvent.getEventType()
                     || MouseEvent.MOUSE_PRESSED == mouseEvent.getEventType()) {

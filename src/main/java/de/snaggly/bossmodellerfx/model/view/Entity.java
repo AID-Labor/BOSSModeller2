@@ -1,11 +1,14 @@
-package de.snaggly.bossmodellerfx.model;
+package de.snaggly.bossmodellerfx.model.view;
+
+import de.snaggly.bossmodellerfx.model.abstraction.EntityAbstraction;
+import de.snaggly.bossmodellerfx.model.subdata.Attribute;
+import de.snaggly.bossmodellerfx.model.subdata.Relation;
+import de.snaggly.bossmodellerfx.model.subdata.UniqueCombination;
 
 import java.util.ArrayList;
 
-public class Entity extends DataModel {
-    private ArrayList<Attribute> attributes;
+public class Entity extends EntityAbstraction {
     private UniqueCombination uniqueCombination;
-    private boolean isWeakType;
 
     public Entity() {
         this(null, new ArrayList<>(), false);
@@ -20,14 +23,8 @@ public class Entity extends DataModel {
     }
 
     public Entity(String name, double xCoordinate, double yCoordinate, ArrayList<Attribute> attributes, UniqueCombination uniqueCombination, boolean isWeakType) {
-        super(name, xCoordinate, yCoordinate);
-        this.attributes = attributes;
+        super(name, xCoordinate, yCoordinate, attributes, isWeakType);
         this.uniqueCombination = uniqueCombination;
-        this.isWeakType = isWeakType;
-    }
-
-    public Attribute getPrimaryKey() {
-        return attributes.stream().filter(Attribute::isPrimary).findFirst().orElse(null);
     }
 
     public ArrayList<Relation> getInvolvedRelations(ArrayList<Relation> relations) {
@@ -40,39 +37,11 @@ public class Entity extends DataModel {
         return result;
     }
 
-    public ArrayList<Attribute> getAttributes() {
-        return attributes;
-    }
-
-    public void setAttributes(ArrayList<Attribute> attributes) {
-        this.attributes = attributes;
-    }
-
-    public void addAttribute(Attribute attribute) {
-        attributes.add(attribute);
-    }
-
-    public void removeAttribute(Attribute attribute) {
-        attributes.remove(attribute);
-    }
-
-    public void removeAttribute(int index) {
-        attributes.remove(index);
-    }
-
     public UniqueCombination getUniqueCombination() {
         return uniqueCombination;
     }
 
     public void setUniqueCombination(UniqueCombination uniqueCombination) {
         this.uniqueCombination = uniqueCombination;
-    }
-
-    public boolean isWeakType() {
-        return isWeakType;
-    }
-
-    public void setWeakType(boolean weakType) {
-        isWeakType = weakType;
     }
 }

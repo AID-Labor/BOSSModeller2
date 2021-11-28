@@ -1,8 +1,8 @@
 package de.snaggly.bossmodellerfx.view.factory.windowtype;
 
 import de.snaggly.bossmodellerfx.Main;
-import de.snaggly.bossmodellerfx.model.Attribute;
-import de.snaggly.bossmodellerfx.model.UniqueCombination;
+import de.snaggly.bossmodellerfx.model.subdata.Attribute;
+import de.snaggly.bossmodellerfx.model.subdata.UniqueCombination;
 import de.snaggly.bossmodellerfx.view.controller.EditUniqueCombinationWindowController;
 import de.snaggly.bossmodellerfx.view.factory.WindowFactory;
 import javafx.fxml.FXMLLoader;

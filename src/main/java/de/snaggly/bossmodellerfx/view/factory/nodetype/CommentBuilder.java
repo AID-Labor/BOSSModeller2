@@ -2,7 +2,7 @@ package de.snaggly.bossmodellerfx.view.factory.nodetype;
 
 import de.snaggly.bossmodellerfx.guiLogic.GUIMethods;
 import de.snaggly.bossmodellerfx.guiLogic.SelectionHandler;
-import de.snaggly.bossmodellerfx.model.Comment;
+import de.snaggly.bossmodellerfx.model.view.Comment;
 import de.snaggly.bossmodellerfx.view.CommentView;
 import de.snaggly.bossmodellerfx.view.factory.ViewFactory;
 import javafx.scene.layout.Region;

@@ -1,9 +1,10 @@
 package de.snaggly.bossmodellerfx.view.controller;
 
 import de.snaggly.bossmodellerfx.guiLogic.*;
-import de.snaggly.bossmodellerfx.model.Attribute;
-import de.snaggly.bossmodellerfx.model.Entity;
-import de.snaggly.bossmodellerfx.model.Relation;
+import de.snaggly.bossmodellerfx.model.subdata.Attribute;
+import de.snaggly.bossmodellerfx.model.view.Entity;
+import de.snaggly.bossmodellerfx.model.subdata.Relation;
+import de.snaggly.bossmodellerfx.struct.relations.CrowsFootOptions;
 import de.snaggly.bossmodellerfx.view.CrowsFootShape;
 import de.snaggly.bossmodellerfx.view.EntityView;
 import de.snaggly.bossmodellerfx.view.factory.nodetype.EntityBuilder;
@@ -20,7 +21,7 @@ import javafx.scene.shape.Line;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class EditRelationWindowController implements ViewController<Relation> {
+public class EditRelationWindowController implements ModelController<Relation> {
     private Relation relation;
     private Project workspace;
     private CrowsFootShape crowsFootTableA;
@@ -163,13 +164,13 @@ public class EditRelationWindowController implements ViewController<Relation> {
         ));
 
         if (radioBtnPolyAN.isSelected())
-            relation.setTableA_Cardinality(Relation.Cardinality.MANY);
+            relation.setTableA_Cardinality(CrowsFootOptions.Cardinality.MANY);
         else
-            relation.setTableA_Cardinality(Relation.Cardinality.ONE);
+            relation.setTableA_Cardinality(CrowsFootOptions.Cardinality.ONE);
         if (radioBtnObligationAMust.isSelected())
-            relation.setTableA_Obligation(Relation.Obligation.MUST);
+            relation.setTableA_Obligation(CrowsFootOptions.Obligation.MUST);
         else
-            relation.setTableA_Obligation(Relation.Obligation.CAN);
+            relation.setTableA_Obligation(CrowsFootOptions.Obligation.CAN);
         relation.getTableA().setWeakType(tableAIsWeakChkBox.isSelected());
 
         entityBModelReference = workspace.getEntities().get(tableBEntityCmboBox.getSelectionModel().getSelectedIndex());
@@ -183,13 +184,13 @@ public class EditRelationWindowController implements ViewController<Relation> {
         ));
 
         if (radioBtnPolyBN.isSelected())
-            relation.setTableB_Cardinality(Relation.Cardinality.MANY);
+            relation.setTableB_Cardinality(CrowsFootOptions.Cardinality.MANY);
         else
-            relation.setTableB_Cardinality(Relation.Cardinality.ONE);
+            relation.setTableB_Cardinality(CrowsFootOptions.Cardinality.ONE);
         if (radioBtnObligationBMust.isSelected())
-            relation.setTableB_Obligation(Relation.Obligation.MUST);
+            relation.setTableB_Obligation(CrowsFootOptions.Obligation.MUST);
         else
-            relation.setTableB_Obligation(Relation.Obligation.CAN);
+            relation.setTableB_Obligation(CrowsFootOptions.Obligation.CAN);
         relation.getTableB().setWeakType(tableBIsWeakChkBox.isSelected());
 
         rebuildEntityView();
@@ -198,7 +199,6 @@ public class EditRelationWindowController implements ViewController<Relation> {
     @Override
     public void loadModel(Relation model) {
         this.relation = new Relation(
-                model.getName(),
                 model.getTableA(),
                 model.getTableB(),
                 model.getTableA_Cardinality(),
@@ -209,15 +209,15 @@ public class EditRelationWindowController implements ViewController<Relation> {
         entityAModelReference = relation.getTableA();
         entityBModelReference = relation.getTableB();
         tableAEntityCmboBox.getSelectionModel().select(workspace.getEntities().indexOf(model.getTableA()));
-        radioBtnPolyAN.setSelected(model.getTableA_Cardinality() == Relation.Cardinality.MANY);
-        radioBtnPolyA1.setSelected(model.getTableA_Cardinality() == Relation.Cardinality.ONE);
-        radioBtnObligationAMust.setSelected(model.getTableA_Obligation() == Relation.Obligation.MUST);
-        radioBtnObligationACan.setSelected(model.getTableA_Obligation() == Relation.Obligation.CAN);
+        radioBtnPolyAN.setSelected(model.getTableA_Cardinality() == CrowsFootOptions.Cardinality.MANY);
+        radioBtnPolyA1.setSelected(model.getTableA_Cardinality() == CrowsFootOptions.Cardinality.ONE);
+        radioBtnObligationAMust.setSelected(model.getTableA_Obligation() == CrowsFootOptions.Obligation.MUST);
+        radioBtnObligationACan.setSelected(model.getTableA_Obligation() == CrowsFootOptions.Obligation.CAN);
         tableBEntityCmboBox.getSelectionModel().select(workspace.getEntities().indexOf(model.getTableB()));
-        radioBtnPolyBN.setSelected(model.getTableB_Cardinality() == Relation.Cardinality.MANY);
-        radioBtnPolyB1.setSelected(model.getTableB_Cardinality() == Relation.Cardinality.ONE);
-        radioBtnObligationBMust.setSelected(model.getTableB_Obligation() == Relation.Obligation.MUST);
-        radioBtnObligationBCan.setSelected(model.getTableB_Obligation() == Relation.Obligation.CAN);
+        radioBtnPolyBN.setSelected(model.getTableB_Cardinality() == CrowsFootOptions.Cardinality.MANY);
+        radioBtnPolyB1.setSelected(model.getTableB_Cardinality() == CrowsFootOptions.Cardinality.ONE);
+        radioBtnObligationBMust.setSelected(model.getTableB_Obligation() == CrowsFootOptions.Obligation.MUST);
+        radioBtnObligationBCan.setSelected(model.getTableB_Obligation() == CrowsFootOptions.Obligation.CAN);
         tableAIsWeakChkBox.setSelected(model.getTableA().isWeakType());
         tableBIsWeakChkBox.setSelected(model.getTableB().isWeakType());
         rebuildEntityView();
@@ -249,12 +249,12 @@ public class EditRelationWindowController implements ViewController<Relation> {
             var foreignPrimaryAttributeA = relation.getTableA().getPrimaryKey();
             var foreignAttributeB = relation.getFkAttributeB(foreignPrimaryAttributeA);
             if (foreignAttributeB != null) { //ForeignKey exist already in TableB
-                if (relation.getTableA_Cardinality() == Relation.Cardinality.ONE) { //When changed to cardinality ONE, remove ForeignKey
+                if (relation.getTableA_Cardinality() == CrowsFootOptions.Cardinality.ONE) { //When changed to cardinality ONE, remove ForeignKey
                     relation.getTableB().getAttributes().remove(foreignAttributeB);
                 }
             }
             else { //ForeignKey does not exist in TableB
-                if (relation.getTableA_Cardinality() == Relation.Cardinality.MANY) { //When has cardinality MANY, add new ForeignKey
+                if (relation.getTableA_Cardinality() == CrowsFootOptions.Cardinality.MANY) { //When has cardinality MANY, add new ForeignKey
                     relation.getTableB().addAttribute(new Attribute(
                             foreignPrimaryAttributeA.getName(),
                             foreignPrimaryAttributeA.getType(),
@@ -272,12 +272,12 @@ public class EditRelationWindowController implements ViewController<Relation> {
             var foreignPrimaryAttributeB = relation.getTableB().getPrimaryKey();
             var foreignAttributeA = relation.getFkAttributeA(foreignPrimaryAttributeB);
             if (foreignAttributeA != null) { //ForeignKey exist already in TableA
-                if (relation.getTableB_Cardinality() == Relation.Cardinality.ONE) { //When changed to cardinality ONE, remove ForeignKey
+                if (relation.getTableB_Cardinality() == CrowsFootOptions.Cardinality.ONE) { //When changed to cardinality ONE, remove ForeignKey
                     relation.getTableA().getAttributes().remove(foreignAttributeA);
                 }
             }
             else { //ForeignKey does not exist in TableA
-                if (relation.getTableB_Cardinality() == Relation.Cardinality.MANY) { //When has cardinality MANY, add new ForeignKey
+                if (relation.getTableB_Cardinality() == CrowsFootOptions.Cardinality.MANY) { //When has cardinality MANY, add new ForeignKey
                     relation.getTableA().addAttribute(new Attribute(
                             foreignPrimaryAttributeB.getName(),
                             foreignPrimaryAttributeB.getType(),
@@ -321,47 +321,47 @@ public class EditRelationWindowController implements ViewController<Relation> {
             tableAIsWeakChkBox.setSelected(false);
             tableBIsWeakChkBox.setSelected(false);
         }
-        else if (relation.getTableA_Cardinality() == Relation.Cardinality.MANY && relation.getTableB_Cardinality() == Relation.Cardinality.MANY) {
+        else if (relation.getTableA_Cardinality() == CrowsFootOptions.Cardinality.MANY && relation.getTableB_Cardinality() == CrowsFootOptions.Cardinality.MANY) {
             tableAIsWeakChkBox.setDisable(true);
             tableBIsWeakChkBox.setDisable(true);
             tableAIsWeakChkBox.setSelected(false);
             tableBIsWeakChkBox.setSelected(false);
         }
-        else if (relation.getTableA_Cardinality() == Relation.Cardinality.ONE && relation.getTableB_Cardinality() == Relation.Cardinality.ONE) {
-            if (relation.getTableA_Obligation() == Relation.Obligation.CAN && relation.getTableB_Obligation() == Relation.Obligation.MUST) {
+        else if (relation.getTableA_Cardinality() == CrowsFootOptions.Cardinality.ONE && relation.getTableB_Cardinality() == CrowsFootOptions.Cardinality.ONE) {
+            if (relation.getTableA_Obligation() == CrowsFootOptions.Obligation.CAN && relation.getTableB_Obligation() == CrowsFootOptions.Obligation.MUST) {
                 tableBIsWeakChkBox.setDisable(true);
                 tableBIsWeakChkBox.setSelected(false);
             }
-            else if (relation.getTableA_Obligation() == Relation.Obligation.CAN && relation.getTableB_Obligation() == Relation.Obligation.CAN) {
+            else if (relation.getTableA_Obligation() == CrowsFootOptions.Obligation.CAN && relation.getTableB_Obligation() == CrowsFootOptions.Obligation.CAN) {
                 tableAIsWeakChkBox.setDisable(true);
                 tableBIsWeakChkBox.setDisable(true);
                 tableAIsWeakChkBox.setSelected(false);
                 tableBIsWeakChkBox.setSelected(false);
             }
-            else if (relation.getTableA_Obligation() == Relation.Obligation.MUST && relation.getTableB_Obligation() == Relation.Obligation.CAN) {
+            else if (relation.getTableA_Obligation() == CrowsFootOptions.Obligation.MUST && relation.getTableB_Obligation() == CrowsFootOptions.Obligation.CAN) {
                 tableAIsWeakChkBox.setDisable(true);
                 tableAIsWeakChkBox.setSelected(false);
             }
         }
-        else if (relation.getTableA_Cardinality() == Relation.Cardinality.ONE && relation.getTableB_Cardinality() == Relation.Cardinality.MANY) {
-            if (relation.getTableA_Obligation() == Relation.Obligation.MUST) {
+        else if (relation.getTableA_Cardinality() == CrowsFootOptions.Cardinality.ONE && relation.getTableB_Cardinality() == CrowsFootOptions.Cardinality.MANY) {
+            if (relation.getTableA_Obligation() == CrowsFootOptions.Obligation.MUST) {
                 tableAIsWeakChkBox.setDisable(true);
                 tableAIsWeakChkBox.setSelected(false);
             }
-            else if (relation.getTableB_Obligation() == Relation.Obligation.CAN) {
+            else if (relation.getTableB_Obligation() == CrowsFootOptions.Obligation.CAN) {
                 tableAIsWeakChkBox.setDisable(true);
                 tableBIsWeakChkBox.setDisable(true);
                 tableAIsWeakChkBox.setSelected(false);
                 tableBIsWeakChkBox.setSelected(false);
             }
         }
-        else if (relation.getTableA_Cardinality() == Relation.Cardinality.MANY && relation.getTableB_Cardinality() == Relation.Cardinality.ONE) {
-            if (relation.getTableB_Obligation() == Relation.Obligation.MUST) {
+        else if (relation.getTableA_Cardinality() == CrowsFootOptions.Cardinality.MANY && relation.getTableB_Cardinality() == CrowsFootOptions.Cardinality.ONE) {
+            if (relation.getTableB_Obligation() == CrowsFootOptions.Obligation.MUST) {
                 tableBIsWeakChkBox.setDisable(true);
                 tableBIsWeakChkBox.setSelected(false);
             }
         }
-        else if (relation.getTableA_Obligation() == Relation.Obligation.CAN && relation.getTableB_Obligation() == Relation.Obligation.CAN) {
+        else if (relation.getTableA_Obligation() == CrowsFootOptions.Obligation.CAN && relation.getTableB_Obligation() == CrowsFootOptions.Obligation.CAN) {
             tableAIsWeakChkBox.setDisable(true);
             tableBIsWeakChkBox.setDisable(true);
             tableAIsWeakChkBox.setSelected(false);
@@ -386,13 +386,13 @@ public class EditRelationWindowController implements ViewController<Relation> {
         }
 
         if (workspace.getEntities().size() >= 1){
-            relation = new Relation("simple",
+            relation = new Relation(
                     selectedEntity,
                     workspace.getEntities().get(0),
-                    Relation.Cardinality.ONE,
-                    Relation.Cardinality.ONE,
-                    Relation.Obligation.CAN,
-                    Relation.Obligation.CAN);
+                    CrowsFootOptions.Cardinality.ONE,
+                    CrowsFootOptions.Cardinality.ONE,
+                    CrowsFootOptions.Obligation.CAN,
+                    CrowsFootOptions.Obligation.CAN);
 
             updateConnectionLine();
         }

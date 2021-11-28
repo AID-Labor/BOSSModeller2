@@ -1,7 +1,7 @@
 package de.snaggly.bossmodellerfx.view;
 
-import de.snaggly.bossmodellerfx.model.Relation;
-import de.snaggly.bossmodellerfx.view.controller.ViewController;
+import de.snaggly.bossmodellerfx.model.subdata.Relation;
+import de.snaggly.bossmodellerfx.view.controller.ModelController;
 import de.snaggly.bossmodellerfx.view.viewtypes.CustomNode;
 import javafx.scene.Node;
 
@@ -51,7 +51,7 @@ public class RelationViewNode extends CustomNode<Relation> {
     }
 
     @Override
-    public ViewController<Relation> getController() {
+    public ModelController<Relation> getController() {
         return null;
     }
 

@@ -2,7 +2,7 @@ package de.snaggly.bossmodellerfx.view.factory.windowtype;
 
 import de.snaggly.bossmodellerfx.Main;
 import de.snaggly.bossmodellerfx.guiLogic.Project;
-import de.snaggly.bossmodellerfx.model.Relation;
+import de.snaggly.bossmodellerfx.model.subdata.Relation;
 import de.snaggly.bossmodellerfx.view.controller.EditRelationWindowController;
 import de.snaggly.bossmodellerfx.view.factory.WindowFactory;
 import javafx.fxml.FXMLLoader;

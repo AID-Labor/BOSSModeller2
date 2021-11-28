@@ -1,7 +1,8 @@
 package de.snaggly.bossmodellerfx.view.controller;
 
-import de.snaggly.bossmodellerfx.model.Attribute;
-import de.snaggly.bossmodellerfx.model.UniqueCombination;
+import de.snaggly.bossmodellerfx.model.subdata.Attribute;
+import de.snaggly.bossmodellerfx.model.subdata.AttributeCombination;
+import de.snaggly.bossmodellerfx.model.subdata.UniqueCombination;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.CheckBox;
@@ -11,12 +12,12 @@ import javafx.scene.layout.VBox;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class EditUniqueCombinationWindowController implements ViewController<UniqueCombination> {
+public class EditUniqueCombinationWindowController implements ModelController<UniqueCombination> {
     private boolean tabSwitchMutex = false;
     private UniqueCombination model;
     private HashMap<Attribute, CheckBox> checkBoxOverview = new HashMap<>();
-    private HashMap<TextField, UniqueCombination.AttributeCombination> attributeCombinationOverview = new HashMap<>();
-    private UniqueCombination.AttributeCombination currentActiveCombination;
+    private HashMap<TextField, AttributeCombination> attributeCombinationOverview = new HashMap<>();
+    private AttributeCombination currentActiveCombination;
 
     @FXML
     private VBox attributesListVBox;
@@ -30,7 +31,7 @@ public class EditUniqueCombinationWindowController implements ViewController<Uni
 
     @FXML
     private void newUniqueComboClick(ActionEvent actionEvent) {
-        var newAttributeCombination = new UniqueCombination.AttributeCombination();
+        var newAttributeCombination = new AttributeCombination();
         model.getCombinations().add(newAttributeCombination);
         uniqueCombNamesListVBox.getChildren().add(generateUniqueCombinationKeyTextField(null, newAttributeCombination));
     }
@@ -63,7 +64,7 @@ public class EditUniqueCombinationWindowController implements ViewController<Uni
         }
     }
 
-    private TextField generateUniqueCombinationKeyTextField(String name, UniqueCombination.AttributeCombination attributeCombination) {
+    private TextField generateUniqueCombinationKeyTextField(String name, AttributeCombination attributeCombination) {
         var textFieldCombination = new TextField();
         if (name == null) {
             textFieldCombination.setPromptText("Unique Name...");

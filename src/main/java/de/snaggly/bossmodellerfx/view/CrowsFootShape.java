@@ -1,6 +1,6 @@
 package de.snaggly.bossmodellerfx.view;
 
-import de.snaggly.bossmodellerfx.model.Relation;
+import de.snaggly.bossmodellerfx.struct.relations.CrowsFootOptions;
 import de.snaggly.bossmodellerfx.view.viewtypes.Highlightable;
 import javafx.beans.value.ChangeListener;
 import javafx.scene.layout.Pane;
@@ -90,8 +90,8 @@ public abstract class CrowsFootShape implements Highlightable {
 
     private final ArrayList<ChangeListener<Number>> listeners = new ArrayList<>();
 
-    public void bindCrowsFootView(Pane parentPane, Relation.Cardinality cardinality, Relation.Obligation obligation) {
-        if (cardinality == Relation.Cardinality.MANY) {
+    public void bindCrowsFootView(Pane parentPane, CrowsFootOptions.Cardinality cardinality, CrowsFootOptions.Obligation obligation) {
+        if (cardinality == CrowsFootOptions.Cardinality.MANY) {
             parentPane.getChildren().addAll(this.multiplicityLineMultiple1, this.multiplicityLineMultiple2);
             entity.layoutXProperty().addListener(this.getMultiplicityMany_XListener((Pane) entity.getParent()));
             entity.widthProperty().addListener(this.getMultiplicityMany_XListener((Pane) entity.getParent()));
@@ -105,7 +105,7 @@ public abstract class CrowsFootShape implements Highlightable {
             entity.heightProperty().addListener(this.getMultiplicityOne_YListener((Pane) entity.getParent()));
         }
 
-        if (obligation == Relation.Obligation.CAN) {
+        if (obligation == CrowsFootOptions.Obligation.CAN) {
             parentPane.getChildren().add(this.optionalCircle);
             entity.layoutXProperty().addListener(this.getOptional_XListener((Pane) entity.getParent()));
             entity.widthProperty().addListener(this.getOptional_XListener((Pane) entity.getParent()));
@@ -120,8 +120,8 @@ public abstract class CrowsFootShape implements Highlightable {
         }
     }
 
-    public void draw(Pane parentPane, Relation.Cardinality cardinality, Relation.Obligation obligation, double xOffset, double yOffset) {
-        if (cardinality == Relation.Cardinality.MANY) {
+    public void draw(Pane parentPane, CrowsFootOptions.Cardinality cardinality, CrowsFootOptions.Obligation obligation, double xOffset, double yOffset) {
+        if (cardinality == CrowsFootOptions.Cardinality.MANY) {
             parentPane.getChildren().addAll(this.multiplicityLineMultiple1, this.multiplicityLineMultiple2);
             movers[0] = () -> {
                 this.drawMultiplicityMany_X(xOffset);
@@ -135,7 +135,7 @@ public abstract class CrowsFootShape implements Highlightable {
             };
         }
 
-        if (obligation == Relation.Obligation.CAN) {
+        if (obligation == CrowsFootOptions.Obligation.CAN) {
             parentPane.getChildren().add(this.optionalCircle);
             movers[1] = () -> {
                 this.drawOptional_X(xOffset);

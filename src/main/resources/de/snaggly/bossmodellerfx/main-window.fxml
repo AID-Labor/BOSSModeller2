@@ -158,7 +158,7 @@
                         <MenuItem mnemonicParsing="false" text="Datenbankmodell aus Datenbank lesen" />
                         <MenuItem mnemonicParsing="false" text="Aus SQL-Skript importieren" />
                      </Menu>
-                     <MenuItem mnemonicParsing="false" text="Speichern" />
+                     <MenuItem mnemonicParsing="false" onAction="#saveFileClick" text="Speichern" />
                      <MenuItem mnemonicParsing="false" text="Speichern unter..." />
                      <Menu mnemonicParsing="false" text="Export">
                         <MenuItem mnemonicParsing="false" text="Als Bild speichern" />
