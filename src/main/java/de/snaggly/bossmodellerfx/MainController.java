@@ -821,10 +821,14 @@ public class MainController {
             var commentView = CommentBuilder.buildComment(commentModel, mainWorkbench, currentProject.getSelectionHandler);
 
             currentProject.addComment(commentModel);
-            mainWorkbench.getChildren().add(commentView);
         } catch (IOException e) {
             GUIMethods.showError(MainController.class.getSimpleName(), "BOSSModellerFX", e.getLocalizedMessage());
         }
+    }
+
+    private void showNewComment(CommentView commentView) {
+        mainWorkbench.getChildren().add(commentView);
+        commentView.toBack();
     }
 
     private void editComment(CommentView commentView) {
@@ -945,7 +949,7 @@ public class MainController {
 
         for (var comment : currentProject.getComments()) {
             var commentView = CommentBuilder.buildComment(comment, mainWorkbench, currentProject.getSelectionHandler);
-            mainWorkbench.getChildren().add(commentView);
+            showNewComment(commentView);
         }
 
         for (var relation : currentProject.getRelations()) {
