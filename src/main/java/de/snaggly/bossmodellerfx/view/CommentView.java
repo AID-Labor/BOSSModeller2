@@ -23,6 +23,9 @@ public abstract class CommentView extends CustomNode<Comment> implements Draggab
         controller = fxmlLoader.getController();
         controller.loadModel(comment);
 
+        this.setMinHeight(model.getHeight());
+        this.setMinWidth(model.getWidth());
+
         setOnClick();
         setDraggable();
         makeResizable();

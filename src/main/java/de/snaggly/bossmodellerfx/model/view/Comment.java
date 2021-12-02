@@ -10,7 +10,10 @@ public class Comment extends ResizableDataModel {
     }
 
     public Comment(String text, double xCoordinate, double yCoordinate) {
-        super(xCoordinate, yCoordinate);
+        this(text, xCoordinate, yCoordinate, 0, 0);
+    }
+    public Comment(String text, double xCoordinate, double yCoordinate, double width, double height) {
+        super(xCoordinate, yCoordinate, width, height);
         this.text = text;
     }
 
