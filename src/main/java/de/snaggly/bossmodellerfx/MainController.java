@@ -121,12 +121,12 @@ public class MainController {
             var midLineX = node1mx;
             var midLineY = node1my;
             if (node1mx <= node2mx && node1my >= node2my) { //1Q
-                if ((node2y + node2h) >= node1y && (node2y + node2h) <= (node1y + node1h)) { //R
+                if ((node2y + node2h) >= node1y && (node2y + node2h) <= Math.abs(node2h - node1h) + (node1y + node1h)) { //R
                     entityAConnections.increaseEastConnections();
                     entityBConnections.increaseWestConnections();
                     relation.orientation = ConnectingOrientation.Q1_R;
                 }
-                else if (node2x >= node1x && node2x <= (node1x + node1w)) { //O
+                else if (Math.abs(node2w - node1w) + node2x >= node1x && node2x <= (node1x + node1w)) { //O
                     entityAConnections.increaseNorthConnections();
                     entityBConnections.increaseSouthConnections();
                     relation.orientation = ConnectingOrientation.Q1_O;
@@ -149,12 +149,12 @@ public class MainController {
                 }
             }
             else if (node1mx <= node2mx && node1my <= node2my) { //2Q
-                if (node2y >= node1y && node2y <= (node1y + node1h)) { //R
+                if (node2y + Math.abs(node2h - node1h) >= node1y && node2y <= (node1y + node1h)) { //R
                     entityAConnections.increaseEastConnections();
                     entityBConnections.increaseWestConnections();
                     relation.orientation = ConnectingOrientation.Q2_R;
                 }
-                else if (node2x >= node1x && node2x <= (node1x + node1w)) { //U
+                else if (Math.abs(node2h - node1h) + node2x >= node1x && node2x <= (node1x + node1w)) { //U
                     entityAConnections.increaseSouthConnections();
                     entityBConnections.increaseNorthConnections();
                     relation.orientation = ConnectingOrientation.Q2_U;
@@ -177,12 +177,12 @@ public class MainController {
                 }
             }
             else if (node1mx >= node2mx && node1my <= node2my) { //3Q
-                if (node2y >= node1y && node2y <= (node1y + node1h)) { //L
+                if ((node2y + Math.abs(node2h - node1h)) >= node1y && node2y <= (node1y + node1h)) { //L
                     entityAConnections.increaseWestConnections();
                     entityBConnections.increaseEastConnections();
                     relation.orientation = ConnectingOrientation.Q3_L;
                 }
-                else if ((node2x + node2w) >= node1x && (node2x + node2w) <= (node1x + node1w)) { //U
+                else if ((node2x + node2w) >= node1x && (node2x + node2w) <= Math.abs(node2w - node1w) + (node1x + node1w)) { //U
                     entityAConnections.increaseSouthConnections();
                     entityBConnections.increaseNorthConnections();
                     relation.orientation = ConnectingOrientation.Q3_U;
@@ -205,12 +205,12 @@ public class MainController {
                 }
             }
             else if (node1mx >= node2mx && node1my >= node2my) { //4Q
-                if ((node2y + node2h) >= node1y && (node2y + node2h) <= (node1y + node1h)) { //L
+                if ((node2y + node2h) >= node1y && (node2y + node2h) <= Math.abs(node2h - node1h) + (node1y + node1h)) { //L
                     entityAConnections.increaseWestConnections();
                     entityBConnections.increaseEastConnections();
                     relation.orientation = ConnectingOrientation.Q4_L;
                 }
-                else if ((node2x + node2w) >= node1x && (node2x + node2w) <= (node1x + node1w)) { //O
+                else if ((node2x + node2w) >= node1x && (node2x + node2w) <= Math.abs(node2w - node1w) + (node1x + node1w)) { //O
                     entityAConnections.increaseNorthConnections();
                     entityBConnections.increaseSouthConnections();
                     relation.orientation = ConnectingOrientation.Q4_O;
@@ -262,8 +262,8 @@ public class MainController {
             var node2x = node2.getLayoutX();
             var node2y = node2.getLayoutY();
 
-            double midPointX = node1x + node1w + (node2x - (node1x + node1w)) / 2;
-            double midPointY = node1y + node1h + (node2y - (node1y + node1h)) / 2;
+            double midPointX = node2x > node1x ? node1x + node1w + (node2x - (node1x + node1w)) / 2 : node2x + node2w + (node1x - (node2x + node2w)) / 2;
+            double midPointY = node2y > node1y ? node1y + node1h + (node2y - (node1y + node1h)) / 2 : node2y + node2h + (node1y - (node2y + node2h)) / 2;
 
             var line1 = relationViewStruct.line1;
             var line2 = relationViewStruct.line2;
