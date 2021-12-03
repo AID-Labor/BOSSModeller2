@@ -5,7 +5,7 @@ import de.snaggly.bossmodellerfx.model.view.ViewModel;
 
 import java.util.ArrayList;
 
-public class EntityAbstraction extends ViewModel {
+public class EntityAbstraction extends ViewModel implements AbstractedModel {
     private String name;
     private ArrayList<Attribute> attributes;
     private boolean isWeakType;

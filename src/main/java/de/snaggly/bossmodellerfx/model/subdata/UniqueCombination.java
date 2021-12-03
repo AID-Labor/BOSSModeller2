@@ -1,10 +1,10 @@
 package de.snaggly.bossmodellerfx.model.subdata;
 
-import de.snaggly.bossmodellerfx.model.BOSSModel;
+import de.snaggly.bossmodellerfx.model.abstraction.UniqueCombinationAbstraction;
 
 import java.util.ArrayList;
 
-public class UniqueCombination implements BOSSModel {
+public class UniqueCombination extends UniqueCombinationAbstraction {
     private ArrayList<AttributeCombination> combinations = new ArrayList<>();
 
     public UniqueCombination() { }

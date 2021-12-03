@@ -1,6 +1,6 @@
 package de.snaggly.bossmodellerfx.model.abstraction;
 
-public abstract class AttributeCombinationAbstraction {
+public abstract class AttributeCombinationAbstraction implements AbstractedModel {
     private String combinationName;
     public String getCombinationName() {
         return combinationName;

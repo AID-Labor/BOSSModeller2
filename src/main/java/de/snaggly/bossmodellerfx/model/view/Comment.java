@@ -1,8 +1,8 @@
 package de.snaggly.bossmodellerfx.model.view;
 
-import de.snaggly.bossmodellerfx.model.view.ResizableDataModel;
+import de.snaggly.bossmodellerfx.model.abstraction.AbstractedModel;
 
-public class Comment extends ResizableDataModel {
+public class Comment extends ResizableDataModel implements AbstractedModel {
     private String text;
 
     public Comment(String text) {
