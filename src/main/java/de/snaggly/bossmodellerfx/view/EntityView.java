@@ -2,6 +2,7 @@ package de.snaggly.bossmodellerfx.view;
 
 import de.snaggly.bossmodellerfx.model.view.Entity;
 import de.snaggly.bossmodellerfx.view.controller.EntityViewController;
+import de.snaggly.bossmodellerfx.view.viewtypes.BiSelectable;
 import de.snaggly.bossmodellerfx.view.viewtypes.Controllable;
 import de.snaggly.bossmodellerfx.view.viewtypes.CustomNode;
 import de.snaggly.bossmodellerfx.view.viewtypes.Draggable;
@@ -9,7 +10,7 @@ import javafx.fxml.FXMLLoader;
 
 import java.io.IOException;
 
-public abstract class EntityView extends CustomNode<Entity> implements Draggable, Controllable {
+public abstract class EntityView extends CustomNode<Entity> implements Draggable, Controllable, BiSelectable {
     private final Entity model;
     private final EntityViewController controller;
 
@@ -46,5 +47,10 @@ public abstract class EntityView extends CustomNode<Entity> implements Draggable
     @Override
     public void setDeFocusStyle() {
         this.setStyle("");
+    }
+
+    @Override
+    public void setSecondFocusStyle() {
+        this.setStyle("-fx-effect: dropshadow(three-pass-box, rgba(3,211,158,0.8), 17, 0, 0, 0);");
     }
 }

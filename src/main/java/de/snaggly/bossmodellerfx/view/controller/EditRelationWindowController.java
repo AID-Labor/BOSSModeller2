@@ -378,17 +378,23 @@ public class EditRelationWindowController implements ModelController<Relation> {
         tableAEntityCmboBox.getSelectionModel().selectFirst();
         tableBEntityCmboBox.getSelectionModel().selectFirst();
 
-        var selectedEntity = workspace.getEntities().get(0);
+        var firstSelectedEntity = workspace.getEntities().get(0);
+        var secondSelectedEntity = firstSelectedEntity;
 
         if (workspace.getCurrentSelected() instanceof EntityView) {
-            selectedEntity = ((EntityView) workspace.getCurrentSelected()).getModel();
-            tableAEntityCmboBox.getSelectionModel().select(workspace.getEntities().indexOf(selectedEntity));
+            firstSelectedEntity = ((EntityView) workspace.getCurrentSelected()).getModel();
+            tableAEntityCmboBox.getSelectionModel().select(workspace.getEntities().indexOf(firstSelectedEntity));
+        }
+
+        if (workspace.getCurrentSecondSelection() instanceof EntityView) {
+            secondSelectedEntity = ((EntityView) workspace.getCurrentSecondSelection()).getModel();
+            tableBEntityCmboBox.getSelectionModel().select(workspace.getEntities().indexOf(secondSelectedEntity));
         }
 
         if (workspace.getEntities().size() >= 1){
             relation = new Relation(
-                    selectedEntity,
-                    workspace.getEntities().get(0),
+                    firstSelectedEntity,
+                    secondSelectedEntity,
                     CrowsFootOptions.Cardinality.ONE,
                     CrowsFootOptions.Cardinality.ONE,
                     CrowsFootOptions.Obligation.CAN,

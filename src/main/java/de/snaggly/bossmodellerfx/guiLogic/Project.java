@@ -5,20 +5,27 @@ import de.snaggly.bossmodellerfx.model.serializable.*;
 import de.snaggly.bossmodellerfx.model.subdata.Relation;
 import de.snaggly.bossmodellerfx.model.view.Comment;
 import de.snaggly.bossmodellerfx.model.view.Entity;
+import de.snaggly.bossmodellerfx.view.viewtypes.BiSelectable;
 import de.snaggly.bossmodellerfx.view.viewtypes.CustomNode;
+import de.snaggly.bossmodellerfx.view.viewtypes.Selectable;
 import javafx.scene.Node;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 public class Project {
     private Pane workField;
     private Node currentSelected;
+    private Node secondSelection;
 
     private final ArrayList<Entity> entities = new ArrayList<>();
     private final ArrayList<Comment> comments = new ArrayList<>();
     private final ArrayList<Relation> relations = new ArrayList<>();
+    private final Set<KeyCode> pressedKeys = new HashSet<>();
 
     public Project(Pane workField) {
         this.workField = workField;
@@ -76,17 +83,43 @@ public class Project {
         return currentSelected;
     }
 
+    public synchronized Node getCurrentSecondSelection() {
+        return secondSelection;
+    }
+
     public final SelectionHandler getSelectionHandler = this::setCurrentSelected;
 
     public synchronized void setCurrentSelected(Node newSelection) {
-        if (this.currentSelected instanceof CustomNode) {
-            ((CustomNode<? extends BOSSModel>) this.currentSelected).setDeFocusStyle();
+        if (this.secondSelection instanceof Selectable) {
+            ((BiSelectable)this.secondSelection).setDeFocusStyle();
+            this.secondSelection = null;
         }
-        if (newSelection instanceof CustomNode) {
-            ((CustomNode<? extends BOSSModel>) newSelection).setFocusStyle();
+        if (this.currentSelected instanceof Selectable) {
+            if (pressedKeys.contains(KeyCode.CONTROL) && newSelection instanceof BiSelectable) {
+                ((BiSelectable) newSelection).setSecondFocusStyle();
+                this.secondSelection = newSelection;
+            } else {
+                ((Selectable) this.currentSelected).setDeFocusStyle();
+                if (newSelection instanceof Selectable) {
+                    ((Selectable) newSelection).setFocusStyle();
+                }
+                this.currentSelected = newSelection;
+            }
         }
+        else {
+            if (newSelection instanceof Selectable) {
+                ((Selectable) newSelection).setFocusStyle();
+            }
+            this.currentSelected = newSelection;
+        }
+    }
 
-        this.currentSelected = newSelection;
+    public void addPressedKey(KeyCode key) {
+        pressedKeys.add(key);
+    }
+
+    public void removePressedKey(KeyCode key) {
+        pressedKeys.remove(key);
     }
 
     private static class ProjectData {

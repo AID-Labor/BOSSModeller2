@@ -23,6 +23,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SeparatorMenuItem;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
@@ -999,4 +1000,14 @@ public class MainController {
     }
 
     private final static String jsonTest = "{\"entities\":[{\"uniqueCombination\":{\"attributeCombination\":[]},\"name\":\"Test1\",\"attributes\":[{\"name\":\"Attr1\",\"type\":\"\",\"isPrimary\":true,\"isNonNull\":true,\"isUnique\":true,\"checkName\":\"\",\"defaultName\":\"\"},{\"name\":\"Attr1\",\"type\":\"\",\"isPrimary\":false,\"isNonNull\":true,\"isUnique\":true,\"checkName\":\"\",\"defaultName\":\"\",\"fkTableColumn\":{\"name\":\"Attr1\",\"type\":\"\",\"isPrimary\":true,\"isNonNull\":true,\"isUnique\":true,\"checkName\":\"\",\"defaultName\":\"\"}}],\"isWeakType\":false,\"xCoordinate\":10.0,\"yCoordinate\":10.0},{\"uniqueCombination\":{\"attributeCombination\":[{\"attributeCombinations\":[1,2],\"combinationName\":\"Combo1\"}]},\"name\":\"Test2\",\"attributes\":[{\"name\":\"Attr1\",\"type\":\"\",\"isPrimary\":true,\"isNonNull\":true,\"isUnique\":true,\"checkName\":\"\",\"defaultName\":\"\"},{\"name\":\"Attr2\",\"type\":\"\",\"isPrimary\":false,\"isNonNull\":false,\"isUnique\":false,\"checkName\":\"\",\"defaultName\":\"\"},{\"name\":\"Attr3\",\"type\":\"\",\"isPrimary\":false,\"isNonNull\":false,\"isUnique\":false,\"checkName\":\"\",\"defaultName\":\"\"}],\"isWeakType\":false,\"xCoordinate\":118.0,\"yCoordinate\":182.0},{\"uniqueCombination\":{\"attributeCombination\":[]},\"name\":\"Test3\",\"attributes\":[{\"name\":\"Attr1\",\"type\":\"\",\"isPrimary\":true,\"isNonNull\":true,\"isUnique\":true,\"checkName\":\"\",\"defaultName\":\"\"},{\"name\":\"Attr2\",\"type\":\"\",\"isPrimary\":false,\"isNonNull\":true,\"isUnique\":true,\"checkName\":\"dfs\",\"defaultName\":\"dsf\"},{\"name\":\"Attr1\",\"type\":\"\",\"isPrimary\":false,\"isNonNull\":true,\"isUnique\":true,\"checkName\":\"\",\"defaultName\":\"\",\"fkTableColumn\":{\"name\":\"Attr1\",\"type\":\"\",\"isPrimary\":true,\"isNonNull\":true,\"isUnique\":true,\"checkName\":\"\",\"defaultName\":\"\"}}],\"isWeakType\":true,\"xCoordinate\":293.0,\"yCoordinate\":54.0}],\"comments\":[{\"text\":\"Comment\\n1\\n2\\n\\u003c\\u003e\",\"width\":0.0,\"height\":0.0,\"xCoordinate\":272.0,\"yCoordinate\":210.0}],\"relations\":[{\"tableAIndex\":0,\"tableBIndex\":1,\"tableA_Cardinality\":\"ONE\",\"tableB_Cardinality\":\"MANY\",\"tableA_Obligation\":\"CAN\",\"tableB_Obligation\":\"CAN\",\"orientation\":\"Q2_R2\"},{\"tableAIndex\":1,\"tableBIndex\":2,\"tableA_Cardinality\":\"MANY\",\"tableB_Cardinality\":\"ONE\",\"tableA_Obligation\":\"CAN\",\"tableB_Obligation\":\"CAN\",\"orientation\":\"Q1_R\"}]}";
+
+    @FXML
+    private void onKeyPressed(KeyEvent keyEvent) {
+        currentProject.addPressedKey(keyEvent.getCode());
+    }
+
+    @FXML
+    private void onKeyReleased(KeyEvent keyEvent) {
+        currentProject.removePressedKey(keyEvent.getCode());
+    }
 }
