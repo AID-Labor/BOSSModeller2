@@ -46,6 +46,19 @@ public class RelationViewNode extends CustomNode<Relation> {
     }
 
     @Override
+    public void toBack() {
+        for (var node : crowsFootA.getAllNodes())
+            node.toBack();
+
+        for (var node : crowsFootB.getAllNodes())
+            node.toBack();
+
+        line1.toBack();
+        line2.toBack();
+        line3.toBack();
+    }
+
+    @Override
     public Relation getModel() {
         return model;
     }

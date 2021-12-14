@@ -600,6 +600,8 @@ public class MainController {
                 crowsFootA.draw(mainWorkbench, relation.getTableA_Cardinality(), relation.getTableA_Obligation(), 0, 0);
                 crowsFootB.draw(mainWorkbench, relation.getTableB_Cardinality(), relation.getTableB_Obligation(), 0, 0);
             }
+
+            relationViewStruct.toBack();
         }
     }
 
@@ -820,6 +822,7 @@ public class MainController {
         try {
             var commentModel = new Comment("", xCoordinate, yCoordinate);
             var commentView = CommentBuilder.buildComment(commentModel, mainWorkbench, currentProject.getSelectionHandler);
+            showNewComment(commentView);
 
             currentProject.addComment(commentModel);
         } catch (IOException e) {
@@ -958,6 +961,12 @@ public class MainController {
         }
     }
 
+    private void clearProject() {
+        currentProject.clear();
+        relationsOverview.clear();
+        entitiesOverview.clear();
+    }
+
     @FXML
     private void openFileClick(ActionEvent actionEvent) {
         var file = GUIMethods.showJSONFileOpenDialog("Projekt öffnen", mainWorkbench.getScene().getWindow());
@@ -970,7 +979,7 @@ public class MainController {
                 json.append(bufferedReader.readLine());
             }
             bufferedReader.close();
-            mainWorkbench.getChildren().clear();
+            clearProject();
             currentProject = Project.deserializeFromJson(json.toString(), mainWorkbench);
             reInitProject();
 
@@ -1009,5 +1018,10 @@ public class MainController {
     @FXML
     private void onKeyReleased(KeyEvent keyEvent) {
         currentProject.removePressedKey(keyEvent.getCode());
+    }
+
+    @FXML
+    private void startNewProject(ActionEvent actionEvent) {
+        clearProject();
     }
 }

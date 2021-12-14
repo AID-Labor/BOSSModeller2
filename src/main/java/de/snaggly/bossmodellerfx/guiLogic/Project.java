@@ -32,6 +32,16 @@ public class Project {
         this.currentSelected = workField;
     }
 
+    public void clear() {
+        entities.clear();
+        comments.clear();
+        relations.clear();
+        pressedKeys.clear();
+        currentSelected = null;
+        secondSelection = null;
+        workField.getChildren().clear();
+    }
+
     public Pane getWorkField() {
         return workField;
     }
