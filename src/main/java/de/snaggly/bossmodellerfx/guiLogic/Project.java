@@ -105,7 +105,7 @@ public class Project {
             this.secondSelection = null;
         }
         if (this.currentSelected instanceof Selectable) {
-            if (pressedKeys.contains(KeyCode.CONTROL) && newSelection instanceof BiSelectable) {
+            if (pressedKeys.contains(KeyCode.CONTROL) && currentSelected instanceof BiSelectable && newSelection instanceof BiSelectable) {
                 ((BiSelectable) newSelection).setSecondFocusStyle();
                 this.secondSelection = newSelection;
             } else {
