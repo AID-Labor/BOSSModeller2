@@ -92,9 +92,14 @@ public class MainController {
                 relationViewNode.line1 = new RelationLineView(relationViewNode, currentProject::setCurrentSelected);
                 relationViewNode.line2 = new RelationLineView(relationViewNode, currentProject::setCurrentSelected);
                 relationViewNode.line3 = new RelationLineView(relationViewNode, currentProject::setCurrentSelected);
+                relationViewNode.line4 = new RelationLineView(relationViewNode, currentProject::setCurrentSelected);
                 relationsOverview.put(relation, relationViewNode);
 
-                mainWorkbench.getChildren().addAll(relationViewNode.line1, relationViewNode.line2, relationViewNode.line3);
+                mainWorkbench.getChildren().addAll(
+                        relationViewNode.line1,
+                        relationViewNode.line2,
+                        relationViewNode.line3,
+                        relationViewNode.line4);
             }
 
             var crowsFootA = relationViewNode.crowsFootA;
@@ -105,6 +110,13 @@ public class MainController {
             }
             if (crowsFootB != null) {
                 mainWorkbench.getChildren().removeAll(crowsFootB.getAllNodes());
+            }
+
+            if (node1 == node2) {
+                entityAConnections.increaseEastConnections();
+                entityBConnections.increaseSouthConnections();
+                relation.orientation = ConnectingOrientation.SELF;
+                continue;
             }
 
             var node1w = node1.getWidth();
@@ -272,21 +284,25 @@ public class MainController {
             var line1 = relationViewStruct.line1;
             var line2 = relationViewStruct.line2;
             var line3 = relationViewStruct.line3;
+            var line4 = relationViewStruct.line4;
             var crowsFootA = relationViewStruct.crowsFootA;
             var crowsFootB = relationViewStruct.crowsFootB;
 
             line1.setVisible(false);
             line2.setVisible(false);
             line3.setVisible(false);
+            line4.setVisible(false);
             if (relation.getTableA().isWeakType() || relation.getTableB().isWeakType()) {
                 line1.setWeakConnection();
                 line2.setWeakConnection();
                 line3.setWeakConnection();
+                line4.setWeakConnection();
             }
             else {
                 line1.setStrongConnection();
                 line2.setStrongConnection();
                 line3.setStrongConnection();
+                line4.setStrongConnection();
             }
 
             switch (relation.orientation){
@@ -594,6 +610,32 @@ public class MainController {
                     crowsFootA = new CrowsFootShape.North(node1, entityALeftNorth / entityAConnections.getNorthConnections());
                     crowsFootB = new CrowsFootShape.East(node2, entityBLeftEast / entityBConnections.getEastConnections());
                     break;
+                case SELF:
+                    var selfDistance = 35;
+                    entityALeftEast = entityAConnections.getEastConnectionsLeft();
+                    entityBLeftSouth = entityBConnections.getSouthConnectionsLeft();
+                    line1.setStartX(node1x + node1w);
+                    line1.setStartY(node1y + (node1h * entityALeftEast / entityAConnections.getEastConnections()));
+                    line1.setEndX(node1x + node1w + selfDistance);
+                    line1.setEndY(node1y + (node1h * entityALeftEast / entityAConnections.getEastConnections()));
+                    line2.setStartX(node1x + node1w + selfDistance);
+                    line2.setStartY(node1y + (node1h * entityALeftEast / entityAConnections.getEastConnections()));
+                    line2.setEndX(node1x + node1w + selfDistance);
+                    line2.setEndY(node1y + node1h + selfDistance);
+                    line3.setStartX(node1x + node1w + selfDistance);
+                    line3.setStartY(node1y + node1h + selfDistance);
+                    line3.setEndX(node1x + (node1w * entityBLeftSouth / entityBConnections.getSouthConnections()));
+                    line3.setEndY(node1y + node1h + selfDistance);
+                    line4.setStartX(node1x + (node1w * entityBLeftSouth / entityBConnections.getSouthConnections()));
+                    line4.setStartY(node1y + node1h + selfDistance);
+                    line4.setEndX(node1x + (node1w * entityBLeftSouth / entityBConnections.getSouthConnections()));
+                    line4.setEndY(node1y + node1h);
+                    line1.setVisible(true);
+                    line2.setVisible(true);
+                    line3.setVisible(true);
+                    line4.setVisible(true);
+                    crowsFootA = new CrowsFootShape.East(node1, entityALeftEast / entityAConnections.getEastConnections());
+                    crowsFootB = new CrowsFootShape.South(node2, entityBLeftSouth / entityBConnections.getSouthConnections());
             }
 
             relationViewStruct.crowsFootA = crowsFootA;

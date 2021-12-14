@@ -12,6 +12,7 @@ public class RelationViewNode extends CustomNode<Relation> {
     public RelationLineView line1;
     public RelationLineView line2;
     public RelationLineView line3;
+    public RelationLineView line4;
     public CrowsFootShape crowsFootA;
     public CrowsFootShape crowsFootB;
 
@@ -21,12 +22,6 @@ public class RelationViewNode extends CustomNode<Relation> {
 
     public ArrayList<Node> getAllNodes() {
         var result = new ArrayList<Node>();
-        if (line1 != null)
-            result.add(line1);
-        if (line2 != null)
-            result.add(line2);
-        if (line3 != null)
-            result.add(line3);
         if (crowsFootA != null) {
             result.add(crowsFootA.multiplicityLineOne);
             result.add(crowsFootA.mandatoryLine);
@@ -41,21 +36,22 @@ public class RelationViewNode extends CustomNode<Relation> {
             result.add(crowsFootB.multiplicityLineMultiple1);
             result.add(crowsFootB.multiplicityLineMultiple2);
         }
+        if (line1 != null)
+            result.add(line1);
+        if (line2 != null)
+            result.add(line2);
+        if (line3 != null)
+            result.add(line3);
+        if (line4 != null)
+            result.add(line4);
 
         return result;
     }
 
     @Override
     public void toBack() {
-        for (var node : crowsFootA.getAllNodes())
+        for (var node : getAllNodes())
             node.toBack();
-
-        for (var node : crowsFootB.getAllNodes())
-            node.toBack();
-
-        line1.toBack();
-        line2.toBack();
-        line3.toBack();
     }
 
     @Override
@@ -80,6 +76,8 @@ public class RelationViewNode extends CustomNode<Relation> {
             line2.highlight();
         if (line3 != null)
             line3.highlight();
+        if (line4 != null)
+            line4.highlight();
     }
 
     @Override
@@ -94,5 +92,7 @@ public class RelationViewNode extends CustomNode<Relation> {
             line2.deHighlight();
         if (line3 != null)
             line3.deHighlight();
+        if (line4 != null)
+            line4.deHighlight();
     }
 }

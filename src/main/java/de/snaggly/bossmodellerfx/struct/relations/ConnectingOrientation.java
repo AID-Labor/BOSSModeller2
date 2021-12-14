@@ -19,5 +19,7 @@ public enum ConnectingOrientation {
     Q4_L,
     Q4_O,
     Q4_R3,
-    Q4_R4
+    Q4_R4,
+
+    SELF
 }

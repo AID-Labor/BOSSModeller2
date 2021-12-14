@@ -52,11 +52,11 @@ public class GUIMethods {
                     final double translateX = nodeToDrag.getLayoutX() + deltaX;
                     final double translateY = nodeToDrag.getLayoutY() + deltaY;
 
-                    if (translateX >= 0 && translateX < parent.getWidth() - nodeToDrag.getWidth()) {
+                    if (translateX >= 0 && translateX < parent.getWidth() - nodeToDrag.getWidth() - 40) {
                         nodeToDrag.setLayoutX(translateX);
                         model.setXCoordinate(translateX);
                     }
-                    if (translateY >= 0 && translateY < parent.getHeight() - nodeToDrag.getHeight()) {
+                    if (translateY >= 0 && translateY < parent.getHeight() - nodeToDrag.getHeight() - 40) {
                         nodeToDrag.setLayoutY(translateY);
                         model.setYCoordinate(translateY);
                     }
