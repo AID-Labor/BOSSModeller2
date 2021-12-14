@@ -16,10 +16,12 @@ import de.snaggly.bossmodellerfx.view.factory.nodetype.CommentBuilder;
 import de.snaggly.bossmodellerfx.view.factory.nodetype.EntityBuilder;
 import de.snaggly.bossmodellerfx.view.factory.windowtype.EntityEditorWindowBuilder;
 import de.snaggly.bossmodellerfx.view.factory.windowtype.RelationEditorWindowBuilder;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.SnapshotParameters;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SeparatorMenuItem;
@@ -29,6 +31,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
+import javax.imageio.ImageIO;
 import java.io.*;
 import java.util.HashMap;
 
@@ -1006,6 +1009,16 @@ public class MainController {
 
     @FXML
     private void exportPictureClick(ActionEvent actionEvent) {
+        var snapshot = mainWorkbench.snapshot(new SnapshotParameters(), null);
+        var file = GUIMethods.showPNGFileSaveDialog("Bild exportieren", mainWorkbench.getScene().getWindow());
+        if (file == null)
+            return;
+        try {
+            ImageIO.write(SwingFXUtils.fromFXImage(snapshot, null), "png", file);
+        }
+        catch (Exception e) {
+            GUIMethods.showError(MainController.class.getSimpleName(), "BOSSModellerFX", e.getLocalizedMessage());
+        }
     }
 
     private final static String jsonTest = "{\"entities\":[{\"uniqueCombination\":{\"attributeCombination\":[]},\"name\":\"Test1\",\"attributes\":[{\"name\":\"Attr1\",\"type\":\"\",\"isPrimary\":true,\"isNonNull\":true,\"isUnique\":true,\"checkName\":\"\",\"defaultName\":\"\"},{\"name\":\"Attr1\",\"type\":\"\",\"isPrimary\":false,\"isNonNull\":true,\"isUnique\":true,\"checkName\":\"\",\"defaultName\":\"\",\"fkTableColumn\":{\"name\":\"Attr1\",\"type\":\"\",\"isPrimary\":true,\"isNonNull\":true,\"isUnique\":true,\"checkName\":\"\",\"defaultName\":\"\"}}],\"isWeakType\":false,\"xCoordinate\":10.0,\"yCoordinate\":10.0},{\"uniqueCombination\":{\"attributeCombination\":[{\"attributeCombinations\":[1,2],\"combinationName\":\"Combo1\"}]},\"name\":\"Test2\",\"attributes\":[{\"name\":\"Attr1\",\"type\":\"\",\"isPrimary\":true,\"isNonNull\":true,\"isUnique\":true,\"checkName\":\"\",\"defaultName\":\"\"},{\"name\":\"Attr2\",\"type\":\"\",\"isPrimary\":false,\"isNonNull\":false,\"isUnique\":false,\"checkName\":\"\",\"defaultName\":\"\"},{\"name\":\"Attr3\",\"type\":\"\",\"isPrimary\":false,\"isNonNull\":false,\"isUnique\":false,\"checkName\":\"\",\"defaultName\":\"\"}],\"isWeakType\":false,\"xCoordinate\":118.0,\"yCoordinate\":182.0},{\"uniqueCombination\":{\"attributeCombination\":[]},\"name\":\"Test3\",\"attributes\":[{\"name\":\"Attr1\",\"type\":\"\",\"isPrimary\":true,\"isNonNull\":true,\"isUnique\":true,\"checkName\":\"\",\"defaultName\":\"\"},{\"name\":\"Attr2\",\"type\":\"\",\"isPrimary\":false,\"isNonNull\":true,\"isUnique\":true,\"checkName\":\"dfs\",\"defaultName\":\"dsf\"},{\"name\":\"Attr1\",\"type\":\"\",\"isPrimary\":false,\"isNonNull\":true,\"isUnique\":true,\"checkName\":\"\",\"defaultName\":\"\",\"fkTableColumn\":{\"name\":\"Attr1\",\"type\":\"\",\"isPrimary\":true,\"isNonNull\":true,\"isUnique\":true,\"checkName\":\"\",\"defaultName\":\"\"}}],\"isWeakType\":true,\"xCoordinate\":293.0,\"yCoordinate\":54.0}],\"comments\":[{\"text\":\"Comment\\n1\\n2\\n\\u003c\\u003e\",\"width\":0.0,\"height\":0.0,\"xCoordinate\":272.0,\"yCoordinate\":210.0}],\"relations\":[{\"tableAIndex\":0,\"tableBIndex\":1,\"tableA_Cardinality\":\"ONE\",\"tableB_Cardinality\":\"MANY\",\"tableA_Obligation\":\"CAN\",\"tableB_Obligation\":\"CAN\",\"orientation\":\"Q2_R2\"},{\"tableAIndex\":1,\"tableBIndex\":2,\"tableA_Cardinality\":\"MANY\",\"tableB_Cardinality\":\"ONE\",\"tableA_Obligation\":\"CAN\",\"tableB_Obligation\":\"CAN\",\"orientation\":\"Q1_R\"}]}";

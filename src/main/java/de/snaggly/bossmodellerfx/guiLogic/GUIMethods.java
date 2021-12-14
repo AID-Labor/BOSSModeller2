@@ -173,4 +173,12 @@ public class GUIMethods {
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("JSON-Datei", "*.json"));
         return fileChooser;
     }
+
+    public static File showPNGFileSaveDialog(String title, Window window) {
+        var fileChooser = new FileChooser();
+        fileChooser.setTitle(title);
+        fileChooser.setInitialFileName("BOSS-Project.png");
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("PNG-Datei", "*.png"));
+        return fileChooser.showSaveDialog(window);
+    }
 }
