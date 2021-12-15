@@ -82,7 +82,7 @@ public class EditRelationWindowController implements ModelController<Relation> {
         String infoText = "Ein ";
         infoText += relation.getTableA().getName();
 
-        if (radioBtnObligationACan.isSelected()) {
+        if (radioBtnObligationBCan.isSelected()) {
             infoText += " kann";
         } else {
             infoText += " muss";
@@ -100,7 +100,7 @@ public class EditRelationWindowController implements ModelController<Relation> {
         infoText += "Ein ";
         infoText += relation.getTableB().getName();
 
-        if (radioBtnObligationBCan.isSelected()) {
+        if (radioBtnObligationACan.isSelected()) {
             infoText += " kann";
         } else {
             infoText += " muss";
