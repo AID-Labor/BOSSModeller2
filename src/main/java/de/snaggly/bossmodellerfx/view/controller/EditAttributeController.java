@@ -3,14 +3,13 @@ package de.snaggly.bossmodellerfx.view.controller;
 import de.snaggly.bossmodellerfx.model.subdata.Attribute;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 
 public class EditAttributeController implements ModelController<Attribute> {
+    @FXML
+    private ComboBox<String> dataTypeComboBox;
     @FXML
     private VBox nameVBox;
     @FXML
@@ -40,6 +39,10 @@ public class EditAttributeController implements ModelController<Attribute> {
 
     public TextField getNameTF() {
         return nameTF;
+    }
+
+    public ComboBox<String> getDataTypeComboBox() {
+        return dataTypeComboBox;
     }
 
     public CheckBox getIsPrimaryCheck() {
@@ -73,6 +76,7 @@ public class EditAttributeController implements ModelController<Attribute> {
     @Override
     public void loadModel(Attribute model) {
         this.nameTF.setText(model.getName());
+        this.dataTypeComboBox.getEditor().setText(model.getType());
         this.checkTF.setText(model.getCheckName());
         this.defaultTF.setText(model.getDefaultName());
         this.isPrimaryCheck.setSelected(model.isPrimary());
@@ -84,6 +88,7 @@ public class EditAttributeController implements ModelController<Attribute> {
         }
 
         if (model.getFkTableColumn() != null) {
+            this.dataTypeComboBox.setDisable(true);
             this.checkTF.setDisable(true);
             this.defaultTF.setDisable(true);
             this.isPrimaryCheck.setDisable(true);
@@ -92,4 +97,51 @@ public class EditAttributeController implements ModelController<Attribute> {
             nameVBox.getChildren().add(new Label("*Fremdschlüssel zu: " + model.getFkTableColumn().getName()));
         }
     }
+
+    @FXML
+    private void initialize() {
+        dataTypeComboBox.getItems().addAll(testDT);
+    }
+
+    private final String[] testDT = {
+            "bigint" ,
+            "bigserial" ,
+            "bit" ,
+            "varbit" ,
+            "boolean" ,
+            "box" ,
+            "bytea" ,
+            "varchar" ,
+            "varchar(25)" ,
+            "varchar(125)" ,
+            "varchar(1024)" ,
+            "char" ,
+            "cidr" ,
+            "circle" ,
+            "date" ,
+            "double precision" ,
+            "inet" ,
+            "integer" ,
+            "interval" ,
+            "line" ,
+            "lseg" ,
+            "macaddr" ,
+            "money" ,
+            "numeric" ,
+            "path" ,
+            "point" ,
+            "polygon" ,
+            "real" ,
+            "smallint" ,
+            "serial" ,
+            "text" ,
+            "time" ,
+            "timetz" ,
+            "timestamp" ,
+            "timestamptz" ,
+            "tsquery" ,
+            "tsvector" ,
+            "txid_snapshot" ,
+            "uuid" ,
+            "xml" };
 }

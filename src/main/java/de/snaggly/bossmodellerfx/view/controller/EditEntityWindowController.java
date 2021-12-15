@@ -7,14 +7,13 @@ import de.snaggly.bossmodellerfx.model.view.Entity;
 import de.snaggly.bossmodellerfx.view.AttributeEditor;
 import de.snaggly.bossmodellerfx.view.factory.nodetype.AttributeEditorBuilder;
 import de.snaggly.bossmodellerfx.view.factory.windowtype.UniqueCombinationEditorWindowBuilder;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.Separator;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
@@ -83,6 +82,7 @@ public class EditEntityWindowController implements ModelController<Entity> {
 
     private void bindAttributeToGui(Attribute attribute, AttributeEditor guiEditor) {
         guiEditor.getController().getNameTF().textProperty().addListener((observableValue, s, newValue) -> attribute.setName(newValue));
+        guiEditor.getController().getDataTypeComboBox().getEditor().textProperty().addListener((observableValue, s, newValue) -> attribute.setType(newValue));
         guiEditor.getController().getIsPrimaryCheck().selectedProperty().addListener((observableValue, s, newValue) -> attribute.setPrimary(newValue));
         guiEditor.getController().getIsNonNullCheck().selectedProperty().addListener((observableValue, s, newValue) -> attribute.setNonNull(newValue));
         guiEditor.getController().getIsUniqueCheck().selectedProperty().addListener((observableValue, s, newValue) -> attribute.setUnique(newValue));
@@ -186,6 +186,16 @@ public class EditEntityWindowController implements ModelController<Entity> {
             }
         }
 
+        if (!checkIfAllAttributesContainDataType()) {
+            if (canClose) {
+                canClose = false;
+                GUIMethods.showWarning(
+                        Entity.class.getSimpleName(),
+                        "Kein Datentyp",
+                        "Alle Attribute müssen einen Datentypen besitzen!");
+            }
+        }
+
         entity.setWeakType(isWeakTypeCheckBox.isSelected());
 
         if (canClose) {
@@ -278,13 +288,26 @@ public class EditEntityWindowController implements ModelController<Entity> {
         boolean result = false;
         for (int i = 0; i < attributesListVBOX.getChildren().size() && !result; i++) {
             var node = attributesListVBOX.getChildren().get(i);
-            if (!(node instanceof  AttributeEditor))
+            if (!(node instanceof AttributeEditor))
                 continue;
             var attributeEditView = (AttributeEditor)(node);
             result = attributeEditView.getController().getIsPrimaryCheck().isSelected();
         }
 
         return result;
+    }
+
+    private boolean checkIfAllAttributesContainDataType() {
+        for (int i = 0; i < attributesListVBOX.getChildren().size(); i++) {
+            var node = attributesListVBOX.getChildren().get(i);
+            if (!(node instanceof AttributeEditor))
+                continue;
+            var attributeEditView = (AttributeEditor)(node);
+            var selection = attributeEditView.getController().getDataTypeComboBox().getEditor().getText();
+            if (selection == null || selection.equals(""))
+                return false;
+        }
+        return true;
     }
 
     private AttributeEditor getFocusedAttribute(Node focusedNode) {
