@@ -22,10 +22,3 @@ public class Main extends Application {
         primaryStage.show();
     }
 }
-
-/*
-ToDo
-*MultiLang
-*Attribute:
-- Unique Kombation
- */

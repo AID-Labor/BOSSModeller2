@@ -11,7 +11,7 @@ public class RelationLineView extends Line implements Controllable, Highlightabl
     private final SelectionHandler clicker;
     private final RelationViewNode parentRelation;
     public RelationLineView(RelationViewNode parent, SelectionHandler relationLineClickHandler) {
-        this.setStrokeWidth(3.0);
+        this.setStrokeWidth(2.0);
         clicker = relationLineClickHandler;
         parentRelation = parent;
 
@@ -23,7 +23,7 @@ public class RelationLineView extends Line implements Controllable, Highlightabl
     }
 
     public void setStrongConnection() {
-        this.getStrokeDashArray().addAll(3.0, 8.0);
+        this.getStrokeDashArray().addAll(10.0, 8.0);
     }
 
     @Override

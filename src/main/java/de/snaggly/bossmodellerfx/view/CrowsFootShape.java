@@ -47,11 +47,11 @@ public abstract class CrowsFootShape implements Highlightable {
     }
 
     public CrowsFootShape(EntityView entity, double positionShift) {
-        multiplicityLineOne.setStrokeWidth(3);
-        multiplicityLineMultiple1.setStrokeWidth(3);
-        multiplicityLineMultiple2.setStrokeWidth(3);
-        mandatoryLine.setStrokeWidth(3);
-        optionalCircle.setStrokeWidth(3);
+        multiplicityLineOne.setStrokeWidth(2);
+        multiplicityLineMultiple1.setStrokeWidth(2);
+        multiplicityLineMultiple2.setStrokeWidth(2);
+        mandatoryLine.setStrokeWidth(2);
+        optionalCircle.setStrokeWidth(2);
         optionalCircle.setRadius(scale);
         optionalCircle.setFill(Color.WHITE);
         optionalCircle.setStroke(Color.BLACK);
