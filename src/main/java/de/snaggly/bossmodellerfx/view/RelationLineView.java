@@ -3,6 +3,7 @@ package de.snaggly.bossmodellerfx.view;
 import de.snaggly.bossmodellerfx.guiLogic.SelectionHandler;
 import de.snaggly.bossmodellerfx.view.viewtypes.Controllable;
 import de.snaggly.bossmodellerfx.view.viewtypes.Highlightable;
+import javafx.scene.Cursor;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
@@ -15,6 +16,7 @@ public class RelationLineView extends Line implements Controllable, Highlightabl
         clicker = relationLineClickHandler;
         parentRelation = parent;
 
+        this.addEventFilter(MouseEvent.MOUSE_ENTERED, mouseEvent -> setCursor(Cursor.HAND));
         this.addEventFilter(MouseEvent.MOUSE_CLICKED, mouseEvent -> setOnClick());
     }
 
