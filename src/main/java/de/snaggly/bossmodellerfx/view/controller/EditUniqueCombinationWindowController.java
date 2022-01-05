@@ -1,5 +1,6 @@
 package de.snaggly.bossmodellerfx.view.controller;
 
+import de.snaggly.bossmodellerfx.guiLogic.GUIMethods;
 import de.snaggly.bossmodellerfx.model.subdata.Attribute;
 import de.snaggly.bossmodellerfx.model.subdata.AttributeCombination;
 import de.snaggly.bossmodellerfx.model.subdata.UniqueCombination;
@@ -15,8 +16,9 @@ import java.util.HashMap;
 public class EditUniqueCombinationWindowController implements ModelController<UniqueCombination> {
     private boolean tabSwitchMutex = false;
     private UniqueCombination model;
-    private HashMap<Attribute, CheckBox> checkBoxOverview = new HashMap<>();
-    private HashMap<TextField, AttributeCombination> attributeCombinationOverview = new HashMap<>();
+    private UniqueCombination refModel;
+    private final HashMap<Attribute, CheckBox> checkBoxOverview = new HashMap<>();
+    private final HashMap<TextField, AttributeCombination> attributeCombinationOverview = new HashMap<>();
     private AttributeCombination currentActiveCombination;
 
     @FXML
@@ -58,7 +60,17 @@ public class EditUniqueCombinationWindowController implements ModelController<Un
 
     @Override
     public void loadModel(UniqueCombination model) {
-        this.model = model;
+        this.model = new UniqueCombination();
+        this.model.setCombinations(new ArrayList<>());
+        for (var combination : model.getCombinations()) {
+            var attriCombinationL = new AttributeCombination();
+            attriCombinationL.setCombinationName(combination.getCombinationName());
+            for (var attribute : combination.getAttributes()){
+                attriCombinationL.addAttribute(attribute);
+            }
+            this.model.getCombinations().add(attriCombinationL);
+        }
+        this.refModel = model;
         for (var combination : this.model.getCombinations()) {
             uniqueCombNamesListVBox.getChildren().add(generateUniqueCombinationKeyTextField(combination.getCombinationName(), combination));
         }
@@ -117,5 +129,11 @@ public class EditUniqueCombinationWindowController implements ModelController<Un
             attributesListVBox.getChildren().add(checkBox);
             checkBoxOverview.put(attribute, checkBox);
         }
+    }
+
+    @FXML
+    private void onSaveAction(ActionEvent actionEvent) {
+        refModel.setCombinations(model.getCombinations());
+        GUIMethods.closeWindow(actionEvent);
     }
 }
