@@ -12,6 +12,7 @@ module de.snaggly.bossmodellerfx {
     requires eu.hansolo.tilesfx;
     requires com.google.gson;
     requires java.desktop;
+    requires java.sql;
 
     opens de.snaggly.bossmodellerfx to javafx.fxml;
     exports de.snaggly.bossmodellerfx;
