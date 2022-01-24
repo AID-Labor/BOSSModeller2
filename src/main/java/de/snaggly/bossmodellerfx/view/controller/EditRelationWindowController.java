@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class EditRelationWindowController implements ModelController<Relation> {
+    private Relation refRelation;
     private Relation relation;
     private Project workspace;
     private CrowsFootShape crowsFootTableA;
@@ -73,7 +74,7 @@ public class EditRelationWindowController implements ModelController<Relation> {
 
     @FXML
     private void initialize(){
-        exampleLine.setStrokeWidth(3);
+        exampleLine.setStrokeWidth(2.0);
         windowAnchorPane.getChildren().add(exampleLine);
     }
 
@@ -131,6 +132,13 @@ public class EditRelationWindowController implements ModelController<Relation> {
         entityBModelReference.setAttributes(relation.getTableB().getAttributes());
         relation.setTableA(entityAModelReference);
         relation.setTableB(entityBModelReference);
+        if (refRelation != null) {
+            refRelation.setTableA_Cardinality(relation.getTableA_Cardinality());
+            refRelation.setTableA_Obligation(relation.getTableA_Obligation());
+            refRelation.setTableB_Cardinality(relation.getTableB_Cardinality());
+            refRelation.setTableB_Obligation(relation.getTableB_Obligation());
+            relation = refRelation;
+        }
         parentObserver.notify(relation);
         GUIMethods.closeWindow(actionEvent);
     }
@@ -198,6 +206,7 @@ public class EditRelationWindowController implements ModelController<Relation> {
 
     @Override
     public void loadModel(Relation model) {
+        this.refRelation = model;
         this.relation = new Relation(
                 model.getTableA(),
                 model.getTableB(),
@@ -232,7 +241,7 @@ public class EditRelationWindowController implements ModelController<Relation> {
         if (relation.getTableA().isWeakType() || relation.getTableB().isWeakType()) {
             exampleLine.getStrokeDashArray().clear();
         } else {
-            exampleLine.getStrokeDashArray().addAll(3.0, 8.0);
+            exampleLine.getStrokeDashArray().addAll(10.0, 8.0);
         }
 
         crowsFootTableA.bindCrowsFootView(windowAnchorPane, relation.getTableA_Cardinality(), relation.getTableA_Obligation());

@@ -991,10 +991,7 @@ public class MainController {
 
         try {
             var relationBuilderWindow = RelationEditorWindowBuilder.buildRelationEditor(selectedRelationModel, currentProject);
-            relationBuilderWindow.getValue().parentObserver = dataset -> {
-                deleteRelation(relationView);
-                saveNewRelation(dataset);
-            };
+            relationBuilderWindow.getValue().parentObserver = this::showNewRelation;
             var stage = new Stage();
             stage.setTitle("Relation bearbeiten");
             stage.setScene(relationBuilderWindow.getKey());
