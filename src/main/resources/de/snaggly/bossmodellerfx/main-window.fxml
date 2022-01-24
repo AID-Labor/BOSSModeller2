@@ -9,8 +9,92 @@
 <AnchorPane onKeyPressed="#onKeyPressed" onKeyReleased="#onKeyReleased" prefHeight="960.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.snaggly.bossmodellerfx.MainController">
    <BorderPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
       <left>
-         <Accordion maxHeight="1.7976931348623157E308" maxWidth="100.0" BorderPane.alignment="TOP_LEFT">
+         <Accordion fx:id="leftNavigationAccordion" maxHeight="1.7976931348623157E308" maxWidth="100.0" BorderPane.alignment="TOP_LEFT">
             <panes>
+               <TitledPane layoutX="10.0" layoutY="62.0" text="Projekt">
+                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <VBox alignment="TOP_CENTER" spacing="15.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                        <Button alignment="CENTER" contentDisplay="CENTER" layoutX="23.0" layoutY="196.0" maxHeight="78.0" maxWidth="78.0" minHeight="78.0" minWidth="78.0" mnemonicParsing="false" onAction="#startNewProject" textAlignment="CENTER">
+                           <font>
+                              <Font name="System Bold" size="31.0" />
+                           </font>
+                           <graphic>
+                              <ImageView pickOnBounds="true" preserveRatio="true" scaleX="0.5" scaleY="0.5">
+                                 <image>
+                                    <Image url="@new.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                        </Button>
+                        <Button alignment="CENTER" contentDisplay="CENTER" layoutX="40.0" layoutY="87.0" maxHeight="78.0" maxWidth="78.0" minHeight="78.0" minWidth="78.0" mnemonicParsing="false" onAction="#openFileClick" textAlignment="CENTER" VBox.vgrow="NEVER">
+                           <font>
+                              <Font name="System Bold" size="31.0" />
+                           </font>
+                           <graphic>
+                              <ImageView pickOnBounds="true" preserveRatio="true" scaleX="0.5" scaleY="0.6">
+                                 <Image url="@open.png" />
+                              </ImageView>
+                           </graphic>
+                        </Button>
+                        <Button alignment="CENTER" contentDisplay="CENTER" layoutX="23.0" layoutY="10.0" maxHeight="78.0" maxWidth="78.0" minHeight="78.0" minWidth="78.0" mnemonicParsing="false" onAction="#saveFileClick" textAlignment="CENTER" VBox.vgrow="NEVER">
+                           <font>
+                              <Font name="System Bold" size="31.0" />
+                           </font>
+                           <graphic>
+                              <ImageView pickOnBounds="true" preserveRatio="true" scaleX="0.5" scaleY="0.5">
+                                 <Image url="@save.png" />
+                              </ImageView>
+                           </graphic>
+                        </Button>
+                        <Button alignment="CENTER" contentDisplay="CENTER" layoutX="23.0" layoutY="103.0" maxHeight="78.0" maxWidth="78.0" minHeight="78.0" minWidth="78.0" mnemonicParsing="false" onAction="#exportPictureClick" textAlignment="CENTER" VBox.vgrow="NEVER">
+                           <font>
+                              <Font name="System Bold" size="31.0" />
+                           </font>
+                           <graphic>
+                              <ImageView pickOnBounds="true" preserveRatio="true" scaleX="0.5" scaleY="0.5">
+                                 <Image url="@export_picture.png" />
+                              </ImageView>
+                           </graphic>
+                        </Button>
+                        <Button alignment="CENTER" contentDisplay="CENTER" layoutX="23.0" layoutY="289.0" maxHeight="78.0" maxWidth="78.0" minHeight="78.0" minWidth="78.0" mnemonicParsing="false" textAlignment="CENTER">
+                           <font>
+                              <Font name="System Bold" size="31.0" />
+                           </font>
+                           <graphic>
+                              <ImageView pickOnBounds="true" preserveRatio="true" scaleX="0.5" scaleY="0.5">
+                                 <image>
+                                    <Image url="@read_db.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                        </Button>
+                        <Button alignment="CENTER" contentDisplay="CENTER" layoutX="23.0" layoutY="382.0" maxHeight="78.0" maxWidth="78.0" minHeight="78.0" minWidth="78.0" mnemonicParsing="false" textAlignment="CENTER">
+                           <font>
+                              <Font name="System Bold" size="31.0" />
+                           </font>
+                           <graphic>
+                              <ImageView pickOnBounds="true" preserveRatio="true" scaleX="0.5" scaleY="0.5">
+                                 <image>
+                                    <Image url="@update_db.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                        </Button>
+                        <Button alignment="CENTER" contentDisplay="CENTER" layoutX="23.0" layoutY="475.0" maxHeight="78.0" maxWidth="78.0" minHeight="78.0" minWidth="78.0" mnemonicParsing="false" textAlignment="CENTER">
+                           <font>
+                              <Font name="System Bold" size="31.0" />
+                           </font>
+                           <graphic>
+                              <ImageView pickOnBounds="true" preserveRatio="true" scaleX="0.5" scaleY="0.5">
+                                 <image>
+                                    <Image url="@sql.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                        </Button>
+                     </VBox>
+                  </AnchorPane>
+               </TitledPane>
                <TitledPane alignment="TOP_LEFT" text="Bearbeiten">
                   <AnchorPane>
                      <VBox alignment="TOP_CENTER" layoutX="34.0" layoutY="14.0" spacing="15.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -93,90 +177,6 @@
                            <graphic>
                               <ImageView pickOnBounds="true" preserveRatio="true" scaleX="0.65" scaleY="0.65">
                                  <Image url="@comment_delete.png" />
-                              </ImageView>
-                           </graphic>
-                        </Button>
-                     </VBox>
-                  </AnchorPane>
-               </TitledPane>
-               <TitledPane layoutX="10.0" layoutY="62.0" text="Datei">
-                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                     <VBox alignment="TOP_CENTER" spacing="15.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                        <Button alignment="CENTER" contentDisplay="CENTER" layoutX="23.0" layoutY="196.0" maxHeight="78.0" maxWidth="78.0" minHeight="78.0" minWidth="78.0" mnemonicParsing="false" onAction="#startNewProject" textAlignment="CENTER">
-                           <font>
-                              <Font name="System Bold" size="31.0" />
-                           </font>
-                           <graphic>
-                              <ImageView pickOnBounds="true" preserveRatio="true" scaleX="0.5" scaleY="0.5">
-                                 <image>
-                                    <Image url="@new.png" />
-                                 </image>
-                              </ImageView>
-                           </graphic>
-                        </Button>
-                        <Button alignment="CENTER" contentDisplay="CENTER" layoutX="40.0" layoutY="87.0" maxHeight="78.0" maxWidth="78.0" minHeight="78.0" minWidth="78.0" mnemonicParsing="false" onAction="#openFileClick" textAlignment="CENTER" VBox.vgrow="NEVER">
-                           <font>
-                              <Font name="System Bold" size="31.0" />
-                           </font>
-                           <graphic>
-                              <ImageView pickOnBounds="true" preserveRatio="true" scaleX="0.5" scaleY="0.6">
-                                 <Image url="@open.png" />
-                              </ImageView>
-                           </graphic>
-                        </Button>
-                        <Button alignment="CENTER" contentDisplay="CENTER" layoutX="23.0" layoutY="10.0" maxHeight="78.0" maxWidth="78.0" minHeight="78.0" minWidth="78.0" mnemonicParsing="false" onAction="#saveFileClick" textAlignment="CENTER" VBox.vgrow="NEVER">
-                           <font>
-                              <Font name="System Bold" size="31.0" />
-                           </font>
-                           <graphic>
-                              <ImageView pickOnBounds="true" preserveRatio="true" scaleX="0.5" scaleY="0.5">
-                                 <Image url="@save.png" />
-                              </ImageView>
-                           </graphic>
-                        </Button>
-                        <Button alignment="CENTER" contentDisplay="CENTER" layoutX="23.0" layoutY="103.0" maxHeight="78.0" maxWidth="78.0" minHeight="78.0" minWidth="78.0" mnemonicParsing="false" onAction="#exportPictureClick" textAlignment="CENTER" VBox.vgrow="NEVER">
-                           <font>
-                              <Font name="System Bold" size="31.0" />
-                           </font>
-                           <graphic>
-                              <ImageView pickOnBounds="true" preserveRatio="true" scaleX="0.5" scaleY="0.5">
-                                 <Image url="@export_picture.png" />
-                              </ImageView>
-                           </graphic>
-                        </Button>
-                        <Button alignment="CENTER" contentDisplay="CENTER" layoutX="23.0" layoutY="289.0" maxHeight="78.0" maxWidth="78.0" minHeight="78.0" minWidth="78.0" mnemonicParsing="false" textAlignment="CENTER">
-                           <font>
-                              <Font name="System Bold" size="31.0" />
-                           </font>
-                           <graphic>
-                              <ImageView pickOnBounds="true" preserveRatio="true" scaleX="0.5" scaleY="0.5">
-                                 <image>
-                                    <Image url="@read_db.png" />
-                                 </image>
-                              </ImageView>
-                           </graphic>
-                        </Button>
-                        <Button alignment="CENTER" contentDisplay="CENTER" layoutX="23.0" layoutY="382.0" maxHeight="78.0" maxWidth="78.0" minHeight="78.0" minWidth="78.0" mnemonicParsing="false" textAlignment="CENTER">
-                           <font>
-                              <Font name="System Bold" size="31.0" />
-                           </font>
-                           <graphic>
-                              <ImageView pickOnBounds="true" preserveRatio="true" scaleX="0.5" scaleY="0.5">
-                                 <image>
-                                    <Image url="@update_db.png" />
-                                 </image>
-                              </ImageView>
-                           </graphic>
-                        </Button>
-                        <Button alignment="CENTER" contentDisplay="CENTER" layoutX="23.0" layoutY="475.0" maxHeight="78.0" maxWidth="78.0" minHeight="78.0" minWidth="78.0" mnemonicParsing="false" textAlignment="CENTER">
-                           <font>
-                              <Font name="System Bold" size="31.0" />
-                           </font>
-                           <graphic>
-                              <ImageView pickOnBounds="true" preserveRatio="true" scaleX="0.5" scaleY="0.5">
-                                 <image>
-                                    <Image url="@sql.png" />
-                                 </image>
                               </ImageView>
                            </graphic>
                         </Button>

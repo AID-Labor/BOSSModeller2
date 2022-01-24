@@ -23,6 +23,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
 import javax.imageio.ImageIO;
@@ -34,6 +35,8 @@ import static de.snaggly.bossmodellerfx.guiLogic.KeyCombos.keyComboOpen;
 import static de.snaggly.bossmodellerfx.guiLogic.KeyCombos.keyComboSave;
 
 public class MainController {
+    @FXML
+    private Accordion leftNavigationAccordion;
     @FXML
     private TabPane projectsTabPane;
 
@@ -665,6 +668,7 @@ public class MainController {
 
     @FXML
     private void initialize() {
+        leftNavigationAccordion.setExpandedPane(leftNavigationAccordion.getPanes().get(0));
         projectsTabPane.getSelectionModel().selectedIndexProperty().addListener((_obj, _old, _new) -> {
             currentProject = projects.get((Integer) _new);
             initializeContextMenu(currentProject.getWorkField());
@@ -673,8 +677,9 @@ public class MainController {
         newTabMenu.setOnAction(actionEvent -> addNewProjectTab("*Neues Projekt", new Project(new WorkbenchPane(this::onMainWorkbenchClick)), false));
         projectsTabPane.setOnContextMenuRequested(contextMenuEvent -> {
             var target = contextMenuEvent.getTarget();
-            if (!(target instanceof WorkbenchPane) && target instanceof Pane) {
+            if (target instanceof TabPane || target instanceof StackPane) {
                 var tabContextMenu = new ContextMenu(newTabMenu);
+                assert target instanceof Pane;
                 tabContextMenu.show(((Pane) target), contextMenuEvent.getScreenX(), contextMenuEvent.getScreenY());
             }
         });

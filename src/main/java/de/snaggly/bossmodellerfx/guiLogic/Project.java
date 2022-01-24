@@ -173,7 +173,7 @@ public class Project {
             project.addEntity(SerializableEntity.deserializableEntity(serEntities));
         }
         SerializableAttribute.adjustFkOnDeserialize(serializableData.entities, project.entities);
-        
+
         for (var serComment : serializableData.comments) {
             project.addComment(SerializableComment.deserializableComment(serComment));
         }
