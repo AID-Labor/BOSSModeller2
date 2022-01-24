@@ -44,7 +44,7 @@ public class SerializableComment extends Comment implements SerializableModel<Co
             return new Comment(
                     serComment.getText(),
                     serComment.getXCoordinate(),
-                    serComment.getXCoordinate(),
+                    serComment.getYCoordinate(),
                     serComment.getWidth(),
                     serComment.getHeight()
             );
