@@ -5,6 +5,7 @@ import de.snaggly.bossmodellerfx.model.serializable.*;
 import de.snaggly.bossmodellerfx.model.subdata.Relation;
 import de.snaggly.bossmodellerfx.model.view.Comment;
 import de.snaggly.bossmodellerfx.model.view.Entity;
+import de.snaggly.bossmodellerfx.view.WorkbenchPane;
 import de.snaggly.bossmodellerfx.view.viewtypes.BiSelectable;
 import de.snaggly.bossmodellerfx.view.viewtypes.CustomNode;
 import de.snaggly.bossmodellerfx.view.viewtypes.Selectable;
@@ -18,7 +19,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class Project {
-    private Pane workField;
+    private WorkbenchPane workField;
     private Node currentSelected;
     private Node secondSelection;
 
@@ -27,7 +28,7 @@ public class Project {
     private final ArrayList<Relation> relations = new ArrayList<>();
     private final Set<KeyCode> pressedKeys = new HashSet<>();
 
-    public Project(Pane workField) {
+    public Project(WorkbenchPane workField) {
         this.workField = workField;
         this.currentSelected = workField;
     }
@@ -42,11 +43,11 @@ public class Project {
         workField.getChildren().clear();
     }
 
-    public Pane getWorkField() {
+    public WorkbenchPane getWorkField() {
         return workField;
     }
 
-    public void setWorkField(Pane workField) {
+    public void setWorkField(WorkbenchPane workField) {
         this.workField = workField;
     }
 
@@ -159,7 +160,7 @@ public class Project {
         return new Gson().toJson(serializableData);
     }
 
-    public static Project deserializeFromJson(String json, Pane workField) {
+    public static Project deserializeFromJson(String json, WorkbenchPane workField) {
         var project = new Project(workField);
         var serializableData = new Gson().fromJson(json, ProjectData.class);
         for (var serEntities : serializableData.entities) {

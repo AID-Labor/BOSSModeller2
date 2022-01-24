@@ -3,43 +3,42 @@ package de.snaggly.bossmodellerfx;
 import de.snaggly.bossmodellerfx.model.subdata.Relation;
 import de.snaggly.bossmodellerfx.model.view.Comment;
 import de.snaggly.bossmodellerfx.model.view.Entity;
-import de.snaggly.bossmodellerfx.view.CrowsFootShape;
+import de.snaggly.bossmodellerfx.view.*;
 import de.snaggly.bossmodellerfx.guiLogic.GUIMethods;
 import de.snaggly.bossmodellerfx.guiLogic.Project;
 import de.snaggly.bossmodellerfx.struct.relations.ConnectingOrientation;
 import de.snaggly.bossmodellerfx.struct.relations.EntityViewConnections;
-import de.snaggly.bossmodellerfx.view.RelationViewNode;
-import de.snaggly.bossmodellerfx.view.CommentView;
-import de.snaggly.bossmodellerfx.view.EntityView;
-import de.snaggly.bossmodellerfx.view.RelationLineView;
 import de.snaggly.bossmodellerfx.view.factory.nodetype.CommentBuilder;
 import de.snaggly.bossmodellerfx.view.factory.nodetype.EntityBuilder;
 import de.snaggly.bossmodellerfx.view.factory.windowtype.EntityEditorWindowBuilder;
 import de.snaggly.bossmodellerfx.view.factory.windowtype.RelationEditorWindowBuilder;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.SnapshotParameters;
-import javafx.scene.control.ContextMenu;
-import javafx.scene.control.MenuItem;
-import javafx.scene.control.SeparatorMenuItem;
+import javafx.scene.control.*;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
 import javax.imageio.ImageIO;
 import java.io.*;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class MainController {
     @FXML
-    private Pane mainWorkbench;
+    private TabPane projectsTabPane;
 
     private Project currentProject;
+    private final ArrayList<Project> projects = new ArrayList<>();
     private final HashMap<Entity, EntityView> entitiesOverview = new HashMap<>();
     private final HashMap<Relation, RelationViewNode> relationsOverview = new HashMap<>();
 
@@ -69,19 +68,19 @@ public class MainController {
 
                 if (relationViewNode != null) {
                     if (relationViewNode.crowsFootA != null) {
-                        mainWorkbench.getChildren().removeAll(relationViewNode.crowsFootA.getAllNodes());
+                        currentProject.getWorkField().getChildren().removeAll(relationViewNode.crowsFootA.getAllNodes());
                     }
                     if (relationViewNode.crowsFootB != null) {
-                        mainWorkbench.getChildren().removeAll(relationViewNode.crowsFootB.getAllNodes());
+                        currentProject.getWorkField().getChildren().removeAll(relationViewNode.crowsFootB.getAllNodes());
                     }
                     if (relationViewNode.line1 != null) {
-                        mainWorkbench.getChildren().remove(relationViewNode.line1);
+                        currentProject.getWorkField().getChildren().remove(relationViewNode.line1);
                     }
                     if (relationViewNode.line2 != null) {
-                        mainWorkbench.getChildren().remove(relationViewNode.line2);
+                        currentProject.getWorkField().getChildren().remove(relationViewNode.line2);
                     }
                     if (relationViewNode.line3 != null) {
-                        mainWorkbench.getChildren().remove(relationViewNode.line3);
+                        currentProject.getWorkField().getChildren().remove(relationViewNode.line3);
                     }
                 }
                 continue;
@@ -95,7 +94,7 @@ public class MainController {
                 relationViewNode.line4 = new RelationLineView(relationViewNode, currentProject::setCurrentSelected);
                 relationsOverview.put(relation, relationViewNode);
 
-                mainWorkbench.getChildren().addAll(
+                currentProject.getWorkField().getChildren().addAll(
                         relationViewNode.line1,
                         relationViewNode.line2,
                         relationViewNode.line3,
@@ -106,10 +105,10 @@ public class MainController {
             var crowsFootB = relationViewNode.crowsFootB;
 
             if (crowsFootA != null) {
-                mainWorkbench.getChildren().removeAll(crowsFootA.getAllNodes());
+                currentProject.getWorkField().getChildren().removeAll(crowsFootA.getAllNodes());
             }
             if (crowsFootB != null) {
-                mainWorkbench.getChildren().removeAll(crowsFootB.getAllNodes());
+                currentProject.getWorkField().getChildren().removeAll(crowsFootB.getAllNodes());
             }
 
             if (node1 == node2) {
@@ -642,8 +641,8 @@ public class MainController {
             relationViewStruct.crowsFootB = crowsFootB;
 
             if (crowsFootA != null && crowsFootB != null){
-                crowsFootA.draw(mainWorkbench, relation.getTableA_Cardinality(), relation.getTableA_Obligation(), 0, 0);
-                crowsFootB.draw(mainWorkbench, relation.getTableB_Cardinality(), relation.getTableB_Obligation(), 0, 0);
+                crowsFootA.draw(currentProject.getWorkField(), relation.getTableA_Cardinality(), relation.getTableA_Obligation(), 0, 0);
+                crowsFootB.draw(currentProject.getWorkField(), relation.getTableB_Cardinality(), relation.getTableB_Obligation(), 0, 0);
             }
 
             relationViewStruct.toBack();
@@ -666,7 +665,24 @@ public class MainController {
 
     @FXML
     private void initialize() {
-        mainWorkbench.setOnContextMenuRequested(contextMenuEvent -> {
+        projectsTabPane.getSelectionModel().selectedIndexProperty().addListener((_obj, _old, _new) -> {
+            currentProject = projects.get((Integer) _new);
+            initializeContextMenu(currentProject.getWorkField());
+        });
+        var newTabMenu = new MenuItem("Neues Projekt");
+        newTabMenu.setOnAction(actionEvent -> addNewProjectTab("*Neues Projekt", new Project(new WorkbenchPane(this::onMainWorkbenchClick)), false));
+        projectsTabPane.setOnContextMenuRequested(contextMenuEvent -> {
+            var target = contextMenuEvent.getTarget();
+            if (!(target instanceof WorkbenchPane) && target instanceof Pane) {
+                var tabContextMenu = new ContextMenu(newTabMenu);
+                tabContextMenu.show(((Pane) target), contextMenuEvent.getScreenX(), contextMenuEvent.getScreenY());
+            }
+        });
+        addNewProjectTab("*Neues Projekt", new Project(new WorkbenchPane(this::onMainWorkbenchClick)), true);
+    }
+
+    private void initializeContextMenu(WorkbenchPane workBench) {
+        workBench.setOnContextMenuRequested(contextMenuEvent -> {
             mainWorkbenchContextMenu.getItems().clear();
             var currentSelection = currentProject.getCurrentSelected();
 
@@ -707,8 +723,8 @@ public class MainController {
 
             var newEntityMenu = new MenuItem("Neue Entität");
             newEntityMenu.setOnAction(actionEvent -> createNewEntity(
-                    ((MenuItem)(actionEvent.getSource())).getParentPopup().getX() - (mainWorkbench.getScene().getWindow().getX() + mainWorkbench.getLayoutX()),
-                    ((MenuItem)(actionEvent.getSource())).getParentPopup().getY() - (mainWorkbench.getScene().getWindow().getY() + mainWorkbench.getLayoutY())
+                    ((MenuItem)(actionEvent.getSource())).getParentPopup().getX() - (currentProject.getWorkField().getScene().getWindow().getX() + currentProject.getWorkField().getLayoutX()),
+                    ((MenuItem)(actionEvent.getSource())).getParentPopup().getY() - (currentProject.getWorkField().getScene().getWindow().getY() + currentProject.getWorkField().getLayoutY())
             ));
 
             var newRelationMenu = new MenuItem("Neue Relation");
@@ -716,28 +732,26 @@ public class MainController {
 
             var newCommentMenu = new MenuItem("Neues Kommentar");
             newCommentMenu.setOnAction(actionEvent -> createNewComment(
-                    ((MenuItem)(actionEvent.getSource())).getParentPopup().getX() - (mainWorkbench.getScene().getWindow().getX() + mainWorkbench.getLayoutX()),
-                    ((MenuItem)(actionEvent.getSource())).getParentPopup().getY() - (mainWorkbench.getScene().getWindow().getY() + mainWorkbench.getLayoutY())
+                    ((MenuItem)(actionEvent.getSource())).getParentPopup().getX() - (currentProject.getWorkField().getScene().getWindow().getX() + currentProject.getWorkField().getLayoutX()),
+                    ((MenuItem)(actionEvent.getSource())).getParentPopup().getY() - (currentProject.getWorkField().getScene().getWindow().getY() + currentProject.getWorkField().getLayoutY())
             ));
             mainWorkbenchContextMenu.getItems().addAll(newEntityMenu, newCommentMenu, newRelationMenu);
             mainWorkbenchContextMenu.show(
-                    mainWorkbench,
+                    currentProject.getWorkField(),
                     contextMenuEvent.getScreenX(),
                     contextMenuEvent.getScreenY()
             );
         });
-
-        currentProject = new Project(mainWorkbench);
     }
 
     @FXML
     private void onMainWorkbenchClick(MouseEvent mouseEvent) {
-        if (mouseEvent.getTarget() == mainWorkbench) {
+        if (mouseEvent.getTarget() == currentProject.getWorkField()) {
             if (currentProject.getCurrentSelected() instanceof CommentView) {
                 ((CommentView) currentProject.getCurrentSelected()).getController().disableEdit();
             }
 
-            currentProject.setCurrentSelected(mainWorkbench);
+            currentProject.setCurrentSelected(currentProject.getWorkField());
         }
 
         if (MouseButton.PRIMARY == mouseEvent.getButton() && mainWorkbenchContextMenu.isShowing()) {
@@ -836,7 +850,7 @@ public class MainController {
                 try {
                     resultedEntity.setXCoordinate(xCoordinate);
                     resultedEntity.setYCoordinate(yCoordinate);
-                    var entityView = EntityBuilder.buildEntity(resultedEntity, mainWorkbench, currentProject.getSelectionHandler);
+                    var entityView = EntityBuilder.buildEntity(resultedEntity, currentProject.getWorkField(), currentProject.getSelectionHandler);
                     saveNewEntity(entityView);
                 } catch (IOException e) {
                     GUIMethods.showError(MainController.class.getSimpleName(), "BOSSModellerFX", e.getLocalizedMessage());
@@ -866,7 +880,7 @@ public class MainController {
     private void createNewComment(double xCoordinate, double yCoordinate) {
         try {
             var commentModel = new Comment("", xCoordinate, yCoordinate);
-            var commentView = CommentBuilder.buildComment(commentModel, mainWorkbench, currentProject.getSelectionHandler);
+            var commentView = CommentBuilder.buildComment(commentModel, currentProject.getWorkField(), currentProject.getSelectionHandler);
             showNewComment(commentView);
 
             currentProject.addComment(commentModel);
@@ -876,7 +890,7 @@ public class MainController {
     }
 
     private void showNewComment(CommentView commentView) {
-        mainWorkbench.getChildren().add(commentView);
+        currentProject.getWorkField().getChildren().add(commentView);
         commentView.toBack();
     }
 
@@ -904,7 +918,7 @@ public class MainController {
 
     private void deleteComment(CommentView selectedCommentView) {
         var selectedComment = selectedCommentView.getModel();
-        mainWorkbench.getChildren().remove(selectedCommentView);
+        currentProject.getWorkField().getChildren().remove(selectedCommentView);
         currentProject.removeComment(selectedComment);
     }
 
@@ -916,7 +930,7 @@ public class MainController {
     private void showNewEntity(EntityView entityView) {
         entitiesOverview.put(entityView.getModel(), entityView);
         GUIMethods.bindEntityToRelationLineHandler(entityView, this::relationLineDrawer);
-        mainWorkbench.getChildren().add(entityView);
+        currentProject.getWorkField().getChildren().add(entityView);
     }
 
     private void deleteEntity(EntityView selectedEntityView) {
@@ -926,7 +940,7 @@ public class MainController {
         }
 
         entitiesOverview.remove(selectedEntity);
-        mainWorkbench.getChildren().remove(selectedEntityView);
+        currentProject.getWorkField().getChildren().remove(selectedEntityView);
         currentProject.removeEntity(selectedEntity);
     }
 
@@ -947,7 +961,7 @@ public class MainController {
     }
 
     private void deleteRelation(RelationViewNode relationView) {
-        mainWorkbench.getChildren().removeAll(relationView.getAllNodes());
+        currentProject.getWorkField().getChildren().removeAll(relationView.getAllNodes());
 
         var relation = relationView.getModel();
         relation.getTableA().setWeakType(false);
@@ -992,12 +1006,12 @@ public class MainController {
 
     private void reInitProject() throws IOException {
         for (var entity : currentProject.getEntities()) {
-            var entityView = EntityBuilder.buildEntity(entity, mainWorkbench, currentProject.getSelectionHandler);
+            var entityView = EntityBuilder.buildEntity(entity, currentProject.getWorkField(), currentProject.getSelectionHandler);
             showNewEntity(entityView);
         }
 
         for (var comment : currentProject.getComments()) {
-            var commentView = CommentBuilder.buildComment(comment, mainWorkbench, currentProject.getSelectionHandler);
+            var commentView = CommentBuilder.buildComment(comment, currentProject.getWorkField(), currentProject.getSelectionHandler);
             showNewComment(commentView);
         }
 
@@ -1014,7 +1028,7 @@ public class MainController {
 
     @FXML
     private void openFileClick(ActionEvent actionEvent) {
-        var file = GUIMethods.showJSONFileOpenDialog("Projekt öffnen", mainWorkbench.getScene().getWindow());
+        var file = GUIMethods.showJSONFileOpenDialog("Projekt öffnen", currentProject.getWorkField().getScene().getWindow());
         if (file == null)
             return;
         try {
@@ -1024,8 +1038,8 @@ public class MainController {
                 json.append(bufferedReader.readLine());
             }
             bufferedReader.close();
-            clearProject();
-            currentProject = Project.deserializeFromJson(json.toString(), mainWorkbench);
+            var newWorkField = new WorkbenchPane(this::onMainWorkbenchClick);
+            addNewProjectTab(file.getName(), Project.deserializeFromJson(json.toString(), newWorkField), true);
             reInitProject();
 
         } catch (Exception e) {
@@ -1035,7 +1049,7 @@ public class MainController {
 
     @FXML
     private void saveFileClick(ActionEvent actionEvent) {
-        var file = GUIMethods.showJSONFileSaveDialog("Projekt speichern", mainWorkbench.getScene().getWindow());
+        var file = GUIMethods.showJSONFileSaveDialog("Projekt speichern", currentProject.getWorkField().getScene().getWindow());
         if (file == null)
             return;
 
@@ -1051,8 +1065,8 @@ public class MainController {
 
     @FXML
     private void exportPictureClick(ActionEvent actionEvent) {
-        var snapshot = mainWorkbench.snapshot(new SnapshotParameters(), null);
-        var file = GUIMethods.showPNGFileSaveDialog("Bild exportieren", mainWorkbench.getScene().getWindow());
+        var snapshot = currentProject.getWorkField().snapshot(new SnapshotParameters(), null);
+        var file = GUIMethods.showPNGFileSaveDialog("Bild exportieren", currentProject.getWorkField().getScene().getWindow());
         if (file == null)
             return;
         try {
@@ -1077,6 +1091,30 @@ public class MainController {
 
     @FXML
     private void startNewProject(ActionEvent actionEvent) {
-        clearProject();
+        var newWorkField = new WorkbenchPane(this::onMainWorkbenchClick);
+        addNewProjectTab("*Neues Projekt", new Project(newWorkField), true);
+    }
+
+    private void addNewProjectTab(String tabName, Project project, boolean switchTo) {
+        projects.add(project);
+        var newTab = new Tab(tabName, project.getWorkField());
+        projectsTabPane.getTabs().add(newTab);
+
+        var closeMenu = new MenuItem("Schließen");
+        closeMenu.setOnAction(actionEvent -> {
+            if (projects.size() <= 1) {
+                GUIMethods.showWarning(MainController.class.getSimpleName(), "BOSSModeller FX", "Das ist der letzte Tab");
+                return;
+            }
+
+            projects.remove(project);
+            projectsTabPane.getTabs().remove(newTab);
+        });
+        newTab.setContextMenu(new ContextMenu(closeMenu));
+
+        if (switchTo) {
+            projectsTabPane.getSelectionModel().selectLast();
+            currentProject = projects.get(projects.size()-1);
+        }
     }
 }

@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane onKeyPressed="#onKeyPressed" onKeyReleased="#onKeyReleased" prefHeight="960.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.snaggly.bossmodellerfx.MainController">
+<AnchorPane onKeyPressed="#onKeyPressed" onKeyReleased="#onKeyReleased" prefHeight="960.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.snaggly.bossmodellerfx.MainController">
    <BorderPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
       <left>
          <Accordion maxHeight="1.7976931348623157E308" maxWidth="100.0" BorderPane.alignment="TOP_LEFT">
@@ -191,10 +191,6 @@
             </panes>
          </Accordion>
       </left>
-      <center>
-         <Pane fx:id="mainWorkbench" onMouseClicked="#onMainWorkbenchClick" style="-fx-border-color: grey;" BorderPane.alignment="CENTER">
-         </Pane>
-      </center>
       <top>
          <VBox BorderPane.alignment="CENTER">
             <MenuBar maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
@@ -255,5 +251,8 @@
             </BorderPane.margin>
          </ButtonBar>
       </bottom>
+      <center>
+         <TabPane fx:id="projectsTabPane" tabClosingPolicy="UNAVAILABLE" tabMaxHeight="20.0" tabMaxWidth="200.0" BorderPane.alignment="CENTER" />
+      </center>
    </BorderPane>
 </AnchorPane>
