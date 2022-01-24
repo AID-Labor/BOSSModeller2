@@ -8,6 +8,7 @@ import de.snaggly.bossmodellerfx.model.subdata.UniqueCombination;
 import java.util.ArrayList;
 
 public class Entity extends EntityAbstraction {
+    private ArrayList<Attribute> attributes;
     private UniqueCombination uniqueCombination;
 
     public Entity() {
@@ -23,8 +24,9 @@ public class Entity extends EntityAbstraction {
     }
 
     public Entity(String name, double xCoordinate, double yCoordinate, ArrayList<Attribute> attributes, UniqueCombination uniqueCombination, boolean isWeakType) {
-        super(name, xCoordinate, yCoordinate, attributes, isWeakType);
+        super(name, xCoordinate, yCoordinate, isWeakType);
         this.uniqueCombination = uniqueCombination;
+        this.attributes = attributes;
     }
 
     public ArrayList<Relation> getInvolvedRelations(ArrayList<Relation> relations) {
@@ -43,5 +45,29 @@ public class Entity extends EntityAbstraction {
 
     public void setUniqueCombination(UniqueCombination uniqueCombination) {
         this.uniqueCombination = uniqueCombination;
+    }
+
+    public ArrayList<Attribute> getAttributes() {
+        return attributes;
+    }
+
+    public void setAttributes(ArrayList<Attribute> attributes) {
+        this.attributes = attributes;
+    }
+
+    public void addAttribute(Attribute attribute) {
+        attributes.add(attribute);
+    }
+
+    public void removeAttribute(Attribute attribute) {
+        attributes.remove(attribute);
+    }
+
+    public void removeAttribute(int index) {
+        attributes.remove(index);
+    }
+
+    public Attribute getPrimaryKey() {
+        return attributes.stream().filter(Attribute::isPrimary).findFirst().orElse(null);
     }
 }

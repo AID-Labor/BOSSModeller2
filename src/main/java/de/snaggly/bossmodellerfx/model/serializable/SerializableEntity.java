@@ -8,7 +8,8 @@ import de.snaggly.bossmodellerfx.model.view.Entity;
 
 import java.util.ArrayList;
 
-public class SerializableEntity extends EntityAbstraction implements SerializableModel<Entity>{
+public class SerializableEntity extends EntityAbstraction implements SerializableModel<Entity> {
+    public ArrayList<SerializableAttribute> attributes = new ArrayList<>();
     public SerializableUniqueCombination uniqueCombination = new SerializableUniqueCombination();
 
     public static SerializableEntity serializableEntity(Entity entity) {
@@ -25,7 +26,18 @@ public class SerializableEntity extends EntityAbstraction implements Serializabl
     public SerializableEntity serialize(Entity entity) {
         var serEntity = new SerializableEntity();
         serEntity.setName(entity.getName());
-        serEntity.setAttributes(entity.getAttributes());
+        for (var attribute : entity.getAttributes()){
+            var serAttribute = new SerializableAttribute(
+                    attribute.getName(),
+                    attribute.getType(),
+                    attribute.isPrimary(),
+                    attribute.isNonNull(),
+                    attribute.isUnique(),
+                    attribute.getCheckName(),
+                    attribute.getDefaultName()
+            );
+            serEntity.attributes.add(serAttribute);
+        }
         serEntity.setWeakType(entity.isWeakType());
         serEntity.setXCoordinate(entity.getXCoordinate());
         serEntity.setYCoordinate(entity.getYCoordinate());
@@ -47,11 +59,24 @@ public class SerializableEntity extends EntityAbstraction implements Serializabl
         if (!(serializableModel instanceof SerializableEntity))
             return null;
         var serEntity = (SerializableEntity)serializableModel;
+        var attributes = new ArrayList<Attribute>();
+        for (var serAttribute : serEntity.attributes) {
+            attributes.add(new Attribute(
+                    serAttribute.getName(),
+                    serAttribute.getType(),
+                    serAttribute.isPrimary(),
+                    serAttribute.isNonNull(),
+                    serAttribute.isUnique(),
+                    serAttribute.getCheckName(),
+                    serAttribute.getDefaultName(),
+                    null
+            ));
+        }
         var entity = new Entity(
                 serEntity.getName(),
                 serEntity.getXCoordinate(),
                 serEntity.getYCoordinate(),
-                serEntity.getAttributes(),
+                attributes,
                 serEntity.isWeakType()
         );
 
