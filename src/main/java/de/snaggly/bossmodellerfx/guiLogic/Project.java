@@ -1,19 +1,17 @@
 package de.snaggly.bossmodellerfx.guiLogic;
 
-import de.snaggly.bossmodellerfx.model.*;
 import de.snaggly.bossmodellerfx.model.serializable.*;
 import de.snaggly.bossmodellerfx.model.subdata.Relation;
 import de.snaggly.bossmodellerfx.model.view.Comment;
 import de.snaggly.bossmodellerfx.model.view.Entity;
 import de.snaggly.bossmodellerfx.view.WorkbenchPane;
 import de.snaggly.bossmodellerfx.view.viewtypes.BiSelectable;
-import de.snaggly.bossmodellerfx.view.viewtypes.CustomNode;
 import de.snaggly.bossmodellerfx.view.viewtypes.Selectable;
 import javafx.scene.Node;
 import javafx.scene.input.KeyCode;
-import javafx.scene.layout.Pane;
 import com.google.gson.Gson;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
@@ -26,6 +24,13 @@ public class Project {
     private final ArrayList<Entity> entities = new ArrayList<>();
     private final ArrayList<Comment> comments = new ArrayList<>();
     private final ArrayList<Relation> relations = new ArrayList<>();
+
+    public File activeFile;
+
+    public Set<KeyCode> getPressedKeys() {
+        return pressedKeys;
+    }
+
     private final Set<KeyCode> pressedKeys = new HashSet<>();
 
     public Project(WorkbenchPane workField) {

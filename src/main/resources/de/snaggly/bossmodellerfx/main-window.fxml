@@ -203,6 +203,7 @@
                         <MenuItem mnemonicParsing="false" text="Aus SQL-Skript importieren" />
                      </Menu>
                      <MenuItem mnemonicParsing="false" onAction="#saveFileClick" text="Speichern" />
+                     <MenuItem mnemonicParsing="false" onAction="#saveUnderFileClick" text="Speichern Unter" />
                      <Menu mnemonicParsing="false" text="Export">
                         <MenuItem mnemonicParsing="false" onAction="#exportPictureClick" text="Als Bild speichern" />
                         <MenuItem mnemonicParsing="false" text="Als SQL-Skript speichern" />

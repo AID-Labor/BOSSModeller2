@@ -14,7 +14,6 @@ import de.snaggly.bossmodellerfx.view.factory.windowtype.EntityEditorWindowBuild
 import de.snaggly.bossmodellerfx.view.factory.windowtype.RelationEditorWindowBuilder;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
-import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -23,15 +22,16 @@ import javafx.scene.control.*;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
 import javax.imageio.ImageIO;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
+
+import static de.snaggly.bossmodellerfx.guiLogic.KeyCombos.keyComboOpen;
+import static de.snaggly.bossmodellerfx.guiLogic.KeyCombos.keyComboSave;
 
 public class MainController {
     @FXML
@@ -1027,7 +1027,7 @@ public class MainController {
     }
 
     @FXML
-    private void openFileClick(ActionEvent actionEvent) {
+    private void openFileClick() {
         var file = GUIMethods.showJSONFileOpenDialog("Projekt öffnen", currentProject.getWorkField().getScene().getWindow());
         if (file == null)
             return;
@@ -1040,6 +1040,7 @@ public class MainController {
             bufferedReader.close();
             var newWorkField = new WorkbenchPane(this::onMainWorkbenchClick);
             addNewProjectTab(file.getName(), Project.deserializeFromJson(json.toString(), newWorkField), true);
+            currentProject.activeFile = file;
             reInitProject();
 
         } catch (Exception e) {
@@ -1048,11 +1049,25 @@ public class MainController {
     }
 
     @FXML
-    private void saveFileClick(ActionEvent actionEvent) {
+    private void saveFileClick() {
+        if (currentProject.activeFile == null) {
+            saveUnderFileClick();
+        }
+        else {
+            saveFile(currentProject.activeFile);
+        }
+    }
+
+    @FXML
+    private void saveUnderFileClick() {
         var file = GUIMethods.showJSONFileSaveDialog("Projekt speichern", currentProject.getWorkField().getScene().getWindow());
         if (file == null)
             return;
+        currentProject.activeFile = file;
+        saveFile(file);
+    }
 
+    private void saveFile(File file) {
         var json = currentProject.serializeToJson();
         try {
             var fileWriter = new BufferedWriter(new FileWriter(file));
@@ -1060,11 +1075,13 @@ public class MainController {
             fileWriter.close();
         } catch (Exception e) {
             GUIMethods.showError(MainController.class.getSimpleName(), "BOSSModellerFX", e.getLocalizedMessage());
+        } finally {
+            projectsTabPane.getTabs().get(projectsTabPane.getSelectionModel().getSelectedIndex()).setText(file.getName());
         }
     }
 
     @FXML
-    private void exportPictureClick(ActionEvent actionEvent) {
+    private void exportPictureClick() {
         var snapshot = currentProject.getWorkField().snapshot(new SnapshotParameters(), null);
         var file = GUIMethods.showPNGFileSaveDialog("Bild exportieren", currentProject.getWorkField().getScene().getWindow());
         if (file == null)
@@ -1082,6 +1099,15 @@ public class MainController {
     @FXML
     private void onKeyPressed(KeyEvent keyEvent) {
         currentProject.addPressedKey(keyEvent.getCode());
+
+        if (currentProject.getPressedKeys().containsAll(keyComboOpen)) {
+            currentProject.getPressedKeys().clear();
+            openFileClick();
+        }
+        else if (currentProject.getPressedKeys().containsAll(keyComboSave)) {
+            currentProject.getPressedKeys().clear();
+            saveFileClick();
+        }
     }
 
     @FXML
@@ -1090,7 +1116,7 @@ public class MainController {
     }
 
     @FXML
-    private void startNewProject(ActionEvent actionEvent) {
+    private void startNewProject() {
         var newWorkField = new WorkbenchPane(this::onMainWorkbenchClick);
         addNewProjectTab("*Neues Projekt", new Project(newWorkField), true);
     }
