@@ -74,6 +74,7 @@ public class EditRelationWindowController implements ModelController<Relation> {
 
     @FXML
     private void initialize(){
+        loadProject();
         exampleLine.setStrokeWidth(2.0);
         windowAnchorPane.getChildren().add(exampleLine);
     }
@@ -378,8 +379,8 @@ public class EditRelationWindowController implements ModelController<Relation> {
         }
     }
 
-    public void loadModel(Project project) {
-        this.workspace = project;
+    public void loadProject() {
+        this.workspace = Project.getCurrentProject();
         for (var entity : workspace.getEntities()) {
             tableAEntityCmboBox.getItems().add(entity.getName());
             tableBEntityCmboBox.getItems().add(entity.getName());
@@ -411,10 +412,5 @@ public class EditRelationWindowController implements ModelController<Relation> {
 
             updateConnectionLine();
         }
-    }
-
-    public void loadModel(Relation model, Project project) {
-        loadModel(project);
-        loadModel(model);
     }
 }

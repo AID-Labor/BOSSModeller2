@@ -17,6 +17,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class Project {
+    private final static ArrayList<Project> instances = new ArrayList<>();
+    public static int activeProject = -1;
     private WorkbenchPane workField;
     private Node currentSelected;
     private Node secondSelection;
@@ -33,9 +35,31 @@ public class Project {
 
     private final Set<KeyCode> pressedKeys = new HashSet<>();
 
-    public Project(WorkbenchPane workField) {
+    private Project(WorkbenchPane workField) {
         this.workField = workField;
         this.currentSelected = workField;
+    }
+
+    public static Project getProject(int index) {
+        activeProject = index;
+        return instances.get(activeProject);
+    }
+
+    public static Project getCurrentProject() {
+        return instances.get(activeProject);
+    }
+
+    public static Project createNewProject(WorkbenchPane workField) {
+        instances.add(new Project(workField));
+        return instances.get(instances.size()-1);
+    }
+
+    public static int getProjectsAmount() {
+        return instances.size();
+    }
+
+    public static void removeProject(Project project) {
+        instances.remove(project);
     }
 
     public void clear() {
@@ -167,7 +191,7 @@ public class Project {
     }
 
     public static Project deserializeFromJson(String json, WorkbenchPane workField) {
-        var project = new Project(workField);
+        var project = createNewProject(workField);
         var serializableData = new Gson().fromJson(json, ProjectData.class);
         for (var serEntities : serializableData.entities) {
             project.addEntity(SerializableEntity.deserializableEntity(serEntities));

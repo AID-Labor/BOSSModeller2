@@ -14,11 +14,8 @@ import java.util.Map;
 
 public class RelationEditorWindowBuilder implements WindowFactory<Relation, EditRelationWindowController> {
     private static RelationEditorWindowBuilder instance;
-    private final Project workspace;
 
-    private RelationEditorWindowBuilder(Project workspace) {
-        this.workspace = workspace;
-    }
+    private RelationEditorWindowBuilder() { }
 
     @Override
     public Map.Entry<Scene, EditRelationWindowController> buildWindow(Relation model) throws IOException {
@@ -26,20 +23,18 @@ public class RelationEditorWindowBuilder implements WindowFactory<Relation, Edit
         var scene = new Scene(fxmlLoader.load());
         var controller = (EditRelationWindowController)(fxmlLoader.getController());
         if (model != null) {
-            controller.loadModel(model, workspace);
-        } else {
-            controller.loadModel(workspace);
+            controller.loadModel(model);
         }
         return new AbstractMap.SimpleEntry<>(scene, controller);
     }
 
-    public static Map.Entry<Scene, EditRelationWindowController> buildRelationEditor(Project workspace) throws IOException {
-        instance = new RelationEditorWindowBuilder(workspace);
+    public static Map.Entry<Scene, EditRelationWindowController> buildRelationEditor() throws IOException {
+        instance = new RelationEditorWindowBuilder();
         return instance.buildWindow(null);
     }
 
-    public static Map.Entry<Scene, EditRelationWindowController> buildRelationEditor(Relation model, Project workspace) throws IOException {
-        instance = new RelationEditorWindowBuilder(workspace);
+    public static Map.Entry<Scene, EditRelationWindowController> buildRelationEditor(Relation model) throws IOException {
+        instance = new RelationEditorWindowBuilder();
         return instance.buildWindow(model);
     }
 }

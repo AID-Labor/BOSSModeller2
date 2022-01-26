@@ -13,7 +13,6 @@ import de.snaggly.bossmodellerfx.view.factory.nodetype.EntityBuilder;
 import de.snaggly.bossmodellerfx.view.factory.windowtype.EntityEditorWindowBuilder;
 import de.snaggly.bossmodellerfx.view.factory.windowtype.RelationEditorWindowBuilder;
 import javafx.embed.swing.SwingFXUtils;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -41,7 +40,6 @@ public class MainController {
     private TabPane projectsTabPane;
 
     private Project currentProject;
-    private final ArrayList<Project> projects = new ArrayList<>();
     private final HashMap<Entity, EntityView> entitiesOverview = new HashMap<>();
     private final HashMap<Relation, RelationViewNode> relationsOverview = new HashMap<>();
 
@@ -670,11 +668,11 @@ public class MainController {
     private void initialize() {
         leftNavigationAccordion.setExpandedPane(leftNavigationAccordion.getPanes().get(0));
         projectsTabPane.getSelectionModel().selectedIndexProperty().addListener((_obj, _old, _new) -> {
-            currentProject = projects.get((Integer) _new);
+            currentProject = Project.getProject(_new.intValue());
             initializeContextMenu(currentProject.getWorkField());
         });
         var newTabMenu = new MenuItem("Neues Projekt");
-        newTabMenu.setOnAction(actionEvent -> addNewProjectTab("*Neues Projekt", new Project(new WorkbenchPane(this::onMainWorkbenchClick)), false));
+        newTabMenu.setOnAction(actionEvent -> addNewProjectTab("*Neues Projekt", new WorkbenchPane(this::onMainWorkbenchClick), false));
         projectsTabPane.setOnContextMenuRequested(contextMenuEvent -> {
             var target = contextMenuEvent.getTarget();
             if (target instanceof TabPane || target instanceof StackPane) {
@@ -683,7 +681,7 @@ public class MainController {
                 tabContextMenu.show(((Pane) target), contextMenuEvent.getScreenX(), contextMenuEvent.getScreenY());
             }
         });
-        addNewProjectTab("*Neues Projekt", new Project(new WorkbenchPane(this::onMainWorkbenchClick)), true);
+        addNewProjectTab("*Neues Projekt", new WorkbenchPane(this::onMainWorkbenchClick), true);
     }
 
     private void initializeContextMenu(WorkbenchPane workBench) {
@@ -909,7 +907,7 @@ public class MainController {
             return;
         }
         try {
-            var relationBuilderWindow = RelationEditorWindowBuilder.buildRelationEditor(currentProject);
+            var relationBuilderWindow = RelationEditorWindowBuilder.buildRelationEditor();
             relationBuilderWindow.getValue().parentObserver = this::saveNewRelation;
             var stage = new Stage();
             stage.setTitle("Neue Relation");
@@ -995,7 +993,7 @@ public class MainController {
         var selectedRelationModel = relationView.getModel();
 
         try {
-            var relationBuilderWindow = RelationEditorWindowBuilder.buildRelationEditor(selectedRelationModel, currentProject);
+            var relationBuilderWindow = RelationEditorWindowBuilder.buildRelationEditor(selectedRelationModel);
             relationBuilderWindow.getValue().parentObserver = this::showNewRelation;
             var stage = new Stage();
             stage.setTitle("Relation bearbeiten");
@@ -1119,30 +1117,32 @@ public class MainController {
 
     @FXML
     private void startNewProject() {
-        var newWorkField = new WorkbenchPane(this::onMainWorkbenchClick);
-        addNewProjectTab("*Neues Projekt", new Project(newWorkField), true);
+        addNewProjectTab("*Neues Projekt", new WorkbenchPane(this::onMainWorkbenchClick), true);
     }
 
-    private void addNewProjectTab(String tabName, Project project, boolean switchTo) {
-        projects.add(project);
-        var newTab = new Tab(tabName, project.getWorkField());
+    private void addNewProjectTab(String tabName, WorkbenchPane workPane, boolean switchTo) {
+        var newProject = Project.createNewProject(workPane);
+        addNewProjectTab(tabName, newProject, switchTo);
+    }
+
+    private void addNewProjectTab(String tabName, Project newProject, boolean switchTo) {
+        var newTab = new Tab(tabName, newProject.getWorkField());
         projectsTabPane.getTabs().add(newTab);
 
         var closeMenu = new MenuItem("Schließen");
         closeMenu.setOnAction(actionEvent -> {
-            if (projects.size() <= 1) {
+            if (Project.getProjectsAmount() <= 1) {
                 GUIMethods.showWarning(MainController.class.getSimpleName(), "BOSSModeller FX", "Das ist der letzte Tab");
                 return;
             }
 
-            projects.remove(project);
+            Project.removeProject(newProject);
             projectsTabPane.getTabs().remove(newTab);
         });
         newTab.setContextMenu(new ContextMenu(closeMenu));
 
         if (switchTo) {
             projectsTabPane.getSelectionModel().selectLast();
-            currentProject = projects.get(projects.size()-1);
         }
     }
 }
