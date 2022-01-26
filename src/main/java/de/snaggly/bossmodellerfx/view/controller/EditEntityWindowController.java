@@ -2,6 +2,7 @@ package de.snaggly.bossmodellerfx.view.controller;
 
 import de.snaggly.bossmodellerfx.guiLogic.GUIActionListener;
 import de.snaggly.bossmodellerfx.guiLogic.GUIMethods;
+import de.snaggly.bossmodellerfx.guiLogic.Project;
 import de.snaggly.bossmodellerfx.model.subdata.Attribute;
 import de.snaggly.bossmodellerfx.model.view.Entity;
 import de.snaggly.bossmodellerfx.view.AttributeEditor;
@@ -196,9 +197,18 @@ public class EditEntityWindowController implements ModelController<Entity> {
             }
         }
 
-        entity.setWeakType(isWeakTypeCheckBox.isSelected());
+        if (checkIfEntityNameAlreadyExists()) {
+            if (canClose) {
+                canClose = false;
+                GUIMethods.showWarning(
+                        Entity.class.getSimpleName(),
+                        "Identischer Name",
+                        "Im Projekt existiert bereits eine Entität mit dem selben Namen!");
+            }
+        }
 
         if (canClose) {
+            entity.setWeakType(isWeakTypeCheckBox.isSelected());
             parentObserver.notify(entity);
             GUIMethods.closeWindow(actionEvent);
         }
@@ -316,5 +326,14 @@ public class EditEntityWindowController implements ModelController<Entity> {
             currentNode = currentNode.getParent();
         while(currentNode != null && !(currentNode instanceof AttributeEditor));
         return (AttributeEditor)currentNode;
+    }
+
+    private boolean checkIfEntityNameAlreadyExists() {
+        var result = false;
+        var currentProjectsEntities = Project.getCurrentProject().getEntities();
+        for (var projEntity : currentProjectsEntities) {
+            result = projEntity.getName().equals(entity.getName());
+        }
+        return result;
     }
 }
