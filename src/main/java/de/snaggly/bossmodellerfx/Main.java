@@ -20,5 +20,6 @@ public class Main extends Application {
         primaryStage.setTitle("BOSSModellerFX");
         primaryStage.setScene(scene);
         primaryStage.show();
+        primaryStage.setOnCloseRequest(windowEvent -> ((MainController)fxmlLoader.getController()).closeApp());
     }
 }

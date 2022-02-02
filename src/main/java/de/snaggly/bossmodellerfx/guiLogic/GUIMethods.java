@@ -18,6 +18,7 @@ import javafx.scene.layout.Region;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.Window;
+import javafx.stage.WindowEvent;
 
 import java.io.File;
 
@@ -134,7 +135,8 @@ public class GUIMethods {
     }
 
     public static void closeWindow(Event source) {
-        ((Stage) ((Button) source.getSource()).getScene().getWindow()).close();
+        var sourceWindow = ((Stage) ((Button) source.getSource()).getScene().getWindow());
+        sourceWindow.fireEvent(new WindowEvent(sourceWindow, WindowEvent.WINDOW_CLOSE_REQUEST));
     }
 
     private static void showAlert(Alert.AlertType type, String origin, String header, String info) {

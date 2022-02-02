@@ -24,11 +24,12 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
+import javafx.stage.Window;
 
 import javax.imageio.ImageIO;
 import java.io.*;
-import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.ArrayList;
 
 import static de.snaggly.bossmodellerfx.guiLogic.KeyCombos.keyComboOpen;
 import static de.snaggly.bossmodellerfx.guiLogic.KeyCombos.keyComboSave;
@@ -42,6 +43,8 @@ public class MainController {
     private Project currentProject;
     private final HashMap<Entity, EntityView> entitiesOverview = new HashMap<>();
     private final HashMap<Relation, RelationViewNode> relationsOverview = new HashMap<>();
+
+    private final ArrayList<Window> subWindows = new ArrayList<>();
 
     private final ContextMenu mainWorkbenchContextMenu = new ContextMenu();
 
@@ -659,6 +662,7 @@ public class MainController {
             stage.setTitle("Über uns");
             stage.setScene(scene);
             stage.show();
+            addSubWindow(scene.getWindow());
         } catch (IOException e) {
             GUIMethods.showError(MainController.class.getSimpleName(), "BOSSModellerFX", e.getLocalizedMessage());
         }
@@ -763,7 +767,10 @@ public class MainController {
     }
 
     @FXML
-    private void closeApp() {
+    public void closeApp() {
+        for (var window : subWindows) {
+            ((Stage)window).close();
+        }
         System.exit(0);
     }
 
@@ -849,6 +856,7 @@ public class MainController {
             stage.setTitle("Neue Entität");
             stage.setScene(entityBuilder.getKey());
             stage.show();
+            addSubWindow(entityBuilder.getKey().getWindow());
             entityBuilder.getValue().parentObserver = resultedEntity -> {
                 try {
                     resultedEntity.setXCoordinate(xCoordinate);
@@ -874,6 +882,7 @@ public class MainController {
             stage.setTitle("Entität bearbeiten");
             stage.setScene(entityBuilder.getKey());
             stage.show();
+            addSubWindow(entityBuilder.getKey().getWindow());
             entityBuilder.getValue().parentObserver = resultedEntity -> selectedEntityView.getController().loadModel(resultedEntity);
         } catch (Exception e) {
             GUIMethods.showError(MainController.class.getSimpleName(), "BOSSModellerFX", e.getLocalizedMessage());
@@ -913,6 +922,7 @@ public class MainController {
             stage.setTitle("Neue Relation");
             stage.setScene(relationBuilderWindow.getKey());
             stage.show();
+            addSubWindow(relationBuilderWindow.getKey().getWindow());
         } catch (IOException e) {
             GUIMethods.showError(MainController.class.getSimpleName(), "BOSSModellerFX", e.getLocalizedMessage());
         }
@@ -999,6 +1009,7 @@ public class MainController {
             stage.setTitle("Relation bearbeiten");
             stage.setScene(relationBuilderWindow.getKey());
             stage.show();
+            addSubWindow(relationBuilderWindow.getKey().getWindow());
         } catch (IOException e) {
             GUIMethods.showError(MainController.class.getSimpleName(), "BOSSModellerFX", e.getLocalizedMessage());
         }
@@ -1117,7 +1128,7 @@ public class MainController {
 
     @FXML
     private void startNewProject() {
-        addNewProjectTab("*Neues Projekt", new WorkbenchPane(this::onMainWorkbenchClick), true);
+        addNewProjectTab("*Neues Projekt", new WorkbenchPane(this::onMainWorkbenchClick), subWindows.size() == 0);
     }
 
     private void addNewProjectTab(String tabName, WorkbenchPane workPane, boolean switchTo) {
@@ -1144,5 +1155,14 @@ public class MainController {
         if (switchTo) {
             projectsTabPane.getSelectionModel().selectLast();
         }
+    }
+
+    private void addSubWindow(Window window) {
+        projectsTabPane.setDisable(true);
+        subWindows.add(window);
+        window.setOnCloseRequest(windowEvent -> {
+            subWindows.remove(window);
+            projectsTabPane.setDisable(subWindows.size() > 0);
+        });
     }
 }
