@@ -273,7 +273,8 @@ public class EditRelationWindowController implements ModelController<Relation> {
                             foreignPrimaryAttributeA.isUnique(),
                             foreignPrimaryAttributeA.getCheckName(),
                             foreignPrimaryAttributeA.getDefaultName(),
-                            foreignPrimaryAttributeA
+                            foreignPrimaryAttributeA,
+                            relation.getTableA()
                     ));
                 }
             }
@@ -296,7 +297,8 @@ public class EditRelationWindowController implements ModelController<Relation> {
                             foreignPrimaryAttributeB.isUnique(),
                             foreignPrimaryAttributeB.getCheckName(),
                             foreignPrimaryAttributeB.getDefaultName(),
-                            foreignPrimaryAttributeB
+                            foreignPrimaryAttributeB,
+                            relation.getTableB()
                     ));
                 }
             }

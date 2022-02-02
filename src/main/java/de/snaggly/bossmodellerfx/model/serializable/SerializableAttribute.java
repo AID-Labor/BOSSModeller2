@@ -22,7 +22,7 @@ public class SerializableAttribute extends AttributeAbstraction {
                     continue;
                 var serAttr = serEntities.get(i).attributes.get(j);
                 serAttr.isFk = true;
-                serAttr.entityIndex = entities.indexOf(attr.getEntityOfFkColumn(entities));
+                serAttr.entityIndex = entities.indexOf(attr.getFkTable());
                 serAttr.attributeIndex = entities.get(serAttr.entityIndex).getAttributes().indexOf(attr.getFkTableColumn());
             }
         }
@@ -35,7 +35,9 @@ public class SerializableAttribute extends AttributeAbstraction {
                 if (!serAttr.isFk)
                     continue;
                 var fkAttr = entities.get(i).getAttributes().get(j);
-                fkAttr.setFkTableColumn(entities.get(serAttr.entityIndex).getAttributes().get(serAttr.attributeIndex));
+                var foreignEntity = entities.get(serAttr.entityIndex);
+                fkAttr.setFkTable(foreignEntity);
+                fkAttr.setFkTableColumn(foreignEntity.getAttributes().get(serAttr.attributeIndex));
             }
         }
     }

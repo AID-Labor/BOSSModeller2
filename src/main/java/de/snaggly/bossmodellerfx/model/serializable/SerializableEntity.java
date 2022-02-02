@@ -68,8 +68,7 @@ public class SerializableEntity extends EntityAbstraction implements Serializabl
                     serAttribute.isNonNull(),
                     serAttribute.isUnique(),
                     serAttribute.getCheckName(),
-                    serAttribute.getDefaultName(),
-                    null
+                    serAttribute.getDefaultName()
             ));
         }
         var entity = new Entity(
