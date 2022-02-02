@@ -4,12 +4,12 @@ import de.snaggly.bossmodellerfx.guiLogic.GUIActionListener;
 import de.snaggly.bossmodellerfx.guiLogic.GUIMethods;
 import de.snaggly.bossmodellerfx.guiLogic.Project;
 import de.snaggly.bossmodellerfx.model.subdata.Attribute;
+import de.snaggly.bossmodellerfx.model.subdata.AttributeCombination;
+import de.snaggly.bossmodellerfx.model.subdata.UniqueCombination;
 import de.snaggly.bossmodellerfx.model.view.Entity;
 import de.snaggly.bossmodellerfx.view.AttributeEditor;
 import de.snaggly.bossmodellerfx.view.factory.nodetype.AttributeEditorBuilder;
 import de.snaggly.bossmodellerfx.view.factory.windowtype.UniqueCombinationEditorWindowBuilder;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -21,11 +21,14 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.util.Collections;
+import java.util.*;
 
 
 public class EditEntityWindowController implements ModelController<Entity> {
     private Entity entity = new Entity();
+    private Entity entityRef;
+
+    private final HashMap<Attribute, LinkedList<Attribute>> foreignAttributes = new HashMap<>();
 
     public GUIActionListener<Entity> parentObserver;
 
@@ -127,13 +130,19 @@ public class EditEntityWindowController implements ModelController<Entity> {
     }
 
     private boolean removeAttributeFromEntity(int index) {
-        if (entity.getAttributes().get(index).getFkTableColumn() == null) {
-            entity.removeAttribute(index);
-            return true;
-        }
-        else {
+        var isFk = entity.getAttributes().get(index).getFkTableColumn() != null;
+        var usedByFks = foreignAttributes.get(entity.getAttributes().get(index));
+        if (isFk) {
             GUIMethods.showWarning(EditEntityWindowController.class.getSimpleName(), "BOSSModellerFX", "Fremdschlüssel können von hier nicht entfernt werden!\nBitte die Relation löschen.");
             return false;
+        }
+        else if (usedByFks != null && usedByFks.size() > 0) {
+            GUIMethods.showWarning(EditEntityWindowController.class.getSimpleName(), "BOSSModellerFX", "Dieses Attribut wird als Fremdschlüssel bei anderen Entitäten verwendet!\nBitte die Relation(en) vorher löschen.");
+            return false;
+        }
+        else {
+            entity.removeAttribute(index);
+            return true;
         }
     }
 
@@ -155,68 +164,86 @@ public class EditEntityWindowController implements ModelController<Entity> {
 
     @FXML
     private void onDoneClick(ActionEvent actionEvent) {
-        var canClose = true;
-
         if (tableNameTextField.getText().equals("")){
-            canClose = false;
             GUIMethods.showWarning(
                     Entity.class.getSimpleName(),
                     "Keine Namen",
                     "Die Entität muss ein Namen haben!");
+            return;
         } else {
             entity.setName(tableNameTextField.getText());
         }
 
-        if (attributesListVBOX.getChildren().size() < 1 || !checkAttributesContent()) {
-            if (canClose) {
-                canClose = false;
-                GUIMethods.showWarning(
-                        Entity.class.getSimpleName(),
-                        "Keine Attribute",
-                        "Die Entität muss mindestens ein Attribut besitzen!");
-            }
+        if (attributesListVBOX.getChildren().size() < 1 || checkAttributesHaveNoNames()) {
+            GUIMethods.showWarning(
+                    Entity.class.getSimpleName(),
+                    "Keine Attribute",
+                    "Die Entität muss mindestens ein Attribut besitzen!");
+            return;
         }
 
         if (!checkContainsPrimaryKey()) {
-            if (canClose) {
-                canClose = false;
-                GUIMethods.showWarning(
-                        Entity.class.getSimpleName(),
-                        "Keine Primärschlüssel",
-                        "Die Entität muss mindestens ein Primärschlüssel besitzen!");
-            }
+            GUIMethods.showWarning(
+                    Entity.class.getSimpleName(),
+                    "Keine Primärschlüssel",
+                    "Die Entität muss mindestens ein Primärschlüssel besitzen!");
+            return;
         }
 
         if (!checkIfAllAttributesContainDataType()) {
-            if (canClose) {
-                canClose = false;
-                GUIMethods.showWarning(
-                        Entity.class.getSimpleName(),
-                        "Kein Datentyp",
-                        "Alle Attribute müssen einen Datentypen besitzen!");
-            }
+            GUIMethods.showWarning(
+                    Entity.class.getSimpleName(),
+                    "Kein Datentyp",
+                    "Alle Attribute müssen einen Datentypen besitzen!");
+            return;
+        }
+
+        var testDoubleNameResult = checkDoubleAttributeName();
+        if (testDoubleNameResult != null) {
+            GUIMethods.showWarning(
+                    Entity.class.getSimpleName(),
+                    "Identischer Name",
+                    "Das Attribut: \"" + testDoubleNameResult + "\" taucht mehrfach auf!");
+            return;
         }
 
         if (checkIfEntityNameAlreadyExists()) {
-            if (canClose) {
-                canClose = false;
+            if (!(entityRef != null && entity.getName().equals(entityRef.getName()))) {
                 GUIMethods.showWarning(
                         Entity.class.getSimpleName(),
                         "Identischer Name",
                         "Im Projekt existiert bereits eine Entität mit dem selben Namen!");
+                return;
             }
         }
 
-        if (canClose) {
-            entity.setWeakType(isWeakTypeCheckBox.isSelected());
-            parentObserver.notify(entity);
-            GUIMethods.closeWindow(actionEvent);
+        entity.setWeakType(isWeakTypeCheckBox.isSelected());
+
+        if (entityRef != null) {
+            adjustForeignKeys();
+            entityRef.setUniqueCombination(entity.getUniqueCombination());
+            entityRef.setAttributes(entity.getAttributes());
+            entityRef.setName(entity.getName());
+            entityRef.setWeakType(entity.isWeakType());
+
+            entity = entityRef;
+        }
+
+        parentObserver.notify(entity);
+        GUIMethods.closeWindow(actionEvent);
+    }
+
+    private void adjustForeignKeys() {
+        for (var foreignKeysSet : foreignAttributes.entrySet()) {
+            for (var foreignAttribute : foreignKeysSet.getValue()) {
+                foreignAttribute.setFkTableColumn(foreignKeysSet.getKey());
+            }
         }
     }
 
     @FXML
     private void editUniqueComboClick(ActionEvent actionEvent) {
-        if (attributesListVBOX.getChildren().size() < 1 || !checkAttributesContent()) {
+        if (attributesListVBOX.getChildren().size() < 1 || checkAttributesHaveNoNames()) {
             GUIMethods.showWarning(
                 Entity.class.getSimpleName(),
                 "Keine Attribute",
@@ -238,12 +265,45 @@ public class EditEntityWindowController implements ModelController<Entity> {
 
     @Override
     public void loadModel(Entity model) {
-        this.entity = model;
-        tableNameTextField.setText(model.getName());
-        isWeakTypeCheckBox.setSelected(model.isWeakType());
+        this.entityRef = model;
+        entity.setName(model.getName());
+
+        entity.setAttributes(new ArrayList<>());
+        for (var modelAttribute : model.getAttributes()) {
+            var newAttribute = new Attribute(
+                    modelAttribute.getName(),
+                    modelAttribute.getType(),
+                    modelAttribute.isPrimary(),
+                    modelAttribute.isNonNull(),
+                    modelAttribute.isUnique(),
+                    modelAttribute.getCheckName(),
+                    modelAttribute.getDefaultName(),
+                    modelAttribute.getFkTableColumn()
+            );
+            entity.addAttribute(newAttribute);
+
+            if (newAttribute.isPrimary())
+                foreignAttributes.put(newAttribute, getForeignEntities(modelAttribute));
+        }
+
+        var uniqueCombination = new UniqueCombination();
+        var attributeCombinations = new ArrayList<AttributeCombination>();
+        for (var combination : model.getUniqueCombination().getCombinations()) {
+            var attributeCombination = new AttributeCombination();
+            for (var attribute : combination.getAttributes()) {
+                attributeCombination.addAttribute(entity.getAttributes().get(model.getAttributes().indexOf(attribute)));
+            }
+            attributeCombination.setCombinationName(combination.getCombinationName());
+            attributeCombinations.add(attributeCombination);
+        }
+        uniqueCombination.setCombinations(attributeCombinations);
+        entity.setUniqueCombination(uniqueCombination);
+
+        tableNameTextField.setText(entity.getName());
+        isWeakTypeCheckBox.setSelected(entity.isWeakType());
         removeAllAttributesAction();
-        removeAttrbBtn.setDisable(model.getAttributes().size() < 1);
-        for (var attributeModel : model.getAttributes()) {
+        removeAttrbBtn.setDisable(entity.getAttributes().size() < 1);
+        for (var attributeModel : entity.getAttributes()) {
             try {
                 var attributeEditor = AttributeEditorBuilder.buildAttributeEditor(attributeModel);
                 attributesListVBOX.getChildren().add(attributeEditor);
@@ -284,14 +344,14 @@ public class EditEntityWindowController implements ModelController<Entity> {
         }
     };
 
-    private boolean checkAttributesContent() {
+    private boolean checkAttributesHaveNoNames() {
         boolean result = false;
         for (int i = 0; i < attributesListVBOX.getChildren().size() && !result; i++) {
             var attributeEditView = (AttributeEditor)(attributesListVBOX.getChildren().get(i));
             result = !attributeEditView.getController().getNameTF().getText().equals("");
         }
 
-        return result;
+        return !result;
     }
 
     private boolean checkContainsPrimaryKey() {
@@ -334,6 +394,30 @@ public class EditEntityWindowController implements ModelController<Entity> {
         for (var projEntity : currentProjectsEntities) {
             result = projEntity.getName().equals(entity.getName());
         }
+        return result;
+    }
+
+    private String checkDoubleAttributeName() {
+        var namesSet = new HashSet<String>();
+        for (var attribute : entity.getAttributes()) {
+            if (!namesSet.add(attribute.getName())) {
+                return attribute.getName();
+            }
+        }
+
+        return null;
+    }
+
+    private LinkedList<Attribute> getForeignEntities(Attribute foreignKey) {
+        var result = new LinkedList<Attribute>();
+        for (var projEntity : Project.getCurrentProject().getEntities()) {
+            for (var projAttr : projEntity.getAttributes()) {
+                if (foreignKey == projAttr.getFkTableColumn()) {
+                    result.add(projAttr);
+                }
+            }
+        }
+
         return result;
     }
 }
