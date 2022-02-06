@@ -268,6 +268,7 @@ public class EditEntityWindowController implements ModelController<Entity> {
         this.entityRef = model;
         entity.setName(model.getName());
 
+        entity.setWeakType(model.isWeakType());
         entity.setAttributes(new ArrayList<>());
         for (var modelAttribute : model.getAttributes()) {
             var newAttribute = new Attribute(
