@@ -2,7 +2,7 @@ package de.snaggly.bossmodellerfx.model.subdata;
 
 import de.snaggly.bossmodellerfx.model.abstraction.RelationAbstraction;
 import de.snaggly.bossmodellerfx.model.view.Entity;
-import de.snaggly.bossmodellerfx.struct.relations.CrowsFootOptions;
+import de.snaggly.bossmodellerfx.relation_logic.CrowsFootOptions;
 
 import java.util.ArrayList;
 

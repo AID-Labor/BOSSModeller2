@@ -1,7 +1,7 @@
 package de.snaggly.bossmodellerfx.model.abstraction;
 
-import de.snaggly.bossmodellerfx.struct.relations.ConnectingOrientation;
-import de.snaggly.bossmodellerfx.struct.relations.CrowsFootOptions;
+import de.snaggly.bossmodellerfx.relation_logic.ConnectingOrientation;
+import de.snaggly.bossmodellerfx.relation_logic.CrowsFootOptions;
 
 public abstract class RelationAbstraction implements AbstractedModel {
     private CrowsFootOptions.Cardinality tableA_Cardinality;

@@ -1,6 +1,6 @@
 package de.snaggly.bossmodellerfx.view;
 
-import de.snaggly.bossmodellerfx.struct.relations.CrowsFootOptions;
+import de.snaggly.bossmodellerfx.relation_logic.CrowsFootOptions;
 import de.snaggly.bossmodellerfx.view.viewtypes.Highlightable;
 import javafx.beans.value.ChangeListener;
 import javafx.scene.layout.Pane;

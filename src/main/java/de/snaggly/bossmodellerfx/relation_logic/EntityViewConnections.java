@@ -1,4 +1,4 @@
-package de.snaggly.bossmodellerfx.struct.relations;
+package de.snaggly.bossmodellerfx.relation_logic;
 
 public class EntityViewConnections {
     private int northConnections = 1;

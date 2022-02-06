@@ -4,7 +4,7 @@ import de.snaggly.bossmodellerfx.guiLogic.*;
 import de.snaggly.bossmodellerfx.model.subdata.Attribute;
 import de.snaggly.bossmodellerfx.model.view.Entity;
 import de.snaggly.bossmodellerfx.model.subdata.Relation;
-import de.snaggly.bossmodellerfx.struct.relations.CrowsFootOptions;
+import de.snaggly.bossmodellerfx.relation_logic.CrowsFootOptions;
 import de.snaggly.bossmodellerfx.view.CrowsFootShape;
 import de.snaggly.bossmodellerfx.view.EntityView;
 import de.snaggly.bossmodellerfx.view.factory.nodetype.EntityBuilder;
