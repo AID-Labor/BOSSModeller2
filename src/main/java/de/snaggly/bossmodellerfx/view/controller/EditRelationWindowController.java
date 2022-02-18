@@ -255,50 +255,50 @@ public class EditRelationWindowController implements ModelController<Relation> {
         try {
             examplePane.getChildren().clear();
 
-            //Handle ForeignKey in TableB
-            var foreignPrimaryAttributeA = relation.getTableA().getPrimaryKey();
-            var foreignAttributeB = relation.getFkAttributeB(foreignPrimaryAttributeA);
-            if (foreignAttributeB != null) { //ForeignKey exist already in TableB
+            //Handle ForeignKey in TableA
+            var foreignPrimaryAttributeB = relation.getTableB().getPrimaryKey();
+            var foreignAttributeA = relation.getFkAttributeA(foreignPrimaryAttributeB);
+            if (foreignAttributeA != null) { //ForeignKey exist already in TableB
                 if (relation.getTableA_Cardinality() == CrowsFootOptions.Cardinality.ONE) { //When changed to cardinality ONE, remove ForeignKey
-                    relation.getTableB().getAttributes().remove(foreignAttributeB);
+                    relation.getTableA().getAttributes().remove(foreignAttributeA);
                 }
             }
             else { //ForeignKey does not exist in TableB
                 if (relation.getTableA_Cardinality() == CrowsFootOptions.Cardinality.MANY) { //When has cardinality MANY, add new ForeignKey
-                    relation.getTableB().addAttribute(new Attribute(
-                            foreignPrimaryAttributeA.getName(),
-                            foreignPrimaryAttributeA.getType(),
-                            false,
-                            foreignPrimaryAttributeA.isNonNull(),
-                            foreignPrimaryAttributeA.isUnique(),
-                            foreignPrimaryAttributeA.getCheckName(),
-                            foreignPrimaryAttributeA.getDefaultName(),
-                            foreignPrimaryAttributeA,
-                            relation.getTableA()
-                    ));
-                }
-            }
-
-            //Handle ForeignKey in TableA
-            var foreignPrimaryAttributeB = relation.getTableB().getPrimaryKey();
-            var foreignAttributeA = relation.getFkAttributeA(foreignPrimaryAttributeB);
-            if (foreignAttributeA != null) { //ForeignKey exist already in TableA
-                if (relation.getTableB_Cardinality() == CrowsFootOptions.Cardinality.ONE) { //When changed to cardinality ONE, remove ForeignKey
-                    relation.getTableA().getAttributes().remove(foreignAttributeA);
-                }
-            }
-            else { //ForeignKey does not exist in TableA
-                if (relation.getTableB_Cardinality() == CrowsFootOptions.Cardinality.MANY) { //When has cardinality MANY, add new ForeignKey
                     relation.getTableA().addAttribute(new Attribute(
                             foreignPrimaryAttributeB.getName(),
                             foreignPrimaryAttributeB.getType(),
                             false,
-                            foreignPrimaryAttributeB.isNonNull(),
-                            foreignPrimaryAttributeB.isUnique(),
+                            true,
+                            false,
                             foreignPrimaryAttributeB.getCheckName(),
                             foreignPrimaryAttributeB.getDefaultName(),
                             foreignPrimaryAttributeB,
                             relation.getTableB()
+                    ));
+                }
+            }
+
+            //Handle ForeignKey in TableB
+            var foreignPrimaryAttributeA = relation.getTableA().getPrimaryKey();
+            var foreignAttributeB = relation.getFkAttributeB(foreignPrimaryAttributeA);
+            if (foreignAttributeB != null) { //ForeignKey exist already in TableA
+                if (relation.getTableB_Cardinality() == CrowsFootOptions.Cardinality.ONE) { //When changed to cardinality ONE, remove ForeignKey
+                    relation.getTableB().getAttributes().remove(foreignAttributeB);
+                }
+            }
+            else { //ForeignKey does not exist in TableA
+                if (relation.getTableB_Cardinality() == CrowsFootOptions.Cardinality.MANY) { //When has cardinality MANY, add new ForeignKey
+                    relation.getTableB().addAttribute(new Attribute(
+                            foreignPrimaryAttributeA.getName(),
+                            foreignPrimaryAttributeA.getType(),
+                            false,
+                            true,
+                            false,
+                            foreignPrimaryAttributeA.getCheckName(),
+                            foreignPrimaryAttributeA.getDefaultName(),
+                            foreignPrimaryAttributeA,
+                            relation.getTableA()
                     ));
                 }
             }

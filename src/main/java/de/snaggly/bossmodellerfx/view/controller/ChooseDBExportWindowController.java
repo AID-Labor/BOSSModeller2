@@ -96,9 +96,7 @@ public class ChooseDBExportWindowController implements ModelController<DBLAHolde
                         Project.getCurrentProject().getEntities(), Project.getCurrentProject().getRelations()
                 );
                 dbla.getTables().clear();
-                dbla.getRelations().clear();
                 dbla.getTables().addAll(legacyProjectHolder.getDbTables());
-                //dbla.getRelations().addAll(legacyProjectHolder.getDbRelations());
                 dbla.writeTablesToDB(dBName, schemeName, css, dbExists, newSchema);
 
                 Platform.runLater(() -> GUIMethods.closeWindow(newDBNameTf.getScene().getWindow()));
