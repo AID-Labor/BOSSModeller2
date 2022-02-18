@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane onKeyPressed="#onKeyPressed" onKeyReleased="#onKeyReleased" prefHeight="960.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.snaggly.bossmodellerfx.MainController">
+<AnchorPane onKeyPressed="#onKeyPressed" onKeyReleased="#onKeyReleased" prefHeight="960.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.snaggly.bossmodellerfx.MainController">
    <BorderPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
       <left>
          <Accordion fx:id="leftNavigationAccordion" maxHeight="1.7976931348623157E308" maxWidth="100.0" BorderPane.alignment="TOP_LEFT">
@@ -56,19 +56,19 @@
                               </ImageView>
                            </graphic>
                         </Button>
-                        <Button alignment="CENTER" contentDisplay="CENTER" layoutX="23.0" layoutY="289.0" maxHeight="78.0" maxWidth="78.0" minHeight="78.0" minWidth="78.0" mnemonicParsing="false" textAlignment="CENTER">
+                        <Button alignment="CENTER" contentDisplay="CENTER" layoutX="23.0" layoutY="289.0" maxHeight="78.0" maxWidth="78.0" minHeight="78.0" minWidth="78.0" mnemonicParsing="false" onAction="#importFromDBClick" textAlignment="CENTER">
                            <font>
                               <Font name="System Bold" size="31.0" />
                            </font>
                            <graphic>
                               <ImageView pickOnBounds="true" preserveRatio="true" scaleX="0.5" scaleY="0.5">
                                  <image>
-                                    <Image url="@read_db.png" />
+                                    <Image url="@import_db.png" />
                                  </image>
                               </ImageView>
                            </graphic>
                         </Button>
-                        <Button alignment="CENTER" contentDisplay="CENTER" layoutX="23.0" layoutY="382.0" maxHeight="78.0" maxWidth="78.0" minHeight="78.0" minWidth="78.0" mnemonicParsing="false" textAlignment="CENTER">
+                        <Button alignment="CENTER" contentDisplay="CENTER" layoutX="23.0" layoutY="382.0" maxHeight="78.0" maxWidth="78.0" minHeight="78.0" minWidth="78.0" mnemonicParsing="false" onAction="#exportToDBClick" textAlignment="CENTER">
                            <font>
                               <Font name="System Bold" size="31.0" />
                            </font>
@@ -199,7 +199,7 @@
                      <MenuItem mnemonicParsing="false" onAction="#startNewProject" text="Neu" />
                      <MenuItem mnemonicParsing="false" onAction="#openFileClick" text="Öffnen" />
                      <Menu mnemonicParsing="false" text="Import">
-                        <MenuItem mnemonicParsing="false" text="Datenbankmodell aus Datenbank lesen" />
+                        <MenuItem mnemonicParsing="false" onAction="#importFromDBClick" text="Datenbankmodell aus Datenbank lesen" />
                         <MenuItem mnemonicParsing="false" text="Aus SQL-Skript importieren" />
                      </Menu>
                      <MenuItem mnemonicParsing="false" onAction="#saveFileClick" text="Speichern" />
@@ -207,7 +207,7 @@
                      <Menu mnemonicParsing="false" text="Export">
                         <MenuItem mnemonicParsing="false" onAction="#exportPictureClick" text="Als Bild speichern" />
                         <MenuItem mnemonicParsing="false" text="Als SQL-Skript speichern" />
-                        <MenuItem mnemonicParsing="false" text="Projekt in Datenbank schreiben" />
+                        <MenuItem mnemonicParsing="false" onAction="#exportToDBClick" text="Projekt in Datenbank schreiben" />
                      </Menu>
                      <MenuItem mnemonicParsing="false" onAction="#closeApp" text="Beenden" />
                   </Menu>
@@ -243,10 +243,6 @@
       </top>
       <bottom>
          <ButtonBar prefHeight="40.0" BorderPane.alignment="CENTER">
-            <buttons>
-               <TextField alignment="CENTER" disable="true" editable="false" text="Bereit" />
-               <ComboBox promptText="PostgreSQL" />
-            </buttons>
             <BorderPane.margin>
                <Insets right="10.0" />
             </BorderPane.margin>

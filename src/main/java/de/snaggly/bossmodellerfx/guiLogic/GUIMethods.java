@@ -10,13 +10,12 @@ import javafx.beans.value.ObservableValue;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.scene.Cursor;
+import javafx.scene.Node;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Region;
 import javafx.stage.FileChooser;
-import javafx.stage.Stage;
 import javafx.stage.Window;
 import javafx.stage.WindowEvent;
 
@@ -135,7 +134,10 @@ public class GUIMethods {
     }
 
     public static void closeWindow(Event source) {
-        var sourceWindow = ((Stage) ((Button) source.getSource()).getScene().getWindow());
+        closeWindow(((Node) source.getSource()).getScene().getWindow());
+    }
+
+    public static void closeWindow(Window sourceWindow) {
         sourceWindow.fireEvent(new WindowEvent(sourceWindow, WindowEvent.WINDOW_CLOSE_REQUEST));
     }
 

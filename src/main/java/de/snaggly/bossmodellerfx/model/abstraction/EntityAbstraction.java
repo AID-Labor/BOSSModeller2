@@ -1,9 +1,7 @@
 package de.snaggly.bossmodellerfx.model.abstraction;
 
-import de.snaggly.bossmodellerfx.model.subdata.Attribute;
 import de.snaggly.bossmodellerfx.model.view.ViewModel;
 
-import java.util.ArrayList;
 
 public class EntityAbstraction extends ViewModel implements AbstractedModel {
     private String name;

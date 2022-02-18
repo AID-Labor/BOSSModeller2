@@ -21,4 +21,7 @@ public class UniqueCombination extends UniqueCombinationAbstraction {
         this.combinations = combinations;
     }
 
+    public void addCombination(AttributeCombination combination) {
+        combinations.add(combination);
+    }
 }

@@ -1,5 +1,7 @@
 package de.snaggly.bossmodellerfx;
 
+import de.snaggly.bossmodellerfx.guiLogic.GUIActionListener;
+import de.snaggly.bossmodellerfx.model.adapter.DBLAHolder;
 import de.snaggly.bossmodellerfx.model.subdata.Relation;
 import de.snaggly.bossmodellerfx.model.view.Comment;
 import de.snaggly.bossmodellerfx.model.view.Entity;
@@ -9,9 +11,9 @@ import de.snaggly.bossmodellerfx.guiLogic.GUIMethods;
 import de.snaggly.bossmodellerfx.guiLogic.Project;
 import de.snaggly.bossmodellerfx.view.factory.nodetype.CommentBuilder;
 import de.snaggly.bossmodellerfx.view.factory.nodetype.EntityBuilder;
-import de.snaggly.bossmodellerfx.view.factory.windowtype.EntityEditorWindowBuilder;
-import de.snaggly.bossmodellerfx.view.factory.windowtype.RelationEditorWindowBuilder;
+import de.snaggly.bossmodellerfx.view.factory.windowtype.*;
 import javafx.embed.swing.SwingFXUtils;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -40,6 +42,8 @@ public class MainController {
     private TabPane projectsTabPane;
 
     private Project currentProject;
+    private DBLAHolder previousDBLA = null;
+
     private final HashMap<Entity, EntityView> entitiesOverview = new HashMap<>();
     private final HashMap<Relation, RelationViewNode> relationsOverview = new HashMap<>();
 
@@ -560,5 +564,81 @@ public class MainController {
             subWindows.remove(window);
             projectsTabPane.setDisable(subWindows.size() > 0);
         });
+    }
+
+    @FXML
+    private void importFromDBClick(ActionEvent actionEvent) {
+        try {
+            var window = ConnectToDBWindowBuilder.buildDBConnectorWindow(previousDBLA);
+            var connectWindowStage = new Stage();
+            window.getValue().parentObserver = resultedConnection -> {
+                previousDBLA = resultedConnection;
+                GUIMethods.closeWindow(connectWindowStage);
+                try {
+                    var chooserWindow = ChooseDBEntityWindowBuilder.buildDBChooserWindow(resultedConnection);
+                    var chooseWindowStage = new Stage();
+                    chooserWindow.getValue().parentObserver = resultedProjectData -> {
+                        GUIMethods.closeWindow(chooseWindowStage);
+                        var newProject = Project.createNewProject(new WorkbenchPane(this::onMainWorkbenchClick));
+                        for (var entity : resultedProjectData.entities) {
+                            newProject.addEntity(entity);
+                        }
+                        for (var relation : resultedProjectData.relations) {
+                            newProject.addRelation(relation);
+                        }
+                        addNewProjectTab(
+                                resultedProjectData.projectName.equals("") ? "Importieres Projekelt" : resultedProjectData.projectName,
+                                newProject,
+                                true);
+                        try {
+                            reInitProject();
+                        } catch (IOException e) {
+                            GUIMethods.showError(MainController.class.getSimpleName(), "BOSSModellerFX", e.getLocalizedMessage());
+                        }
+                    };
+                    chooseWindowStage.setScene(chooserWindow.getKey());
+                    chooseWindowStage.setTitle("Tabellen auswählen");
+                    chooseWindowStage.show();
+                    addSubWindow(chooseWindowStage);
+                } catch (IOException e) {
+                    GUIMethods.showError(MainController.class.getSimpleName(), "BOSSModellerFX", e.getLocalizedMessage());
+                }
+            };
+            connectWindowStage.setScene(window.getKey());
+            connectWindowStage.setTitle("Mit Datenbank verbinden");
+            connectWindowStage.show();
+            addSubWindow(connectWindowStage);
+        } catch (IOException e) {
+            GUIMethods.showError(MainController.class.getSimpleName(), "BOSSModellerFX", e.getLocalizedMessage());
+        }
+    }
+
+    @FXML
+    private void exportToDBClick(ActionEvent actionEvent) {
+        try {
+            var window = ConnectToDBWindowBuilder.buildDBConnectorWindow(previousDBLA);
+            var connectWindowStage = new Stage();
+            window.getValue().prepForExport(true);
+            window.getValue().parentObserver = resultedConnection -> {
+                previousDBLA = resultedConnection;
+                GUIMethods.closeWindow(connectWindowStage);
+                try {
+                    var exportWindow = ChooseDBExportWindowBuilder.buildDBChooserWindow(resultedConnection);
+                    var exportWindowStage = new Stage();
+                    exportWindowStage.setScene(exportWindow.getKey());
+                    exportWindowStage.setTitle("DB und Schema auswählen");
+                    exportWindowStage.show();
+                    addSubWindow(exportWindowStage);
+                } catch (IOException e) {
+                    GUIMethods.showError(MainController.class.getSimpleName(), "BOSSModellerFX", e.getLocalizedMessage());
+                }
+            };
+            connectWindowStage.setScene(window.getKey());
+            connectWindowStage.setTitle("Mit Datenbank verbinden");
+            connectWindowStage.show();
+            addSubWindow(connectWindowStage);
+        } catch (IOException e) {
+            GUIMethods.showError(MainController.class.getSimpleName(), "BOSSModellerFX", e.getLocalizedMessage());
+        }
     }
 }
