@@ -188,14 +188,19 @@ public class EditRelationWindowController implements ModelController<Relation> {
         relation.getTableA().setWeakType(tableAIsWeakChkBox.isSelected());
 
         entityBModelReference = workspace.getEntities().get(tableBEntityCmboBox.getSelectionModel().getSelectedIndex());
-        entityAttributes = new ArrayList<>(entityBModelReference.getAttributes());
-        relation.setTableB(new Entity(
-                entityBModelReference.getName(),
-                entityBModelReference.getXCoordinate(),
-                entityBModelReference.getYCoordinate(),
-                entityAttributes,
-                entityBModelReference.isWeakType()
-        ));
+        if (entityAModelReference == entityBModelReference) { //SelfRelation
+            relation.setTableB(relation.getTableA());
+        }
+        else {
+            entityAttributes = new ArrayList<>(entityBModelReference.getAttributes());
+            relation.setTableB(new Entity(
+                    entityBModelReference.getName(),
+                    entityBModelReference.getXCoordinate(),
+                    entityBModelReference.getYCoordinate(),
+                    entityAttributes,
+                    entityBModelReference.isWeakType()
+            ));
+        }
 
         if (radioBtnPolyBN.isSelected())
             relation.setTableB_Cardinality(CrowsFootOptions.Cardinality.MANY);
@@ -294,7 +299,8 @@ public class EditRelationWindowController implements ModelController<Relation> {
             var primaryKeyA = relation.getTableA().getPrimaryKey();
             var foreignAttributeB = relation.getFkAttributeB(primaryKeyA);
             if (foreignAttributeB.size() > 0) { //ForeignKey exist already in TableA
-                if (relation.getTableB_Cardinality() == CrowsFootOptions.Cardinality.ONE) { //When changed to cardinality ONE, remove ForeignKey
+                if (relation.getTableB_Cardinality() == CrowsFootOptions.Cardinality.ONE //When changed to cardinality ONE, remove ForeignKey
+                && relation.getTableA() != relation.getTableB()) { //SelfRelation, might have already removed them in A above
                     relation.getTableB().getAttributes().removeAll(foreignAttributeB);
                 }
             }
