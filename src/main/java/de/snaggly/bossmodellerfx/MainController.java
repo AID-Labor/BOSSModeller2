@@ -543,6 +543,20 @@ public class MainController {
         var newTab = new Tab(tabName, newProject.getWorkField());
         projectsTabPane.getTabs().add(newTab);
 
+        var tabTooltip = new Tooltip();
+        tabTooltip.textProperty().bindBidirectional(newTab.textProperty());
+        newTab.setTooltip(tabTooltip);
+
+        var renameMenu = new MenuItem("Umbenennen");
+        renameMenu.setOnAction(actionEvent -> {
+            var textInputDialog = new TextInputDialog();
+            textInputDialog.setResizable(true);
+            textInputDialog.setContentText("Neuen Projektnamen eingeben:");
+            textInputDialog.setTitle("BOSSModellerFX");
+            textInputDialog.setHeaderText("Projektname");
+            textInputDialog.showAndWait().ifPresent(newTab::setText);
+        });
+
         var closeMenu = new MenuItem("Schließen");
         closeMenu.setOnAction(actionEvent -> {
             if (Project.getProjectsAmount() <= 1) {
@@ -553,7 +567,7 @@ public class MainController {
             Project.removeProject(newProject);
             projectsTabPane.getTabs().remove(newTab);
         });
-        newTab.setContextMenu(new ContextMenu(closeMenu));
+        newTab.setContextMenu(new ContextMenu(renameMenu, closeMenu));
 
         if (switchTo) {
             projectsTabPane.getSelectionModel().selectLast();
