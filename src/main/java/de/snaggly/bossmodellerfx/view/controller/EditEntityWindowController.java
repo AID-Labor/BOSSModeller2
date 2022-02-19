@@ -160,13 +160,13 @@ public class EditEntityWindowController implements ModelController<Entity> {
 
     private void removeAllAttributesAction() {
         attributesListVBOX.getChildren().clear();
-        removeAttrbBtn.setDisable(attributesListVBOX.getChildren().size() < 1);
+        removeAttrbBtn.setDisable(true);
     }
 
     @FXML
     private void initialize() {
         addAttributeAction();
-        removeAttrbBtn.setDisable(attributesListVBOX.getChildren().size() < 1);
+        removeAttrbBtn.setDisable(true);
     }
 
     @FXML
@@ -186,7 +186,7 @@ public class EditEntityWindowController implements ModelController<Entity> {
             entity.setName(tableNameTextField.getText());
         }
 
-        if (attributesListVBOX.getChildren().size() < 1 || checkAttributesHaveNoNames()) {
+        /*if (attributesListVBOX.getChildren().size() < 1 || checkAttributesHaveNoNames()) {
             GUIMethods.showWarning(
                     Entity.class.getSimpleName(),
                     "Keine Attribute",
@@ -200,7 +200,7 @@ public class EditEntityWindowController implements ModelController<Entity> {
                     "Keine Primärschlüssel",
                     "Die Entität muss mindestens ein Primärschlüssel besitzen!");
             return;
-        }
+        }*/
 
         if (!checkIfAllAttributesContainDataType()) {
             GUIMethods.showWarning(
@@ -230,6 +230,7 @@ public class EditEntityWindowController implements ModelController<Entity> {
         }
 
         entity.setWeakType(isWeakTypeCheckBox.isSelected());
+        entity.getAttributes().removeIf(attribute -> attribute.getName() == null || attribute.getName().equals(""));
 
         if (entityRef != null) {
             adjustForeignKeys();
@@ -315,20 +316,23 @@ public class EditEntityWindowController implements ModelController<Entity> {
         tableNameTextField.setText(entity.getName());
         isWeakTypeCheckBox.setSelected(entity.isWeakType());
         removeAllAttributesAction();
-        removeAttrbBtn.setDisable(entity.getAttributes().size() < 1);
-        for (var attributeModel : entity.getAttributes()) {
-            try {
-                var attributeEditor = AttributeEditorBuilder.buildAttributeEditor(attributeModel);
-                attributesListVBOX.getChildren().add(attributeEditor);
-                attributeEditor.getController().handleDownBtnClick(attributeEditorDownClick);
-                attributeEditor.getController().handleUpBtnClick(attributeEditorUpClick);
-                bindAttributeToGui(attributeModel, attributeEditor);
-                attributesListVBOX.getChildren().add(new Separator());
-            } catch (IOException e) {
-                GUIMethods.showError(EditEntityWindowController.class.getSimpleName(), "BOSSModellerFX", e.getLocalizedMessage());
+        if (entity.getAttributes().size() > 0) {
+            for (var attributeModel : entity.getAttributes()) {
+                try {
+                    var attributeEditor = AttributeEditorBuilder.buildAttributeEditor(attributeModel);
+                    attributesListVBOX.getChildren().add(attributeEditor);
+                    attributeEditor.getController().handleDownBtnClick(attributeEditorDownClick);
+                    attributeEditor.getController().handleUpBtnClick(attributeEditorUpClick);
+                    bindAttributeToGui(attributeModel, attributeEditor);
+                    attributesListVBOX.getChildren().add(new Separator());
+                } catch (IOException e) {
+                    GUIMethods.showError(EditEntityWindowController.class.getSimpleName(), "BOSSModellerFX", e.getLocalizedMessage());
+                }
             }
+            attributesListVBOX.getChildren().remove(attributesListVBOX.getChildren().size()-1);
+        } else {
+            addAttributeAction();
         }
-        attributesListVBOX.getChildren().remove(attributesListVBOX.getChildren().size()-1);
     }
 
     private final EventHandler<MouseEvent> attributeEditorDownClick = mouseEvent ->  {
@@ -386,8 +390,9 @@ public class EditEntityWindowController implements ModelController<Entity> {
             if (!(node instanceof AttributeEditor))
                 continue;
             var attributeEditView = (AttributeEditor)(node);
-            var selection = attributeEditView.getController().getDataTypeComboBox().getEditor().getText();
-            if (selection == null || selection.equals(""))
+            var attributeType = attributeEditView.getController().getDataTypeComboBox().getEditor().getText();
+            var attributeName = attributeEditView.getController().getNameTF().getText();
+            if ((attributeName != null && !attributeName.equals("")) && (attributeType == null || attributeType.equals("")))
                 return false;
         }
         return true;
@@ -430,7 +435,6 @@ public class EditEntityWindowController implements ModelController<Entity> {
                 }
             }
         }
-
         return result;
     }
 }
