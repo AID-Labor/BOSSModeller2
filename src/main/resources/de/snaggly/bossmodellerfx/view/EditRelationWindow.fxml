@@ -86,7 +86,7 @@
                   <Insets />
                </VBox.margin>
             </HBox>
-            <HBox fx:id="examplePane" alignment="CENTER" maxHeight="1.7976931348623157E308" spacing="200.0" VBox.vgrow="ALWAYS">
+            <HBox fx:id="examplePane" alignment="CENTER" fillHeight="false" spacing="200.0" VBox.vgrow="ALWAYS">
                <VBox.margin>
                   <Insets bottom="25.0" left="25.0" right="25.0" top="25.0" />
                </VBox.margin>

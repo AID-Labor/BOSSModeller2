@@ -8,6 +8,8 @@ import de.snaggly.bossmodellerfx.relation_logic.CrowsFootOptions;
 import de.snaggly.bossmodellerfx.view.CrowsFootShape;
 import de.snaggly.bossmodellerfx.view.EntityView;
 import de.snaggly.bossmodellerfx.view.factory.nodetype.EntityBuilder;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.CheckBox;
@@ -29,6 +31,9 @@ public class EditRelationWindowController implements ModelController<Relation> {
     private CrowsFootShape crowsFootTableB;
     private Entity entityAModelReference;
     private Entity entityBModelReference;
+
+    private Double previousAHeight = 0.0;
+    private Double previousBHeight = 0.0;
 
     public GUIActionListener<Relation> parentObserver;
 
@@ -251,7 +256,6 @@ public class EditRelationWindowController implements ModelController<Relation> {
 
     private void rebuildEntityView() {
         handleCheckBoxesDisable();
-
         try {
             examplePane.getChildren().clear();
 
@@ -319,6 +323,18 @@ public class EditRelationWindowController implements ModelController<Relation> {
             tableBexample = EntityBuilder.buildEntity(relation.getTableB(), windowAnchorPane, workspace.getSelectionHandler);
             tableAexample.setDisable(true);
             tableBexample.setDisable(true);
+            tableAexample.heightProperty().addListener((observableValue, number, newValue) -> {
+                var delta = (Double)newValue - previousAHeight;
+                previousAHeight = (Double)newValue;
+                var window = examplePane.getScene().getWindow();
+                window.setHeight(window.getHeight() + delta);
+            });
+            tableBexample.heightProperty().addListener((observableValue, number, newValue) -> {
+                var delta = (Double)newValue - previousBHeight;
+                previousBHeight = (Double)newValue;
+                var window = examplePane.getScene().getWindow();
+                window.setHeight(window.getHeight() + delta);
+            });
             examplePane.getChildren().addAll(tableAexample, tableBexample);
 
             if (crowsFootTableA != null)
@@ -434,7 +450,6 @@ public class EditRelationWindowController implements ModelController<Relation> {
                 return true;
             }
         }
-
         return false;
     }
 }
