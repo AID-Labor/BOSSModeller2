@@ -8,14 +8,9 @@ import de.snaggly.bossmodellerfx.relation_logic.CrowsFootOptions;
 import de.snaggly.bossmodellerfx.view.CrowsFootShape;
 import de.snaggly.bossmodellerfx.view.EntityView;
 import de.snaggly.bossmodellerfx.view.factory.nodetype.EntityBuilder;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.RadioButton;
-import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.shape.Line;
@@ -73,6 +68,11 @@ public class EditRelationWindowController implements ModelController<Relation> {
     private ToggleGroup ObligationB;
     @FXML
     private RadioButton radioBtnObligationBMust;
+    @FXML
+    public Button saveBtn;
+    @FXML
+    public Button cancelBtn;
+
     private EntityView tableAexample;
     private EntityView tableBexample;
     private final Line exampleLine = new Line();
@@ -256,6 +256,7 @@ public class EditRelationWindowController implements ModelController<Relation> {
 
     private void rebuildEntityView() {
         handleCheckBoxesDisable();
+        handleSaveBtnDisable();
         try {
             examplePane.getChildren().clear();
 
@@ -349,6 +350,36 @@ public class EditRelationWindowController implements ModelController<Relation> {
         } catch (IOException e) {
             GUIMethods.showError(EditRelationWindowController.class.getSimpleName(), "BOSSModellerFX", e.getLocalizedMessage());
         }
+    }
+
+    private void handleSaveBtnDisable() { //Future: EasyMode->Automatically create Transformation
+        boolean disableSaving = false;
+        if (relation.getTableA_Cardinality() == CrowsFootOptions.Cardinality.MANY && relation.getTableB_Cardinality() == CrowsFootOptions.Cardinality.MANY){
+            disableSaving = true;
+        }
+        else if (relation.getTableA_Cardinality() == CrowsFootOptions.Cardinality.MANY && relation.getTableB_Cardinality() == CrowsFootOptions.Cardinality.ONE) {
+            if (relation.getTableA_Obligation() == CrowsFootOptions.Obligation.MUST && relation.getTableB_Obligation() == CrowsFootOptions.Obligation.MUST) {
+                disableSaving = true;
+            }
+            else if (relation.getTableA_Obligation() == CrowsFootOptions.Obligation.MUST && relation.getTableB_Obligation() == CrowsFootOptions.Obligation.CAN) {
+                disableSaving = true;
+            }
+        }
+        else if (relation.getTableA_Cardinality() == CrowsFootOptions.Cardinality.ONE && relation.getTableB_Cardinality() == CrowsFootOptions.Cardinality.MANY) {
+            if (relation.getTableA_Obligation() == CrowsFootOptions.Obligation.MUST && relation.getTableB_Obligation() == CrowsFootOptions.Obligation.MUST) {
+                disableSaving = true;
+            }
+            else if (relation.getTableA_Obligation() == CrowsFootOptions.Obligation.CAN && relation.getTableB_Obligation() == CrowsFootOptions.Obligation.MUST) {
+                disableSaving = true;
+            }
+        }
+        else if (relation.getTableA_Cardinality() == CrowsFootOptions.Cardinality.ONE && relation.getTableB_Cardinality() == CrowsFootOptions.Cardinality.ONE) {
+            if (relation.getTableA_Obligation() == CrowsFootOptions.Obligation.CAN && relation.getTableB_Obligation() == CrowsFootOptions.Obligation.CAN) {
+                disableSaving = true;
+            }
+        }
+
+        saveBtn.setDisable(disableSaving);
     }
 
     private void handleCheckBoxesDisable() {

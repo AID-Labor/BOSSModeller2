@@ -93,8 +93,8 @@
             </HBox>
             <HBox alignment="CENTER_RIGHT" spacing="15.0">
                <children>
-                  <Button layoutX="279.0" layoutY="10.0" mnemonicParsing="false" onAction="#closeWindow" text="Abbrechen" />
-                  <Button mnemonicParsing="false" onAction="#save" text="Speichern" />
+                  <Button fx:id="cancelBtn" layoutX="279.0" layoutY="10.0" mnemonicParsing="false" onAction="#closeWindow" text="Abbrechen" />
+                  <Button fx:id="saveBtn" disable="true" mnemonicParsing="false" onAction="#save" text="Speichern" />
                </children>
                <VBox.margin>
                   <Insets top="20.0" />
