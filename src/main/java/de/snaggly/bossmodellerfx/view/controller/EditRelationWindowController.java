@@ -266,8 +266,12 @@ public class EditRelationWindowController implements ModelController<Relation> {
             else { //ForeignKey does not exist in TableB
                 if (relation.getTableA_Cardinality() == CrowsFootOptions.Cardinality.MANY) { //When has cardinality MANY, add new ForeignKey
                     for (var newFkB : primaryKeyB) {
+                        var fkName = newFkB.getName();
+                        while (checkIfNameAlreadyExists(fkName, relation.getTableA().getAttributes())) {
+                            fkName += "X";
+                        }
                         relation.getTableA().addAttribute(new Attribute(
-                                newFkB.getName(),
+                                fkName,
                                 newFkB.getType(),
                                 false,
                                 true,
@@ -292,8 +296,12 @@ public class EditRelationWindowController implements ModelController<Relation> {
             else { //ForeignKey does not exist in TableA
                 if (relation.getTableB_Cardinality() == CrowsFootOptions.Cardinality.MANY) { //When has cardinality MANY, add new ForeignKey
                     for (var newFkA : primaryKeyA) {
+                        var fkName = newFkA.getName();
+                        while (checkIfNameAlreadyExists(fkName, relation.getTableB().getAttributes())) {
+                            fkName += "X";
+                        }
                         relation.getTableB().addAttribute(new Attribute(
-                                newFkA.getName(),
+                                fkName,
                                 newFkA.getType(),
                                 false,
                                 true,
@@ -418,5 +426,15 @@ public class EditRelationWindowController implements ModelController<Relation> {
 
             updateConnectionLine();
         }
+    }
+
+    private boolean checkIfNameAlreadyExists(String suggestedName, ArrayList<Attribute> attributes) {
+        for (var attribute : attributes) {
+            if (attribute.getName().equals(suggestedName)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
