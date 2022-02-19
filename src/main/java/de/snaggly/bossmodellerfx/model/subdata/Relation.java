@@ -5,6 +5,7 @@ import de.snaggly.bossmodellerfx.model.view.Entity;
 import de.snaggly.bossmodellerfx.relation_logic.CrowsFootOptions;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 public class Relation extends RelationAbstraction {
     private Entity tableA;
@@ -32,27 +33,30 @@ public class Relation extends RelationAbstraction {
         this.tableB = tableB;
     }
 
-    public Attribute getFkAttributeA() {
+    public LinkedList<Attribute> getFkAttributeA() {
         return getFkAttribute(tableA.getAttributes(), tableB.getPrimaryKey());
     }
 
-    public Attribute getFkAttributeB() {
+    public LinkedList<Attribute> getFkAttributeB() {
         return getFkAttribute(tableB.getAttributes(), tableA.getPrimaryKey());
     }
 
-    public Attribute getFkAttributeA(Attribute foreignPrimaryKey) {
-        return getFkAttribute(tableA.getAttributes(), foreignPrimaryKey);
+    public LinkedList<Attribute> getFkAttributeA(LinkedList<Attribute> foreignPrimaryKeys) {
+        return getFkAttribute(tableA.getAttributes(), foreignPrimaryKeys);
     }
 
-    public Attribute getFkAttributeB(Attribute foreignPrimaryKey) {
-        return getFkAttribute(tableB.getAttributes(), foreignPrimaryKey);
+    public LinkedList<Attribute> getFkAttributeB(LinkedList<Attribute> foreignPrimaryKeys) {
+        return getFkAttribute(tableB.getAttributes(), foreignPrimaryKeys);
     }
 
-    private Attribute getFkAttribute(ArrayList<Attribute> attributes, Attribute primaryKey) {
+    private LinkedList<Attribute> getFkAttribute(ArrayList<Attribute> attributes, LinkedList<Attribute> primaryKey) {
+        var result = new LinkedList<Attribute>();
         for (var attribute : attributes) {
-            if (attribute.getFkTableColumn() != null && attribute.getFkTableColumn().equals(primaryKey))
-                return attribute;
+            var fKey = attribute.getFkTableColumn();
+            if (fKey != null && primaryKey.contains(fKey)) {
+                result.add(attribute);
+            }
         }
-        return null;
+        return result;
     }
 }

@@ -256,50 +256,54 @@ public class EditRelationWindowController implements ModelController<Relation> {
             examplePane.getChildren().clear();
 
             //Handle ForeignKey in TableA
-            var foreignPrimaryAttributeB = relation.getTableB().getPrimaryKey();
-            var foreignAttributeA = relation.getFkAttributeA(foreignPrimaryAttributeB);
-            if (foreignAttributeA != null) { //ForeignKey exist already in TableB
+            var primaryKeyB = relation.getTableB().getPrimaryKey();
+            var foreignAttributeA = relation.getFkAttributeA(primaryKeyB);
+            if (foreignAttributeA.size() > 0) { //ForeignKey exist already in TableB
                 if (relation.getTableA_Cardinality() == CrowsFootOptions.Cardinality.ONE) { //When changed to cardinality ONE, remove ForeignKey
-                    relation.getTableA().getAttributes().remove(foreignAttributeA);
+                    relation.getTableA().getAttributes().removeAll(foreignAttributeA);
                 }
             }
             else { //ForeignKey does not exist in TableB
                 if (relation.getTableA_Cardinality() == CrowsFootOptions.Cardinality.MANY) { //When has cardinality MANY, add new ForeignKey
-                    relation.getTableA().addAttribute(new Attribute(
-                            foreignPrimaryAttributeB.getName(),
-                            foreignPrimaryAttributeB.getType(),
-                            false,
-                            true,
-                            false,
-                            foreignPrimaryAttributeB.getCheckName(),
-                            foreignPrimaryAttributeB.getDefaultName(),
-                            foreignPrimaryAttributeB,
-                            relation.getTableB()
-                    ));
+                    for (var newFkB : primaryKeyB) {
+                        relation.getTableA().addAttribute(new Attribute(
+                                newFkB.getName(),
+                                newFkB.getType(),
+                                false,
+                                true,
+                                false,
+                                newFkB.getCheckName(),
+                                newFkB.getDefaultName(),
+                                newFkB,
+                                relation.getTableB()
+                        ));
+                    }
                 }
             }
 
             //Handle ForeignKey in TableB
-            var foreignPrimaryAttributeA = relation.getTableA().getPrimaryKey();
-            var foreignAttributeB = relation.getFkAttributeB(foreignPrimaryAttributeA);
-            if (foreignAttributeB != null) { //ForeignKey exist already in TableA
+            var primaryKeyA = relation.getTableA().getPrimaryKey();
+            var foreignAttributeB = relation.getFkAttributeB(primaryKeyA);
+            if (foreignAttributeB.size() > 0) { //ForeignKey exist already in TableA
                 if (relation.getTableB_Cardinality() == CrowsFootOptions.Cardinality.ONE) { //When changed to cardinality ONE, remove ForeignKey
-                    relation.getTableB().getAttributes().remove(foreignAttributeB);
+                    relation.getTableB().getAttributes().removeAll(foreignAttributeB);
                 }
             }
             else { //ForeignKey does not exist in TableA
                 if (relation.getTableB_Cardinality() == CrowsFootOptions.Cardinality.MANY) { //When has cardinality MANY, add new ForeignKey
-                    relation.getTableB().addAttribute(new Attribute(
-                            foreignPrimaryAttributeA.getName(),
-                            foreignPrimaryAttributeA.getType(),
-                            false,
-                            true,
-                            false,
-                            foreignPrimaryAttributeA.getCheckName(),
-                            foreignPrimaryAttributeA.getDefaultName(),
-                            foreignPrimaryAttributeA,
-                            relation.getTableA()
-                    ));
+                    for (var newFkA : primaryKeyA) {
+                        relation.getTableB().addAttribute(new Attribute(
+                                newFkA.getName(),
+                                newFkA.getType(),
+                                false,
+                                true,
+                                false,
+                                newFkA.getCheckName(),
+                                newFkA.getDefaultName(),
+                                newFkA,
+                                relation.getTableA()
+                        ));
+                    }
                 }
             }
 

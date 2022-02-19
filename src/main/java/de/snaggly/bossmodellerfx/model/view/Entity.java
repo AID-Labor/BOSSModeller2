@@ -6,6 +6,7 @@ import de.snaggly.bossmodellerfx.model.subdata.Relation;
 import de.snaggly.bossmodellerfx.model.subdata.UniqueCombination;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 public class Entity extends EntityAbstraction {
     private ArrayList<Attribute> attributes;
@@ -59,6 +60,10 @@ public class Entity extends EntityAbstraction {
         attributes.add(attribute);
     }
 
+    public void addAttribute(int index, Attribute attribute) {
+        attributes.add(index, attribute);
+    }
+
     public void removeAttribute(Attribute attribute) {
         attributes.remove(attribute);
     }
@@ -67,7 +72,13 @@ public class Entity extends EntityAbstraction {
         attributes.remove(index);
     }
 
-    public Attribute getPrimaryKey() {
-        return attributes.stream().filter(Attribute::isPrimary).findFirst().orElse(null);
+    public LinkedList<Attribute> getPrimaryKey() {
+        var result = new LinkedList<Attribute>();
+        for (var attribute : attributes) {
+            if (attribute.isPrimary()) {
+                result.add(attribute);
+            }
+        }
+        return result;
     }
 }
