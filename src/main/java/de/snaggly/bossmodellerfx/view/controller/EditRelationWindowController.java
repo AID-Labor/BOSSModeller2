@@ -240,6 +240,8 @@ public class EditRelationWindowController implements ModelController<Relation> {
         radioBtnObligationBCan.setSelected(model.getTableB_Obligation() == CrowsFootOptions.Obligation.CAN);
         tableAIsWeakChkBox.setSelected(model.getTableA().isWeakType());
         tableBIsWeakChkBox.setSelected(model.getTableB().isWeakType());
+        tableAEntityCmboBox.setDisable(true);
+        tableBEntityCmboBox.setDisable(true);
         rebuildEntityView();
     }
 
