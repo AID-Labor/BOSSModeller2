@@ -1,6 +1,5 @@
 package de.snaggly.bossmodellerfx;
 
-import de.snaggly.bossmodellerfx.guiLogic.GUIActionListener;
 import de.snaggly.bossmodellerfx.model.adapter.DBLAHolder;
 import de.snaggly.bossmodellerfx.model.subdata.Relation;
 import de.snaggly.bossmodellerfx.model.view.Comment;
@@ -51,8 +50,8 @@ public class MainController {
 
     private final ContextMenu mainWorkbenchContextMenu = new ContextMenu();
 
-    private void relationLineDrawer() { //For future: Follow State-Pattern
-        RelationLineDrawer.drawAllLines(currentProject, entitiesOverview, relationsOverview);
+    private void relationLineDrawer(Project project) { //For future: Follow State-Pattern
+        RelationLineDrawer.drawAllLines(project, entitiesOverview, relationsOverview);
     }
 
     @FXML
@@ -78,7 +77,7 @@ public class MainController {
             initializeContextMenu(currentProject.getWorkField());
         });
         var newTabMenu = new MenuItem("Neues Projekt");
-        newTabMenu.setOnAction(actionEvent -> addNewProjectTab("*Neues Projekt", new WorkbenchPane(this::onMainWorkbenchClick), false));
+        newTabMenu.setOnAction(actionEvent -> addNewProjectTab(new WorkbenchPane(this::onMainWorkbenchClick), false));
         projectsTabPane.setOnContextMenuRequested(contextMenuEvent -> {
             var target = contextMenuEvent.getTarget();
             if (target instanceof TabPane || target instanceof StackPane) {
@@ -87,7 +86,7 @@ public class MainController {
                 tabContextMenu.show(((Pane) target), contextMenuEvent.getScreenX(), contextMenuEvent.getScreenY());
             }
         });
-        addNewProjectTab("*Neues Projekt", new WorkbenchPane(this::onMainWorkbenchClick), true);
+        addNewProjectTab(new WorkbenchPane(this::onMainWorkbenchClick), true);
     }
 
     private void initializeContextMenu(WorkbenchPane workBench) {
@@ -295,7 +294,7 @@ public class MainController {
         try {
             var commentModel = new Comment("", xCoordinate, yCoordinate);
             var commentView = CommentBuilder.buildComment(commentModel, currentProject.getWorkField(), currentProject.getSelectionHandler);
-            showNewComment(commentView);
+            showNewComment(commentView, currentProject);
 
             currentProject.addComment(commentModel);
         } catch (IOException e) {
@@ -303,8 +302,8 @@ public class MainController {
         }
     }
 
-    private void showNewComment(CommentView commentView) {
-        currentProject.getWorkField().getChildren().add(commentView);
+    private void showNewComment(CommentView commentView, Project project) {
+        project.getWorkField().getChildren().add(commentView);
         commentView.toBack();
     }
 
@@ -339,13 +338,13 @@ public class MainController {
 
     private void saveNewEntity(EntityView entityView) {
         currentProject.addEntity(entityView.getModel());
-        showNewEntity(entityView);
+        showNewEntity(entityView, currentProject);
     }
 
-    private void showNewEntity(EntityView entityView) {
+    private void showNewEntity(EntityView entityView, Project project) {
         entitiesOverview.put(entityView.getModel(), entityView);
-        GUIMethods.bindEntityToRelationLineHandler(entityView, this::relationLineDrawer);
-        currentProject.getWorkField().getChildren().add(entityView);
+        GUIMethods.bindEntityToRelationLineHandler(entityView, () -> relationLineDrawer(currentProject));
+        project.getWorkField().getChildren().add(entityView);
     }
 
     private void deleteEntity(EntityView selectedEntityView) {
@@ -361,10 +360,10 @@ public class MainController {
 
     private void saveNewRelation(Relation dataset) {
         currentProject.addRelation(dataset);
-        showNewRelation(dataset);
+        showNewRelation(dataset, currentProject);
     }
 
-    private void showNewRelation(Relation relation) {
+    private void showNewRelation(Relation relation, Project project) {
         var tableAView = entitiesOverview.get(relation.getTableA());
         var tableBView = entitiesOverview.get(relation.getTableB());
         tableAView.getController().loadModel(relation.getTableA());
@@ -372,7 +371,7 @@ public class MainController {
             tableBView.getController().loadModel(relation.getTableB());
         }
 
-        relationLineDrawer();
+        relationLineDrawer(project);
     }
 
     private void deleteRelation(RelationViewNode relationView) {
@@ -398,7 +397,7 @@ public class MainController {
 
         relationsOverview.remove(relation);
         currentProject.getRelations().remove(relationView.getModel());
-        relationLineDrawer();
+        relationLineDrawer(currentProject);
     }
 
     private void editRelation(RelationViewNode relationView) {
@@ -406,7 +405,7 @@ public class MainController {
 
         try {
             var relationBuilderWindow = RelationEditorWindowBuilder.buildRelationEditor(selectedRelationModel);
-            relationBuilderWindow.getValue().parentObserver = this::showNewRelation;
+            relationBuilderWindow.getValue().parentObserver = (resultedRelation) -> showNewRelation(resultedRelation, currentProject);
             var stage = new Stage();
             stage.setTitle("Relation bearbeiten");
             stage.setScene(relationBuilderWindow.getKey());
@@ -418,18 +417,22 @@ public class MainController {
     }
 
     private void reInitProject() throws IOException {
-        for (var entity : currentProject.getEntities()) {
-            var entityView = EntityBuilder.buildEntity(entity, currentProject.getWorkField(), currentProject.getSelectionHandler);
-            showNewEntity(entityView);
+        initProject(currentProject);
+    }
+
+    private void initProject(Project project) throws IOException {
+        for (var entity : project.getEntities()) {
+            var entityView = EntityBuilder.buildEntity(entity, project.getWorkField(), project.getSelectionHandler);
+            showNewEntity(entityView, project);
         }
 
-        for (var comment : currentProject.getComments()) {
-            var commentView = CommentBuilder.buildComment(comment, currentProject.getWorkField(), currentProject.getSelectionHandler);
-            showNewComment(commentView);
+        for (var comment : project.getComments()) {
+            var commentView = CommentBuilder.buildComment(comment, project.getWorkField(), project.getSelectionHandler);
+            showNewComment(commentView, project);
         }
 
-        for (var relation : currentProject.getRelations()) {
-            showNewRelation(relation);
+        for (var relation : project.getRelations()) {
+            showNewRelation(relation, project);
         }
     }
 
@@ -451,10 +454,10 @@ public class MainController {
                 json.append(bufferedReader.readLine());
             }
             bufferedReader.close();
-            var newWorkField = new WorkbenchPane(this::onMainWorkbenchClick);
-            addNewProjectTab(file.getName(), Project.deserializeFromJson(json.toString(), newWorkField), true);
-            currentProject.activeFile = file;
-            reInitProject();
+            var newProject = Project.deserializeFromJson(json.toString(), new WorkbenchPane(this::onMainWorkbenchClick));
+            addNewProjectTab(file.getName(), newProject, subWindows.size() == 0);
+            newProject.activeFile = file;
+            initProject(newProject);
 
         } catch (Exception e) {
             GUIMethods.showError(MainController.class.getSimpleName(), "BOSSModellerFX", e.getLocalizedMessage());
@@ -528,12 +531,12 @@ public class MainController {
 
     @FXML
     private void startNewProject() {
-        addNewProjectTab("*Neues Projekt", new WorkbenchPane(this::onMainWorkbenchClick), subWindows.size() == 0);
+        addNewProjectTab(new WorkbenchPane(this::onMainWorkbenchClick), subWindows.size() == 0);
     }
 
-    private void addNewProjectTab(String tabName, WorkbenchPane workPane, boolean switchTo) {
+    private void addNewProjectTab(WorkbenchPane workPane, boolean switchTo) {
         var newProject = Project.createNewProject(workPane);
-        addNewProjectTab(tabName, newProject, switchTo);
+        addNewProjectTab("*Neues Projekt", newProject, switchTo);
     }
 
     private void addNewProjectTab(String tabName, Project newProject, boolean switchTo) {
@@ -589,9 +592,9 @@ public class MainController {
                         addNewProjectTab(
                                 resultedProjectData.projectName.equals("") ? "Importieres Projekelt" : resultedProjectData.projectName,
                                 newProject,
-                                true);
+                                subWindows.size() == 0);
                         try {
-                            reInitProject();
+                            initProject(newProject);
                         } catch (IOException e) {
                             GUIMethods.showError(MainController.class.getSimpleName(), "BOSSModellerFX", e.getLocalizedMessage());
                         }
