@@ -87,7 +87,19 @@ public class EditEntityWindowController implements ModelController<Entity> {
     private void bindAttributeToGui(Attribute attribute, AttributeEditor guiEditor) {
         guiEditor.getController().getNameTF().textProperty().addListener((observableValue, s, newValue) -> attribute.setName(newValue));
         guiEditor.getController().getDataTypeComboBox().getEditor().textProperty().addListener((observableValue, s, newValue) -> attribute.setType(newValue));
-        guiEditor.getController().getIsPrimaryCheck().selectedProperty().addListener((observableValue, s, newValue) -> attribute.setPrimary(newValue));
+        guiEditor.getController().getIsPrimaryCheck().selectedProperty().addListener((observableValue, s, newValue) -> {
+            if (!newValue) {
+                var usedByFks = foreignAttributes.get(attribute);
+                if (usedByFks != null && usedByFks.size() > 0) {
+                    GUIMethods.showWarning(EditEntityWindowController.class.getSimpleName(), "BOSSModellerFX", "Dieses Attribut wird als Fremdschlüssel bei anderen Entitäten verwendet!\nBitte die Relation(en) vorher löschen.");
+                    guiEditor.getController().getIsPrimaryCheck().setSelected(true);
+                } else {
+                    attribute.setPrimary(false);
+                }
+            } else {
+                attribute.setPrimary(true);
+            }
+        });
         guiEditor.getController().getIsNonNullCheck().selectedProperty().addListener((observableValue, s, newValue) -> attribute.setNonNull(newValue));
         guiEditor.getController().getIsUniqueCheck().selectedProperty().addListener((observableValue, s, newValue) -> attribute.setUnique(newValue));
         guiEditor.getController().getCheckTF().textProperty().addListener((observableValue, s, newValue) -> attribute.setCheckName(newValue));
