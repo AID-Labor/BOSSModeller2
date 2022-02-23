@@ -161,6 +161,7 @@ public class EditRelationWindowController implements ModelController<Relation> {
             refRelation.setTableB_Obligation(relation.getTableB_Obligation());
             relation = refRelation;
         }
+        relation.setStrongRelation(isStrongRelation());
         parentObserver.notify(relation);
         GUIMethods.closeWindow(actionEvent);
     }
@@ -202,7 +203,6 @@ public class EditRelationWindowController implements ModelController<Relation> {
             relation.setTableA_Obligation(CrowsFootOptions.Obligation.MUST);
         else
             relation.setTableA_Obligation(CrowsFootOptions.Obligation.CAN);
-        relation.getTableA().setWeakType(tableAIsWeakChkBox.isSelected());
 
         entityBModelReference = workspace.getEntities().get(tableBEntityCmboBox.getSelectionModel().getSelectedIndex());
         if (entityAModelReference == entityBModelReference) { //SelfRelation
@@ -261,7 +261,8 @@ public class EditRelationWindowController implements ModelController<Relation> {
             relation.setTableB_Obligation(CrowsFootOptions.Obligation.MUST);
         else
             relation.setTableB_Obligation(CrowsFootOptions.Obligation.CAN);
-        relation.getTableB().setWeakType(tableBIsWeakChkBox.isSelected());
+
+        relation.setStrongRelation(tableAIsWeakChkBox.isSelected() || tableBIsWeakChkBox.isSelected());
 
         rebuildEntityView();
     }
@@ -277,6 +278,7 @@ public class EditRelationWindowController implements ModelController<Relation> {
                 model.getTableA_Obligation(),
                 model.getTableB_Obligation()
         );
+        relation.setStrongRelation(model.isStrongRelation());
         entityAModelReference = relation.getTableA();
         entityBModelReference = relation.getTableB();
         tableAEntityCmboBox.getSelectionModel().select(workspace.getEntities().indexOf(model.getTableA()));
@@ -289,8 +291,10 @@ public class EditRelationWindowController implements ModelController<Relation> {
         radioBtnPolyB1.setSelected(model.getTableB_Cardinality() == CrowsFootOptions.Cardinality.ONE);
         radioBtnObligationBMust.setSelected(model.getTableB_Obligation() == CrowsFootOptions.Obligation.MUST);
         radioBtnObligationBCan.setSelected(model.getTableB_Obligation() == CrowsFootOptions.Obligation.CAN);
-        tableAIsWeakChkBox.setSelected(model.getTableA().isWeakType());
-        tableBIsWeakChkBox.setSelected(model.getTableB().isWeakType());
+        if (relation.isStrongRelation()) {
+            tableAIsWeakChkBox.setSelected(model.getTableA().isWeakType());
+            tableBIsWeakChkBox.setSelected(model.getTableB().isWeakType());
+        }
         tableAEntityCmboBox.setDisable(true);
         tableBEntityCmboBox.setDisable(true);
         rebuildEntityView();
@@ -302,7 +306,7 @@ public class EditRelationWindowController implements ModelController<Relation> {
         exampleLine.startYProperty().bind(tableAexample.layoutYProperty().add(tableAexample.heightProperty().divide(2)).add(tableAexample.getParent().layoutYProperty()));
         exampleLine.endYProperty().bind(tableAexample.layoutYProperty().add(tableAexample.heightProperty().divide(2)).add(tableAexample.getParent().layoutYProperty()));
 
-        if (relation.getTableA().isWeakType() || relation.getTableB().isWeakType()) {
+        if (isStrongRelation()) {
             exampleLine.getStrokeDashArray().clear();
         } else {
             exampleLine.getStrokeDashArray().addAll(10.0, 8.0);
@@ -320,6 +324,26 @@ public class EditRelationWindowController implements ModelController<Relation> {
 
             ForeignKeyHandler.removeAllForeignKeys(relation);
             ForeignKeyHandler.addForeignKeys(relation);
+
+            //Determine if Tables are really weak
+            relation.getTableA().setWeakType(false);
+            relation.getTableB().setWeakType(false);
+            for (var fk : relation.getTableA().getAttributes()) {
+                if (fk.getFkTable() == null)
+                    continue;
+                if (fk.isPrimary()) {
+                    relation.getTableA().setWeakType(true);
+                    break;
+                }
+            }
+            for (var fk : relation.getTableB().getAttributes()) {
+                if (fk.getFkTable() == null)
+                    continue;
+                if (fk.isPrimary()) {
+                    relation.getTableB().setWeakType(true);
+                    break;
+                }
+            }
 
             tableAexample = EntityBuilder.buildEntity(relation.getTableA(), windowAnchorPane, workspace.getSelectionHandler);
             tableBexample = EntityBuilder.buildEntity(relation.getTableB(), windowAnchorPane, workspace.getSelectionHandler);
@@ -474,5 +498,27 @@ public class EditRelationWindowController implements ModelController<Relation> {
 
             updateConnectionLine();
         }
+    }
+
+    private boolean isStrongRelation() {
+        var result = false;
+        if (relation.getTableA().isWeakType()) {
+            for (var fk : relation.getFkAttributesA()) {
+                if (fk.isPrimary() && fk.getFkTable() == relation.getTableB()) {
+                    result = true;
+                    break;
+                }
+            }
+        }
+        else if (relation.getTableB().isWeakType()) {
+            for (var fk : relation.getFkAttributesB()) {
+                if (fk.isPrimary() && fk.getFkTable() == relation.getTableA()) {
+                    result = true;
+                    break;
+                }
+            }
+        }
+
+        return result;
     }
 }

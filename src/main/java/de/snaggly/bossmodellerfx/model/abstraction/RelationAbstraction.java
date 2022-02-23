@@ -8,6 +8,7 @@ import de.snaggly.bossmodellerfx.relation_logic.CrowsFootOptions;
  * @author Omar Emshani
  */
 public abstract class RelationAbstraction implements AbstractedModel {
+    private boolean isStrongRelation = false;
     private CrowsFootOptions.Cardinality tableA_Cardinality;
     private CrowsFootOptions.Cardinality tableB_Cardinality;
     private CrowsFootOptions.Obligation tableA_Obligation;
@@ -53,5 +54,13 @@ public abstract class RelationAbstraction implements AbstractedModel {
 
     public void setTableB_Obligation(CrowsFootOptions.Obligation tableB_Obligation) {
         this.tableB_Obligation = tableB_Obligation;
+    }
+
+    public boolean isStrongRelation() {
+        return isStrongRelation;
+    }
+
+    public void setStrongRelation(boolean strongRelation) {
+        isStrongRelation = strongRelation;
     }
 }

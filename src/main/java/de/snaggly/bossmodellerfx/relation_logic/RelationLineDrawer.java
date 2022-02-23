@@ -273,7 +273,7 @@ public class RelationLineDrawer {
             line2.setVisible(false);
             line3.setVisible(false);
             line4.setVisible(false);
-            if (relation.getTableA().isWeakType() || relation.getTableB().isWeakType()) {
+            if (relation.isStrongRelation()) {
                 line1.setStrongConnection();
                 line2.setStrongConnection();
                 line3.setStrongConnection();

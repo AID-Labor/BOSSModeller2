@@ -38,6 +38,7 @@ public class SerializableRelation extends RelationAbstraction implements Seriali
         serRelation.setTableB_Obligation(relation.getTableB_Obligation());
         serRelation.tableAIndex = entities.indexOf(relation.getTableA());
         serRelation.tableBIndex = entities.indexOf(relation.getTableB());
+        serRelation.setStrongRelation(relation.isStrongRelation());
 
         return serRelation;
     }
@@ -54,6 +55,7 @@ public class SerializableRelation extends RelationAbstraction implements Seriali
                 serRelation.getTableB_Obligation()
         );
         relation.orientation = serRelation.orientation;
+        relation.setStrongRelation(serRelation.isStrongRelation());
 
         return relation;
     }
