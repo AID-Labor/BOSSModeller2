@@ -5,6 +5,7 @@ import de.snaggly.bossmodellerfx.model.subdata.Attribute;
 import de.snaggly.bossmodellerfx.model.view.Entity;
 import de.snaggly.bossmodellerfx.model.subdata.Relation;
 import de.snaggly.bossmodellerfx.relation_logic.CrowsFootOptions;
+import de.snaggly.bossmodellerfx.relation_logic.ForeignKeyHandler;
 import de.snaggly.bossmodellerfx.view.CrowsFootShape;
 import de.snaggly.bossmodellerfx.view.EntityView;
 import de.snaggly.bossmodellerfx.view.factory.nodetype.EntityBuilder;
@@ -137,10 +138,20 @@ public class EditRelationWindowController implements ModelController<Relation> {
 
     @FXML
     private void save(ActionEvent actionEvent) {
+        //Move temp models to real models
         entityAModelReference.setWeakType(relation.getTableA().isWeakType());
         entityAModelReference.setAttributes(relation.getTableA().getAttributes());
         entityBModelReference.setWeakType(relation.getTableB().isWeakType());
         entityBModelReference.setAttributes(relation.getTableB().getAttributes());
+        //Readjust ForeignKey from TempEntity
+        for (var attribute : relation.getTableA().getAttributes()) { //In TabA
+            if (attribute.getFkTable() == relation.getTableB())
+                attribute.setFkTable(entityBModelReference);
+        }
+        for (var attribute : relation.getTableB().getAttributes()) { //In TabB
+            if (attribute.getFkTable() == relation.getTableA())
+                attribute.setFkTable(entityAModelReference);
+        }
         relation.setTableA(entityAModelReference);
         relation.setTableB(entityBModelReference);
         if (refRelation != null) {
@@ -174,6 +185,7 @@ public class EditRelationWindowController implements ModelController<Relation> {
     private void updateConnectionLine() {
         entityAModelReference = workspace.getEntities().get(tableAEntityCmboBox.getSelectionModel().getSelectedIndex());
         var entityAttributes = new ArrayList<>(entityAModelReference.getAttributes());
+        //Work on a temp Model, do not apply changes on main model until user saves!
         relation.setTableA(new Entity(
                 entityAModelReference.getName(),
                 entityAModelReference.getXCoordinate(),
@@ -205,6 +217,40 @@ public class EditRelationWindowController implements ModelController<Relation> {
                     entityAttributes,
                     entityBModelReference.isWeakType()
             ));
+        }
+
+        //Adjust ForeignKey Table Reference
+        for (int i=0; i<entityAModelReference.getAttributes().size(); i++) { //In TabA
+            var attribute = entityAModelReference.getAttributes().get(i);
+            if (attribute.getFkTable() == entityBModelReference) {
+                relation.getTableA().getAttributes().set(i, new Attribute(
+                        attribute.getName(),
+                        attribute.getType(),
+                        attribute.isPrimary(),
+                        attribute.isNonNull(),
+                        attribute.isUnique(),
+                        attribute.getCheckName(),
+                        attribute.getDefaultName(),
+                        attribute.getFkTableColumn(),
+                        relation.getTableB()
+                ));
+            }
+        }
+        for (int i=0; i<entityBModelReference.getAttributes().size(); i++) { //In TabB
+            var attribute = entityBModelReference.getAttributes().get(i);
+            if (attribute.getFkTable() == entityAModelReference) {
+                relation.getTableB().getAttributes().set(i, new Attribute(
+                        attribute.getName(),
+                        attribute.getType(),
+                        attribute.isPrimary(),
+                        attribute.isNonNull(),
+                        attribute.isUnique(),
+                        attribute.getCheckName(),
+                        attribute.getDefaultName(),
+                        attribute.getFkTableColumn(),
+                        relation.getTableA()
+                ));
+            }
         }
 
         if (radioBtnPolyBN.isSelected())
@@ -272,66 +318,8 @@ public class EditRelationWindowController implements ModelController<Relation> {
         try {
             examplePane.getChildren().clear();
 
-            //Handle ForeignKey in TableA
-            var primaryKeyB = relation.getTableB().getPrimaryKey();
-            var foreignAttributeA = relation.getFkAttributesA();
-            if (foreignAttributeA.size() > 0) { //ForeignKey exist already in TableB
-                if (relation.getTableA_Cardinality() == CrowsFootOptions.Cardinality.ONE) { //When changed to cardinality ONE, remove ForeignKey
-                    relation.getTableA().getAttributes().removeAll(foreignAttributeA);
-                }
-            }
-            else { //ForeignKey does not exist in TableB
-                if (relation.getTableA_Cardinality() == CrowsFootOptions.Cardinality.MANY) { //When has cardinality MANY, add new ForeignKey
-                    for (var newFkB : primaryKeyB) {
-                        var fkName = newFkB.getName();
-                        while (checkIfNameAlreadyExists(fkName, relation.getTableA().getAttributes())) {
-                            fkName += "X";
-                        }
-                        relation.getTableA().addAttribute(new Attribute(
-                                fkName,
-                                newFkB.getType(),
-                                false,
-                                true,
-                                false,
-                                newFkB.getCheckName(),
-                                newFkB.getDefaultName(),
-                                newFkB,
-                                relation.getTableB()
-                        ));
-                    }
-                }
-            }
-
-            //Handle ForeignKey in TableB
-            var primaryKeyA = relation.getTableA().getPrimaryKey();
-            var foreignAttributeB = relation.getFkAttributesB();
-            if (foreignAttributeB.size() > 0) { //ForeignKey exist already in TableA
-                if (relation.getTableB_Cardinality() == CrowsFootOptions.Cardinality.ONE //When changed to cardinality ONE, remove ForeignKey
-                && relation.getTableA() != relation.getTableB()) { //SelfRelation, might have already removed them in A above
-                    relation.getTableB().getAttributes().removeAll(foreignAttributeB);
-                }
-            }
-            else { //ForeignKey does not exist in TableA
-                if (relation.getTableB_Cardinality() == CrowsFootOptions.Cardinality.MANY) { //When has cardinality MANY, add new ForeignKey
-                    for (var newFkA : primaryKeyA) {
-                        var fkName = newFkA.getName();
-                        while (checkIfNameAlreadyExists(fkName, relation.getTableB().getAttributes())) {
-                            fkName += "X";
-                        }
-                        relation.getTableB().addAttribute(new Attribute(
-                                fkName,
-                                newFkA.getType(),
-                                false,
-                                true,
-                                false,
-                                newFkA.getCheckName(),
-                                newFkA.getDefaultName(),
-                                newFkA,
-                                relation.getTableA()
-                        ));
-                    }
-                }
-            }
+            ForeignKeyHandler.removeAllForeignKeys(relation);
+            ForeignKeyHandler.addForeignKeys(relation);
 
             tableAexample = EntityBuilder.buildEntity(relation.getTableA(), windowAnchorPane, workspace.getSelectionHandler);
             tableBexample = EntityBuilder.buildEntity(relation.getTableB(), windowAnchorPane, workspace.getSelectionHandler);
@@ -486,14 +474,5 @@ public class EditRelationWindowController implements ModelController<Relation> {
 
             updateConnectionLine();
         }
-    }
-
-    private boolean checkIfNameAlreadyExists(String suggestedName, ArrayList<Attribute> attributes) {
-        for (var attribute : attributes) {
-            if (attribute.getName().equals(suggestedName)) {
-                return true;
-            }
-        }
-        return false;
     }
 }

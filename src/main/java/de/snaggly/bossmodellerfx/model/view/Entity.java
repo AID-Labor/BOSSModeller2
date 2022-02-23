@@ -67,7 +67,7 @@ public class Entity extends EntityAbstraction {
         attributes.remove(index);
     }
 
-    public LinkedList<Attribute> getPrimaryKey() {
+    public LinkedList<Attribute> getPrimaryKeys() {
         var result = new LinkedList<Attribute>();
         for (var attribute : attributes) {
             if (attribute.isPrimary()) {

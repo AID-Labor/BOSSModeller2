@@ -42,14 +42,14 @@ public class Relation extends RelationAbstraction {
      * Gets the ForeignKeys of TableA linked in TableB
      */
     public LinkedList<Attribute> getFkAttributesA() {
-        return getFkAttributes(tableA.getAttributes(), tableB.getPrimaryKey());
+        return getFkAttributes(tableA.getAttributes(), tableB.getPrimaryKeys());
     }
 
     /**
      * Gets the ForeignKeys of TableB linked in TableA
      */
     public LinkedList<Attribute> getFkAttributesB() {
-        return getFkAttributes(tableB.getAttributes(), tableA.getPrimaryKey());
+        return getFkAttributes(tableB.getAttributes(), tableA.getPrimaryKeys());
     }
 
     /**

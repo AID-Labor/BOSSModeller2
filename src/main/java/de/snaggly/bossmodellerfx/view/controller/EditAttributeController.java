@@ -13,6 +13,7 @@ import javafx.scene.layout.VBox;
  * @author Omar Emshani
  */
 public class EditAttributeController implements ModelController<Attribute> {
+    private boolean isForeignKey = false;
     @FXML
     private ComboBox<String> dataTypeComboBox;
     @FXML
@@ -36,6 +37,8 @@ public class EditAttributeController implements ModelController<Attribute> {
 
     @FXML
     private void onPrimarySelected() {
+        if (isForeignKey)
+            return;
         isNonNullCheck.setSelected(isPrimaryCheck.isSelected());
         isUniqueCheck.setSelected(isPrimaryCheck.isSelected());
         isNonNullCheck.setDisable(isPrimaryCheck.isSelected());
@@ -88,11 +91,8 @@ public class EditAttributeController implements ModelController<Attribute> {
         this.isNonNullCheck.setSelected(model.isNonNull());
         this.isUniqueCheck.setSelected(model.isUnique());
 
-        if (model.isPrimary()) {
-            onPrimarySelected();
-        }
-
         if (model.getFkTableColumn() != null) {
+            isForeignKey = true;
             this.dataTypeComboBox.setDisable(true);
             this.checkTF.setDisable(true);
             this.defaultTF.setDisable(true);
@@ -100,6 +100,10 @@ public class EditAttributeController implements ModelController<Attribute> {
             this.isNonNullCheck.setDisable(true);
             this.isUniqueCheck.setDisable(true);
             nameVBox.getChildren().add(new Label("*Fremdschlüssel zu: " + model.getFkTableColumn().getName()));
+        }
+
+        if (model.isPrimary()) {
+            onPrimarySelected();
         }
     }
 

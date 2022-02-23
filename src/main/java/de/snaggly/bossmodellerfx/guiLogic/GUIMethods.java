@@ -12,6 +12,7 @@ import javafx.event.EventHandler;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Region;
@@ -20,6 +21,7 @@ import javafx.stage.Window;
 import javafx.stage.WindowEvent;
 
 import java.io.File;
+import java.util.Optional;
 
 /**
  * A collection of static methods for GUI operations.
@@ -275,5 +277,23 @@ public class GUIMethods {
         fileChooser.setInitialFileName("BOSS-Project.png");
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("PNG-Datei", "*.png"));
         return fileChooser.showSaveDialog(window);
+    }
+
+    /**
+     * Prompts user to click on either Yes or No
+     * @param origin Text to be shown on title
+     * @param header Text to be shown on header
+     * @param text What are you asking the user?
+     * @return Returns an Optional container. Call ifPresen() to see if there is an answer and get() to check what answer.
+     */
+    public static Optional<ButtonType> showYesNoConfirmationDialog(String origin, String header, String text) {
+        var userInputDialog = new Alert(Alert.AlertType.CONFIRMATION);
+        userInputDialog.getButtonTypes().clear();
+        userInputDialog.getButtonTypes().addAll(ButtonType.NO, ButtonType.YES);
+        userInputDialog.getDialogPane().setContent(new Label(text));
+        userInputDialog.setTitle(origin);
+        userInputDialog.setHeaderText(header);
+        userInputDialog.setResizable(true);
+        return userInputDialog.showAndWait();
     }
 }
