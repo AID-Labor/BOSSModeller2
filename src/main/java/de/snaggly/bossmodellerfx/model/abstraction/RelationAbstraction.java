@@ -2,7 +2,11 @@ package de.snaggly.bossmodellerfx.model.abstraction;
 
 import de.snaggly.bossmodellerfx.relation_logic.ConnectingOrientation;
 import de.snaggly.bossmodellerfx.relation_logic.CrowsFootOptions;
-
+/**
+ * Abstracting around Relation. Here TableA and TableB have been abstracted.
+ *
+ * @author Omar Emshani
+ */
 public abstract class RelationAbstraction implements AbstractedModel {
     private CrowsFootOptions.Cardinality tableA_Cardinality;
     private CrowsFootOptions.Cardinality tableB_Cardinality;

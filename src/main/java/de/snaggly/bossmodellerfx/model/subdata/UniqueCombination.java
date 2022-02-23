@@ -4,6 +4,11 @@ import de.snaggly.bossmodellerfx.model.abstraction.UniqueCombinationAbstraction;
 
 import java.util.ArrayList;
 
+/**
+ * Model for UniqueCombination. This class holds the AttributeCombinations. Used in Entity.
+ *
+ * @author Omar Emshani
+ */
 public class UniqueCombination extends UniqueCombinationAbstraction {
     private ArrayList<AttributeCombination> combinations = new ArrayList<>();
 

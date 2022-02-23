@@ -15,11 +15,25 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 
+/**
+ * Structure for Project Data. This class is to be used for the DBInterface.
+ *
+ * TODO: Check redundancy with class "Project"
+ *
+ * @author Omar Emshani
+ */
 public class ProjectData implements BOSSModel {
     public String projectName;
     public ArrayList<Entity> entities;
     public ArrayList<Relation> relations;
 
+    /**
+     * Converts legacy DBTable and DBRelation model to the new model used by the Views.
+     * @param name ProjectName
+     * @param dbTables Legacy DBTables
+     * @param dbRelations Legacy DBRelations
+     * @return ProjectData Holder
+     */
     public static ProjectData convertLegacyToFXModel(String name, LinkedList<DBTable> dbTables, LinkedList<DBRelation> dbRelations) {
         var projectData = new ProjectData();
         projectData.projectName = name;
@@ -124,6 +138,12 @@ public class ProjectData implements BOSSModel {
         return projectData;
     }
 
+    /**
+     * Converts Entities and Relations into the legacy DBTables and DBRelations model to be used for DBLogicalAdministration.
+     * @param entities Entity list
+     * @param relations Relation list
+     * @return Structure for legacy models
+     */
     public static DBProjectHolder convertFXToLegacyModel(ArrayList<Entity> entities, ArrayList<Relation> relations) {
         var projectHolder = new DBProjectHolder();
 

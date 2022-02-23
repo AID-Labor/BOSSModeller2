@@ -10,8 +10,23 @@ import de.snaggly.bossmodellerfx.view.RelationViewNode;
 
 import java.util.HashMap;
 
+/**
+ * This class handles the algorithm in drawing the relation lines.
+ * It utilizes a custom Pathfinding algorithm.
+ *
+ * TODO: To do redraw *every* line! Try to detect which lines had to be redrawn. Or better yet, only move the line instead of redrawing.
+ *
+ * @author Omar Emshani
+ */
 public class RelationLineDrawer {
-    public static void drawAllLines(Project currentProject, HashMap<Entity, EntityView> entitiesOverview, HashMap<Relation, RelationViewNode> relationsOverview) { //For future: Follow State-Pattern
+    /**
+     * Redraws every line with CrowsFoot.
+     *
+     * @param currentProject Project of which the entities and relations originate.
+     * @param entitiesOverview Entity-EntityView Map. To get the designated view of said Entity.
+     * @param relationsOverview Relation-RelationView Map. To get the designated view of said Relation.
+     */
+    public static void drawAllLines(Project currentProject, HashMap<Entity, EntityView> entitiesOverview, HashMap<Relation, RelationViewNode> relationsOverview) {
         var entityViewConnectionsOverview = new HashMap<Entity, EntityViewConnections>();
 
         for (var relation : currentProject.getRelations()) {
@@ -259,16 +274,16 @@ public class RelationLineDrawer {
             line3.setVisible(false);
             line4.setVisible(false);
             if (relation.getTableA().isWeakType() || relation.getTableB().isWeakType()) {
-                line1.setWeakConnection();
-                line2.setWeakConnection();
-                line3.setWeakConnection();
-                line4.setWeakConnection();
-            }
-            else {
                 line1.setStrongConnection();
                 line2.setStrongConnection();
                 line3.setStrongConnection();
                 line4.setStrongConnection();
+            }
+            else {
+                line1.setWeakConnection();
+                line2.setWeakConnection();
+                line3.setWeakConnection();
+                line4.setWeakConnection();
             }
 
             switch (relation.orientation){

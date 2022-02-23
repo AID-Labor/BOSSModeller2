@@ -2,7 +2,6 @@ package de.snaggly.bossmodellerfx.view.factory.windowtype;
 
 import de.snaggly.bossmodellerfx.Main;
 import de.snaggly.bossmodellerfx.model.adapter.DBLAHolder;
-import de.snaggly.bossmodellerfx.view.controller.ChooseDBEntityWindowController;
 import de.snaggly.bossmodellerfx.view.controller.ChooseDBExportWindowController;
 import de.snaggly.bossmodellerfx.view.factory.WindowFactory;
 import javafx.fxml.FXMLLoader;
@@ -12,6 +11,11 @@ import java.io.IOException;
 import java.util.AbstractMap;
 import java.util.Map;
 
+/**
+ * Builds a new Database Export Window. This window is used to export the active project to an active Database connection.
+ *
+ * @author Omar Emshani
+ */
 public class ChooseDBExportWindowBuilder implements WindowFactory<DBLAHolder, ChooseDBExportWindowController> {
     private final static ChooseDBExportWindowBuilder instance = new ChooseDBExportWindowBuilder();
 
@@ -27,6 +31,12 @@ public class ChooseDBExportWindowBuilder implements WindowFactory<DBLAHolder, Ch
         return new AbstractMap.SimpleEntry<>(scene, controller);
     }
 
+    /**
+     * Use this method to build a new window.
+     * @param model Existing model to load on window. Can be null to create new model.
+     * @return Returns the scene and controller.
+     * @throws IOException When the file is not found.
+     */
     public static Map.Entry<Scene, ChooseDBExportWindowController> buildDBChooserWindow(DBLAHolder model) throws IOException {
         return instance.buildWindow(model);
     }

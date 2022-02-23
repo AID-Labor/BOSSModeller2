@@ -8,6 +8,11 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 
+/**
+ * Custom Line used for to display relations on WorkbenchPane
+ *
+ * @author Omar Emshani
+ */
 public class RelationLineView extends Line implements Controllable, Highlightable {
     private final SelectionHandler clicker;
     private final RelationViewNode parentRelation;
@@ -20,11 +25,17 @@ public class RelationLineView extends Line implements Controllable, Highlightabl
         this.addEventFilter(MouseEvent.MOUSE_CLICKED, mouseEvent -> setOnClick());
     }
 
-    public void setWeakConnection() {
+    /**
+     * On a strong relation, sets line solid.
+     */
+    public void setStrongConnection() {
         this.getStrokeDashArray().clear();
     }
 
-    public void setStrongConnection() {
+    /**
+     * On a weak relation, sets line stroked.
+     */
+    public void setWeakConnection() {
         this.getStrokeDashArray().addAll(10.0, 8.0);
     }
 

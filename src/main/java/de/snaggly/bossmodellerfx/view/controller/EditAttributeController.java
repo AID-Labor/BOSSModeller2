@@ -7,6 +7,11 @@ import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 
+/**
+ * Controller for Attribute Editor View
+ *
+ * @author Omar Emshani
+ */
 public class EditAttributeController implements ModelController<Attribute> {
     @FXML
     private ComboBox<String> dataTypeComboBox;
@@ -103,6 +108,7 @@ public class EditAttributeController implements ModelController<Attribute> {
         dataTypeComboBox.getItems().addAll(testDT);
     }
 
+    //TODO
     private final String[] testDT = {
             "bigint" ,
             "bigserial" ,

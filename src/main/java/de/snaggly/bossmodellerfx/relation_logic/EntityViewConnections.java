@@ -1,5 +1,11 @@
 package de.snaggly.bossmodellerfx.relation_logic;
 
+/**
+ * This class keeps track of how many relations lines are connecting in which orientation.
+ * On Get, one spot automatically get taken.
+ *
+ * @author Omar Emshani
+ */
 public class EntityViewConnections {
     private int northConnections = 1;
     private int southConnections = 1;

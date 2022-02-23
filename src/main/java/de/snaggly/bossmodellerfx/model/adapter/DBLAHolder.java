@@ -3,6 +3,11 @@ package de.snaggly.bossmodellerfx.model.adapter;
 import de.bossmodeler.logicalLayer.elements.DBLogicalAdministration;
 import de.snaggly.bossmodellerfx.model.BOSSModel;
 
+/**
+ * Model for structuring DBLogicalAdministration. To be used for DBInterface.
+ *
+ * @author Omar Emshani
+ */
 public class DBLAHolder implements BOSSModel {
     private DBLogicalAdministration dbla;
     private String host, port, db, user, pass, schema;

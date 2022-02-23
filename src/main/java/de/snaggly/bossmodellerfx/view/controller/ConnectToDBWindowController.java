@@ -14,11 +14,14 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.VBox;
 
 import java.sql.SQLException;
 
+/**
+ * Controller for DBConnector Window
+ *
+ * @author Omar Emshani
+ */
 public class ConnectToDBWindowController implements ModelController<DBLAHolder>{
     public GUIActionListener<DBLAHolder> parentObserver;
 

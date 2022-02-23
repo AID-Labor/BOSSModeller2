@@ -6,6 +6,11 @@ import de.snaggly.bossmodellerfx.model.view.Entity;
 
 import java.util.ArrayList;
 
+/**
+ * Model for a serializable Relation.
+ *
+ * @author Omar Emshani
+ */
 public class SerializableRelation extends RelationAbstraction implements SerializableModel<Relation> {
     public int tableAIndex;
     public int tableBIndex;

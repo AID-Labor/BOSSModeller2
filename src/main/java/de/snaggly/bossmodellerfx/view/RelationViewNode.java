@@ -7,6 +7,11 @@ import javafx.scene.Node;
 
 import java.util.ArrayList;
 
+/**
+ * Wrapper ViewNode to bundle all required views for a relation.
+ *
+ * @author Omar Emshani
+ */
 public class RelationViewNode extends CustomNode<Relation> {
     private final Relation model;
     public RelationLineView line1;

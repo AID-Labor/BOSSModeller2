@@ -8,6 +8,11 @@ import de.snaggly.bossmodellerfx.model.view.Entity;
 
 import java.util.ArrayList;
 
+/**
+ * Model for a serializable Entity.
+ *
+ * @author Omar Emshani
+ */
 public class SerializableEntity extends EntityAbstraction implements SerializableModel<Entity> {
     public ArrayList<SerializableAttribute> attributes = new ArrayList<>();
     public SerializableUniqueCombination uniqueCombination = new SerializableUniqueCombination();

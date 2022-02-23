@@ -7,6 +7,12 @@ import javafx.fxml.FXMLLoader;
 
 import java.io.IOException;
 
+/**
+ * AttributeEditor View-Class used in an Entity Editor Window
+ * This class is realized by a Factory.
+ *
+ * @author Omar Emshani
+ */
 public abstract class AttributeEditor extends CustomNode<Attribute> {
     private final EditAttributeController controller;
     private final Attribute model;

@@ -4,6 +4,13 @@ import de.snaggly.bossmodellerfx.model.abstraction.AttributeCombinationAbstracti
 
 import java.util.ArrayList;
 
+/**
+ * Model for a serializable AttributeCombination.
+ *
+ * Holds index' of Attribute to retain connecting reference on serialization.
+ *
+ * @author Omar Emshani
+ */
 public class SerializableAttributeCombination extends AttributeCombinationAbstraction {
     public ArrayList<Integer> attributeCombinations = new ArrayList<>();
 }

@@ -8,6 +8,11 @@ import de.snaggly.bossmodellerfx.model.subdata.UniqueCombination;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
+/**
+ * Model for an EntityView.
+ *
+ * @author Omar Emshani
+ */
 public class Entity extends EntityAbstraction {
     private ArrayList<Attribute> attributes;
     private UniqueCombination uniqueCombination;
@@ -28,16 +33,6 @@ public class Entity extends EntityAbstraction {
         super(name, xCoordinate, yCoordinate, isWeakType);
         this.uniqueCombination = uniqueCombination;
         this.attributes = attributes;
-    }
-
-    public ArrayList<Relation> getInvolvedRelations(ArrayList<Relation> relations) {
-        var result = new ArrayList<Relation>();
-        for (var relation : relations) {
-            if (relation.getTableA() == this || relation.getTableB() == this) {
-                result.add(relation);
-            }
-        }
-        return result;
     }
 
     public UniqueCombination getUniqueCombination() {
@@ -77,6 +72,16 @@ public class Entity extends EntityAbstraction {
         for (var attribute : attributes) {
             if (attribute.isPrimary()) {
                 result.add(attribute);
+            }
+        }
+        return result;
+    }
+
+    public ArrayList<Relation> getInvolvedRelations(ArrayList<Relation> relations) {
+        var result = new ArrayList<Relation>();
+        for (var relation : relations) {
+            if (relation.getTableA() == this || relation.getTableB() == this) {
+                result.add(relation);
             }
         }
         return result;

@@ -5,6 +5,11 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 
+/**
+ * Custom Pane to be used to display a project on the main window.
+ *
+ * @author Omar Emshani
+ */
 public class WorkbenchPane extends Pane {
     public WorkbenchPane(EventHandler<MouseEvent> onMouseClick) {
         AnchorPane.setTopAnchor(this, 0.0);

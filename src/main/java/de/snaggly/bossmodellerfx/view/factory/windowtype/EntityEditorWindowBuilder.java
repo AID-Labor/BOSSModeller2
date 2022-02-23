@@ -11,8 +11,13 @@ import java.io.IOException;
 import java.util.AbstractMap;
 import java.util.Map;
 
+/**
+ * Builds a new Entity Editor Window.
+ *
+ * @author Omar Emshani
+ */
 public class EntityEditorWindowBuilder implements WindowFactory<Entity, EditEntityWindowController> {
-    private static EntityEditorWindowBuilder instance;
+    private final static EntityEditorWindowBuilder instance = new EntityEditorWindowBuilder(); //Singleton
 
     private EntityEditorWindowBuilder() { }
 
@@ -27,15 +32,13 @@ public class EntityEditorWindowBuilder implements WindowFactory<Entity, EditEnti
         return new AbstractMap.SimpleEntry<>(scene, controller);
     }
 
-    public static Map.Entry<Scene, EditEntityWindowController> buildEntityEditor() throws IOException {
-        if (instance == null)
-            instance = new EntityEditorWindowBuilder();
-        return instance.buildWindow(null);
-    }
-
+    /**
+     * Use this method to build a new window.
+     * @param model Existing model to load on window. Can be null to create new model.
+     * @return Returns the scene and controller.
+     * @throws IOException When the file is not found.
+     */
     public static Map.Entry<Scene, EditEntityWindowController> buildEntityEditor(Entity model) throws IOException {
-        if (instance == null)
-            instance = new EntityEditorWindowBuilder();
         return instance.buildWindow(model);
     }
 }

@@ -7,6 +7,11 @@ import de.snaggly.bossmodellerfx.relation_logic.CrowsFootOptions;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
+/**
+ * Model for a Relation between two Entities.
+ *
+ * @author Omar Emshani
+ */
 public class Relation extends RelationAbstraction {
     private Entity tableA;
     private Entity tableB;
@@ -33,27 +38,29 @@ public class Relation extends RelationAbstraction {
         this.tableB = tableB;
     }
 
-    public LinkedList<Attribute> getFkAttributeA() {
-        return getFkAttribute(tableA.getAttributes(), tableB.getPrimaryKey());
+    /**
+     * Gets the ForeignKeys of TableA linked in TableB
+     */
+    public LinkedList<Attribute> getFkAttributesA() {
+        return getFkAttributes(tableA.getAttributes(), tableB.getPrimaryKey());
     }
 
-    public LinkedList<Attribute> getFkAttributeB() {
-        return getFkAttribute(tableB.getAttributes(), tableA.getPrimaryKey());
+    /**
+     * Gets the ForeignKeys of TableB linked in TableA
+     */
+    public LinkedList<Attribute> getFkAttributesB() {
+        return getFkAttributes(tableB.getAttributes(), tableA.getPrimaryKey());
     }
 
-    public LinkedList<Attribute> getFkAttributeA(LinkedList<Attribute> foreignPrimaryKeys) {
-        return getFkAttribute(tableA.getAttributes(), foreignPrimaryKeys);
-    }
-
-    public LinkedList<Attribute> getFkAttributeB(LinkedList<Attribute> foreignPrimaryKeys) {
-        return getFkAttribute(tableB.getAttributes(), foreignPrimaryKeys);
-    }
-
-    private LinkedList<Attribute> getFkAttribute(ArrayList<Attribute> attributes, LinkedList<Attribute> primaryKey) {
+    /**
+     * Gets the ForeignKeys in attributes linked in primaryKey,
+     * by iterating over all attributes and checking if FkTableColumn exist in primaryKeys list.
+     */
+    private LinkedList<Attribute> getFkAttributes(ArrayList<Attribute> attributes, LinkedList<Attribute> primaryKeys) {
         var result = new LinkedList<Attribute>();
         for (var attribute : attributes) {
             var fKey = attribute.getFkTableColumn();
-            if (fKey != null && primaryKey.contains(fKey)) {
+            if (fKey != null && primaryKeys.contains(fKey)) {
                 result.add(attribute);
             }
         }

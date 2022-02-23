@@ -2,6 +2,13 @@ package de.snaggly.bossmodellerfx.model.view;
 
 import de.snaggly.bossmodellerfx.model.abstraction.AbstractedModel;
 
+/**
+ * Model for a CommentView.
+ * A CommentView is movable and resizable and contains only a text.
+ * TODO: Hold color data to make a CommentView display in user defines colors.
+ *
+ * @author Omar Emshani
+ */
 public class Comment extends ResizableDataModel implements AbstractedModel {
     private String text;
 

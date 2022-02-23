@@ -10,6 +10,14 @@ import javafx.fxml.FXMLLoader;
 
 import java.io.IOException;
 
+/**
+ * Comment View-Class to be used in a Workbench. Displays a Comment from a Project.
+ * This class is realized by a Factory.
+ *
+ * TODO: Try to redesign this like at Post-It Note
+ *
+ * @author Omar Emshani
+ */
 public abstract class CommentView extends CustomNode<Comment> implements Draggable, Controllable, Resizable {
     private final Comment model;
 

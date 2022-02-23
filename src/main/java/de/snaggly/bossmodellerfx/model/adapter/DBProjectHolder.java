@@ -6,6 +6,11 @@ import de.snaggly.bossmodellerfx.model.BOSSModel;
 
 import java.util.LinkedList;
 
+/**
+ * Structure for legacy data model. To be used for DBInterface.
+ *
+ * @author Omar Emshani
+ */
 public class DBProjectHolder implements BOSSModel {
     private LinkedList<DBTable> dbTables;
     private LinkedList<DBRelation> dbRelations;

@@ -7,6 +7,11 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Line;
 
+/**
+ * Controller for EntityView
+ *
+ * @author Omar Emshani
+ */
 public class EntityViewController implements ModelController<Entity> {
     @FXML
     private Label entityHeadTitle;

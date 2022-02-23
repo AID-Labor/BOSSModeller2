@@ -18,6 +18,11 @@ import javafx.scene.shape.Line;
 import java.io.IOException;
 import java.util.ArrayList;
 
+/**
+ * Controller for Relation Edit Window
+ *
+ * @author Omar Emshani
+ */
 public class EditRelationWindowController implements ModelController<Relation> {
     private Relation refRelation;
     private Relation relation;
@@ -269,7 +274,7 @@ public class EditRelationWindowController implements ModelController<Relation> {
 
             //Handle ForeignKey in TableA
             var primaryKeyB = relation.getTableB().getPrimaryKey();
-            var foreignAttributeA = relation.getFkAttributeA(primaryKeyB);
+            var foreignAttributeA = relation.getFkAttributesA();
             if (foreignAttributeA.size() > 0) { //ForeignKey exist already in TableB
                 if (relation.getTableA_Cardinality() == CrowsFootOptions.Cardinality.ONE) { //When changed to cardinality ONE, remove ForeignKey
                     relation.getTableA().getAttributes().removeAll(foreignAttributeA);
@@ -299,7 +304,7 @@ public class EditRelationWindowController implements ModelController<Relation> {
 
             //Handle ForeignKey in TableB
             var primaryKeyA = relation.getTableA().getPrimaryKey();
-            var foreignAttributeB = relation.getFkAttributeB(primaryKeyA);
+            var foreignAttributeB = relation.getFkAttributesB();
             if (foreignAttributeB.size() > 0) { //ForeignKey exist already in TableA
                 if (relation.getTableB_Cardinality() == CrowsFootOptions.Cardinality.ONE //When changed to cardinality ONE, remove ForeignKey
                 && relation.getTableA() != relation.getTableB()) { //SelfRelation, might have already removed them in A above

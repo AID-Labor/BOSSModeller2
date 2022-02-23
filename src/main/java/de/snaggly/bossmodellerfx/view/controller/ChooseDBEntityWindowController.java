@@ -13,6 +13,11 @@ import javafx.scene.layout.VBox;
 import java.sql.SQLException;
 import java.util.LinkedList;
 
+/**
+ * Controller for DB Import Tables Window
+ *
+ * @author Omar Emshani
+ */
 public class ChooseDBEntityWindowController implements ModelController<DBLAHolder> {
     public GUIActionListener<ProjectData> parentObserver;
 

@@ -17,6 +17,11 @@ import javafx.scene.control.*;
 import java.sql.SQLException;
 import java.util.HashMap;
 
+/**
+ * Controller for DB Export Window
+ *
+ * @author Omar Emshani
+ */
 public class ChooseDBExportWindowController implements ModelController<DBLAHolder> {
     private DBLAHolder dblaHolder;
     private final HashMap<String, ObservableList<String>> schemeMap = new HashMap<>();

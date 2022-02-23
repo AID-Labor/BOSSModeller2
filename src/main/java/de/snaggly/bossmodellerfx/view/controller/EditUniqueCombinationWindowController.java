@@ -13,6 +13,11 @@ import javafx.scene.layout.VBox;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+/**
+ * Controller for EntityView
+ *
+ * @author Omar Emshani
+ */
 public class EditUniqueCombinationWindowController implements ModelController<UniqueCombination> {
     private boolean tabSwitchMutex = false;
     private UniqueCombination model;

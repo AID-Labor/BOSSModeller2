@@ -5,6 +5,13 @@ import de.snaggly.bossmodellerfx.model.view.Entity;
 
 import java.util.ArrayList;
 
+/**
+ * Wrapper for a serializable Attribute model.
+ *
+ * Has to index the ForeignKey on serialization on an existing dataset to retain reference.
+ *
+ * @author Omar Emshani
+ */
 public class SerializableAttribute extends AttributeAbstraction {
     public boolean isFk = false;
     public int entityIndex = -1;

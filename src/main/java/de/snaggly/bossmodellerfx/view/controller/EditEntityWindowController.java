@@ -23,7 +23,11 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.util.*;
 
-
+/**
+ * Controller for Relation Edit Window
+ *
+ * @author Omar Emshani
+ */
 public class EditEntityWindowController implements ModelController<Entity> {
     private Entity entity = new Entity();
     private Entity entityRef;
@@ -62,7 +66,7 @@ public class EditEntityWindowController implements ModelController<Entity> {
         }
 
         try {
-            var attributeEditor = AttributeEditorBuilder.buildAttributeEditor();
+            var attributeEditor = AttributeEditorBuilder.buildAttributeEditor(null);
             attributeEditor.getController().handleDownBtnClick(attributeEditorDownClick);
             attributeEditor.getController().handleUpBtnClick(attributeEditorUpClick);
             if (index >= 1) {
@@ -292,7 +296,8 @@ public class EditEntityWindowController implements ModelController<Entity> {
                     modelAttribute.isUnique(),
                     modelAttribute.getCheckName(),
                     modelAttribute.getDefaultName(),
-                    modelAttribute.getFkTableColumn()
+                    modelAttribute.getFkTableColumn(),
+                    modelAttribute.getFkTable()
             );
             entity.addAttribute(newAttribute);
 

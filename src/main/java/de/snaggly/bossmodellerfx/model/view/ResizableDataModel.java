@@ -1,5 +1,11 @@
 package de.snaggly.bossmodellerfx.model.view;
 
+/**
+ * A parents class for Models used in resizable views.
+ * Tracks information about the user specified width and height to be restored when saved.
+ *
+ * @author Omar Emshani
+ */
 public abstract class ResizableDataModel extends ViewModel {
     private double width;
     private double height;

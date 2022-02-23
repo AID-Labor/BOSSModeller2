@@ -2,7 +2,11 @@ package de.snaggly.bossmodellerfx.model.abstraction;
 
 import de.snaggly.bossmodellerfx.model.view.ViewModel;
 
-
+/**
+ * Abstracting around Entity. Here Attributes and UniqueCombinations have been abstracted.
+ *
+ * @author Omar Emshani
+ */
 public class EntityAbstraction extends ViewModel implements AbstractedModel {
     private String name;
     private boolean isWeakType;

@@ -2,6 +2,11 @@ package de.snaggly.bossmodellerfx.model.abstraction;
 
 import de.snaggly.bossmodellerfx.model.BOSSModel;
 
+/**
+ * Abstracting around Attribute. Here the ForeignKey has been abstracted.
+ *
+ * @author Omar Emshani
+ */
 public abstract class AttributeAbstraction implements BOSSModel {
     private String name;
     private String type;

@@ -10,6 +10,12 @@ import javafx.fxml.FXMLLoader;
 
 import java.io.IOException;
 
+/**
+ * Entity View-Class to be used in a Workbench. Displays an Entity from a Project.
+ * This class is realized by a Factory.
+ *
+ * @author Omar Emshani
+ */
 public abstract class EntityView extends CustomNode<Entity> implements Draggable, Controllable, BiSelectable {
     private final Entity model;
     private final EntityViewController controller;

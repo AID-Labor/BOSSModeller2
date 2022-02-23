@@ -2,6 +2,11 @@ package de.snaggly.bossmodellerfx.model.serializable;
 
 import de.snaggly.bossmodellerfx.model.view.Comment;
 
+/**
+ * Model for a serializable Comment.
+ *
+ * @author Omar Emshani
+ */
 public class SerializableComment extends Comment implements SerializableModel<Comment>{
     public SerializableComment(String text) {
         super(text);

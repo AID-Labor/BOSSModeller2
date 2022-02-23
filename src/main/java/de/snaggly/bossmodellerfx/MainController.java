@@ -34,6 +34,11 @@ import java.util.ArrayList;
 import static de.snaggly.bossmodellerfx.guiLogic.KeyCombos.keyComboOpen;
 import static de.snaggly.bossmodellerfx.guiLogic.KeyCombos.keyComboSave;
 
+/**
+ * Controller for Main Window
+ *
+ * @author Omar Emshani
+ */
 public class MainController {
     @FXML
     private Accordion leftNavigationAccordion;
@@ -252,7 +257,7 @@ public class MainController {
 
     private void createNewEntity(double xCoordinate, double yCoordinate) {
         try {
-            var entityBuilder = EntityEditorWindowBuilder.buildEntityEditor();
+            var entityBuilder = EntityEditorWindowBuilder.buildEntityEditor(null);
             var stage = new Stage();
             stage.setTitle("Neue Entität");
             stage.setScene(entityBuilder.getKey());
@@ -317,7 +322,7 @@ public class MainController {
             return;
         }
         try {
-            var relationBuilderWindow = RelationEditorWindowBuilder.buildRelationEditor();
+            var relationBuilderWindow = RelationEditorWindowBuilder.buildRelationEditor(null);
             relationBuilderWindow.getValue().parentObserver = this::saveNewRelation;
             var stage = new Stage();
             stage.setTitle("Neue Relation");
@@ -380,11 +385,11 @@ public class MainController {
         var relation = relationView.getModel();
         relation.getTableA().setWeakType(false);
         relation.getTableB().setWeakType(false);
-        var fkA = relation.getFkAttributeA();
+        var fkA = relation.getFkAttributesA();
         if (fkA != null) {
             relation.getTableA().getAttributes().remove(fkA);
         }
-        var fkB = relation.getFkAttributeB();
+        var fkB = relation.getFkAttributesB();
         if (fkB != null) {
             relation.getTableB().getAttributes().remove(fkB);
             var entityView = entitiesOverview.get(relation.getTableB());
