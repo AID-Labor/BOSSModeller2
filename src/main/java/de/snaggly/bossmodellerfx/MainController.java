@@ -551,12 +551,13 @@ public class MainController {
 
     private void addNewProjectTab(String tabName, Project newProject, boolean switchTo) {
         var workbench = newProject.getWorkField();
-        var scrollPane = new ScrollPane(workbench);
-        var newTab = new Tab(tabName, scrollPane);
+        //var scrollPane = new ScrollPane(workbench); ScrollPane implementation yet does not work.
+        var newTab = new Tab(tabName, workbench);
 
         //Automatically increase Workbench size when resizing. Keep size when shrinking.
+        //TODO YET TO IMPLEMENT PROPERLY!
         //TODO When dragging Entity over edge, also increase bench size
-        scrollPane.setFitToWidth(true);
+        /*scrollPane.setFitToWidth(true);
         scrollPane.setFitToHeight(true);
         var initialTabTotalWidth = new AtomicReference<>(0);
         var initialTabTotalHeight = new AtomicReference<>(0);
@@ -613,7 +614,7 @@ public class MainController {
             }
         });
 
-        scrollPane.setPannable(true);
+        scrollPane.setPannable(true);*/
 
         projectsTabPane.getTabs().add(newTab);
 
