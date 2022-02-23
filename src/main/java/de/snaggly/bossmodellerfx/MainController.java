@@ -392,11 +392,11 @@ public class MainController {
         relation.getTableB().setWeakType(false);
         var fkA = relation.getFkAttributesA();
         if (fkA != null) {
-            relation.getTableA().getAttributes().remove(fkA);
+            relation.getTableA().getAttributes().removeAll(fkA);
         }
         var fkB = relation.getFkAttributesB();
         if (fkB != null) {
-            relation.getTableB().getAttributes().remove(fkB);
+            relation.getTableB().getAttributes().removeAll(fkB);
             var entityView = entitiesOverview.get(relation.getTableB());
             entityView.getController().loadModel(relation.getTableB());
         }
