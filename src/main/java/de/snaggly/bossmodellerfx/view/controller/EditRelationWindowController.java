@@ -326,24 +326,7 @@ public class EditRelationWindowController implements ModelController<Relation> {
             ForeignKeyHandler.addForeignKeys(relation);
 
             //Determine if Tables are really weak
-            relation.getTableA().setWeakType(false);
-            relation.getTableB().setWeakType(false);
-            for (var fk : relation.getTableA().getAttributes()) {
-                if (fk.getFkTable() == null)
-                    continue;
-                if (fk.isPrimary()) {
-                    relation.getTableA().setWeakType(true);
-                    break;
-                }
-            }
-            for (var fk : relation.getTableB().getAttributes()) {
-                if (fk.getFkTable() == null)
-                    continue;
-                if (fk.isPrimary()) {
-                    relation.getTableB().setWeakType(true);
-                    break;
-                }
-            }
+            ForeignKeyHandler.setWeakType(relation);
 
             tableAexample = EntityBuilder.buildEntity(relation.getTableA(), windowAnchorPane, workspace.getSelectionHandler);
             tableBexample = EntityBuilder.buildEntity(relation.getTableB(), windowAnchorPane, workspace.getSelectionHandler);

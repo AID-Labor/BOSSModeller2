@@ -1,9 +1,11 @@
 package de.snaggly.bossmodellerfx;
 
 import de.snaggly.bossmodellerfx.model.adapter.DBLAHolder;
+import de.snaggly.bossmodellerfx.model.subdata.Attribute;
 import de.snaggly.bossmodellerfx.model.subdata.Relation;
 import de.snaggly.bossmodellerfx.model.view.Comment;
 import de.snaggly.bossmodellerfx.model.view.Entity;
+import de.snaggly.bossmodellerfx.relation_logic.ForeignKeyHandler;
 import de.snaggly.bossmodellerfx.relation_logic.RelationLineDrawer;
 import de.snaggly.bossmodellerfx.view.*;
 import de.snaggly.bossmodellerfx.guiLogic.GUIMethods;
@@ -34,6 +36,7 @@ import javax.imageio.ImageIO;
 import java.io.*;
 import java.util.HashMap;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static de.snaggly.bossmodellerfx.guiLogic.KeyCombos.keyComboOpen;
@@ -388,26 +391,45 @@ public class MainController {
         currentProject.getWorkField().getChildren().removeAll(relationView.getAllNodes());
 
         var relation = relationView.getModel();
-        relation.getTableA().setWeakType(false);
-        relation.getTableB().setWeakType(false);
-        var fkA = relation.getFkAttributesA();
-        if (fkA != null) {
-            relation.getTableA().getAttributes().removeAll(fkA);
+        var modifiedEntities = new LinkedList<Entity>();
+        clearForeignKeys(relation.getFkAttributesA(), modifiedEntities);
+        clearForeignKeys(relation.getFkAttributesB(), modifiedEntities);
+
+        ForeignKeyHandler.setWeakType(relation);
+
+        //Redraw the modified entities
+        for (var modifiedEntity : modifiedEntities) {
+            var entityView = entitiesOverview.get(modifiedEntity);
+            entityView.getController().loadModel(modifiedEntity);
         }
-        var fkB = relation.getFkAttributesB();
-        if (fkB != null) {
-            relation.getTableB().getAttributes().removeAll(fkB);
-            var entityView = entitiesOverview.get(relation.getTableB());
-            entityView.getController().loadModel(relation.getTableB());
-        }
-        var entityViewA = entitiesOverview.get(relation.getTableA());
-        entityViewA.getController().loadModel(relation.getTableA());
-        var entityViewB = entitiesOverview.get(relation.getTableB());
-        entityViewB.getController().loadModel(relation.getTableB());
 
         relationsOverview.remove(relation);
         currentProject.getRelations().remove(relationView.getModel());
         relationLineDrawer(currentProject);
+    }
+
+    /**
+     * Iteratively find all the columns in Project that also reference the same FK
+     * @param foreignKeys ForeignKeys to clear from all entities in current Project
+     * @param resultedModifiedEntities Adds all modified entities, to keep track of. Used to redraw after removal of foreign keys.
+     */
+    private void clearForeignKeys(LinkedList<Attribute> foreignKeys, LinkedList<Entity> resultedModifiedEntities) {
+        if (foreignKeys.size() <= 0)
+            return;
+        for (var entity : currentProject.getEntities()) { //Repeat for other table
+            var itemsToRemove = new LinkedList<Attribute>();
+            for (var attribute : entity.getAttributes()) {
+                var fk = attribute;
+                while (fk != null && !foreignKeys.contains(fk)) {
+                    fk = fk.getFkTableColumn();
+                }
+                if (fk != null) {
+                    itemsToRemove.add(attribute);
+                    resultedModifiedEntities.add(entity);
+                }
+            }
+            entity.getAttributes().removeAll(itemsToRemove);
+        }
     }
 
     private void editRelation(RelationViewNode relationView) {

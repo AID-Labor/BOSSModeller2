@@ -7,6 +7,7 @@ import de.snaggly.bossmodellerfx.model.view.Entity;
 import javafx.scene.control.ButtonType;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 /**
  * Static service class to manage the foreign Key according to the Entity-Relation-Model
@@ -88,23 +89,51 @@ public class ForeignKeyHandler {
      */
     public static void removeAllForeignKeys(Relation relation) {
         //Removing all ForeignKeys in TabA that reference TabB
-        for (int i=0; i<relation.getTableA().getAttributes().size(); i++) {
-            var fTable = relation.getTableA().getAttributes().get(i).getFkTable();
+        var itemsToRemove = new LinkedList<Attribute>();
+        for (var attributeA : relation.getTableA().getAttributes()) {
+            var fTable = attributeA.getFkTable();
             if (fTable == null)
                 continue;
             if (fTable != relation.getTableB())
                 continue;
-            relation.getTableA().removeAttribute(i);
+            itemsToRemove.add(attributeA);
         }
+        relation.getTableA().getAttributes().removeAll(itemsToRemove);
 
         //Removing all ForeignKeys in TabB that reference TabA
-        for (int i=0; i<relation.getTableB().getAttributes().size(); i++) {
-            var fTable = relation.getTableB().getAttributes().get(i).getFkTable();
+        itemsToRemove.clear();
+        for (var attributeB : relation.getTableB().getAttributes()) {
+            var fTable = attributeB.getFkTable();
             if (fTable == null)
                 continue;
             if (fTable != relation.getTableA())
                 continue;
-            relation.getTableB().removeAttribute(i);
+            itemsToRemove.add(attributeB);
+        }
+        relation.getTableB().getAttributes().removeAll(itemsToRemove);
+    }
+
+    /**
+     * Sets the entities weak type in relation
+     */
+    public static void setWeakType(Relation relation) {
+        relation.getTableA().setWeakType(false);
+        relation.getTableB().setWeakType(false);
+        for (var fk : relation.getTableA().getAttributes()) {
+            if (fk.getFkTable() == null)
+                continue;
+            if (fk.isPrimary()) {
+                relation.getTableA().setWeakType(true);
+                break;
+            }
+        }
+        for (var fk : relation.getTableB().getAttributes()) {
+            if (fk.getFkTable() == null)
+                continue;
+            if (fk.isPrimary()) {
+                relation.getTableB().setWeakType(true);
+                break;
+            }
         }
     }
 
