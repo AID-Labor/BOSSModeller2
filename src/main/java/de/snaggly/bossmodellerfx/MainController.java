@@ -377,11 +377,17 @@ public class MainController {
     }
 
     private void showNewRelation(Relation relation, Project project) {
-        var tableAView = entitiesOverview.get(relation.getTableA());
-        var tableBView = entitiesOverview.get(relation.getTableB());
-        tableAView.getController().loadModel(relation.getTableA());
-        if (tableAView != tableBView) {
-            tableBView.getController().loadModel(relation.getTableB());
+        //Reload all relations to get the FKs more properly set at strong connections
+        for (var profRelation : project.getRelations()) {
+            ForeignKeyHandler.removeAllForeignKeys(profRelation);
+            ForeignKeyHandler.addForeignKeys(profRelation);
+
+            var tableAView = entitiesOverview.get(profRelation.getTableA());
+            var tableBView = entitiesOverview.get(profRelation.getTableB());
+            tableAView.getController().loadModel(profRelation.getTableA());
+            if (tableAView != tableBView) {
+                tableBView.getController().loadModel(profRelation.getTableB());
+            }
         }
 
         relationLineDrawer(project);
