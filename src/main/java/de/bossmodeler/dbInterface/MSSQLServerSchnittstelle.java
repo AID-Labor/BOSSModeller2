@@ -7,6 +7,7 @@ package de.bossmodeler.dbInterface;
 import de.bossmodeler.logicalLayer.elements.DBColumn;
 import de.bossmodeler.logicalLayer.elements.DBTable;
 import de.bossmodeler.logicalLayer.elements.UniqueCombination;
+import de.snaggly.bossmodellerfx.BOSS_Strings;
 
 import javax.swing.*;
 import java.sql.*;
@@ -127,7 +128,7 @@ public class MSSQLServerSchnittstelle extends Schnittstelle {
 			 * Changed to utilise new language loader
 			 */
 			//schema = (String)JOptionPane.showInputDialog(null, XmlClass.getTag("insertSchema"),XmlClass.getTag("insertSchema"), JOptionPane.QUESTION_MESSAGE,null,null,"public");
-			schema = (String)JOptionPane.showInputDialog(null, "Bitte geben Sie das Schema ein:","Bitte geben Sie das Schema ein:", JOptionPane.QUESTION_MESSAGE,null,null,"public");
+			schema = (String)JOptionPane.showInputDialog(null, BOSS_Strings.LEGACY_INSERT_SCHEMA, BOSS_Strings.LEGACY_INSERT_SCHEMA, JOptionPane.QUESTION_MESSAGE,null,null,"public");
 		} else {
 			schema = schemaName;
 		}
@@ -649,7 +650,7 @@ public class MSSQLServerSchnittstelle extends Schnittstelle {
 			
 			//System.out.println(XmlClass.getTag("loadedDriver"));
 		}catch(ClassNotFoundException e){
-			JOptionPane.showMessageDialog(null, "Fehler beim Laden des Treibers: ", "Fehler beim Laden des Treibers: ", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(null, BOSS_Strings.LEGACY_ERROR_LOADING_DRIVER, BOSS_Strings.LEGACY_ERROR_LOADING_DRIVER, JOptionPane.ERROR_MESSAGE);
 		}
 	}
 

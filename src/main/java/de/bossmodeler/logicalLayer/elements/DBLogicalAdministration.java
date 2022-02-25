@@ -3,6 +3,7 @@ package de.bossmodeler.logicalLayer.elements;
 //import de.bossmodeler.GUI.buttons.XmlClass; *Changed to utilise a new language loader
 import de.bossmodeler.dbInterface.PostgreSQLSchnittstelle;
 import de.bossmodeler.dbInterface.Schnittstelle;
+import de.snaggly.bossmodellerfx.BOSS_Strings;
 
 import javax.swing.*;
 import java.awt.*;
@@ -467,7 +468,7 @@ public class DBLogicalAdministration {
 		        if(f.exists() && getDialogType() == SAVE_DIALOG){
 					//int result = JOptionPane.showConfirmDialog(this,XmlClass.getTag("dataalreadyexists"),XmlClass.getTag("dataconflict"),JOptionPane.YES_NO_OPTION);
 		            // Changed to utilise new language loader
-					int result = JOptionPane.showConfirmDialog(this,"Die Datei existiert bereits. Möchten Sie diese überschreiben?","Datei Konflikt",JOptionPane.YES_NO_OPTION);
+					int result = JOptionPane.showConfirmDialog(this, BOSS_Strings.LEGACY_PROMPT_OVERRIDING_EXISTING_FILE, BOSS_Strings.LEGACY_FILE_CONFLICT,JOptionPane.YES_NO_OPTION);
 		            switch(result){
 		                case JOptionPane.YES_OPTION:
 		                    super.approveSelection();
@@ -505,22 +506,22 @@ public class DBLogicalAdministration {
 					//Changed to utilise new language loader
 		    		//JOptionPane.showMessageDialog(parentframe,XmlClass.getTag("sqlCreatedSuccessfully"),XmlClass.getTag("success"),
 		    		//JOptionPane.INFORMATION_MESSAGE);
-					JOptionPane.showMessageDialog(parentframe,"Das SQL-Skript wurde erfolgreich erstellt.","Erfolg!",
+					JOptionPane.showMessageDialog(parentframe, BOSS_Strings.LEGACY_SQL_FILE_CREATION_SUCCESS, BOSS_Strings.LEGACY_SUCCESS,
 							JOptionPane.INFORMATION_MESSAGE);
 		   		} catch (IOException e) {
 					//Changed to utilise new language loader
 		   			//JOptionPane.showMessageDialog(parentframe,XmlClass.getTag("sqlCouldNotBeSaved"),"Error",JOptionPane.ERROR_MESSAGE);
-					JOptionPane.showMessageDialog(parentframe,"Das SQL-Skript konnte nicht gespeichert werden.","Error",JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(parentframe, BOSS_Strings.LEGACY_SQLCOILDNOTBESAVED, BOSS_Strings.LEGACY_ERROR,JOptionPane.ERROR_MESSAGE);
 		    	}
 			} else{
 				//Changed to utilise new language loader
 				//JOptionPane.showMessageDialog(parentframe,XmlClass.getTag("sqlCouldNotBeSaved"),"Error",JOptionPane.ERROR_MESSAGE);
-				JOptionPane.showMessageDialog(parentframe,"Das SQL-Skript konnte nicht gespeichert werden.","Error",JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(parentframe, BOSS_Strings.LEGACY_SQLCOILDNOTBESAVED, BOSS_Strings.LEGACY_ERROR,JOptionPane.ERROR_MESSAGE);
 			}
 	   	} else {
 			//Changed to utilise new language loader
 	   		//JOptionPane.showMessageDialog(parentframe,XmlClass.getTag("sqlHasNotBeenSaved"),"Error",JOptionPane.ERROR_MESSAGE);
-			JOptionPane.showMessageDialog(parentframe,"Das SQL-Skript konnte nicht gespeichert werden.","Error",JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(parentframe, BOSS_Strings.LEGACY_SQLCOILDNOTBESAVED, BOSS_Strings.LEGACY_ERROR,JOptionPane.ERROR_MESSAGE);
 	   	}
 	   	
 	}

@@ -6,6 +6,7 @@ package de.bossmodeler.dbInterface;
 import de.bossmodeler.logicalLayer.elements.DBColumn;
 import de.bossmodeler.logicalLayer.elements.DBTable;
 import de.bossmodeler.logicalLayer.elements.UniqueCombination;
+import de.snaggly.bossmodellerfx.BOSS_Strings;
 /**
  This source code was modified to utilise a different Language loader.
  The changed lines have been highlighted with the appropriate annotation.
@@ -25,8 +26,8 @@ import java.util.LinkedList;
  * 
  */
 public class MySQLSchnittstelle extends Schnittstelle {
-	
-	
+
+
 	/**
 	 * Instantiates a new mysql schnittstelle and loads the JDBC driver
 	 *
@@ -125,7 +126,7 @@ public class MySQLSchnittstelle extends Schnittstelle {
 		}catch(ClassNotFoundException e){
 			// *Change to utilise a new language loader
 			//JOptionPane.showMessageDialog(null, XmlClass.getTag("errorLoadingDriver")+e.getMessage(), XmlClass.getTag("errorLoadingDriver"), JOptionPane.ERROR_MESSAGE);
-			JOptionPane.showMessageDialog(null, "Fehler beim Laden des Treibers: "+e.getMessage(), "Fehler beim Laden des Treibers: ", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(null, BOSS_Strings.LEGACY_ERROR_LOADING_DRIVER +e.getMessage(), BOSS_Strings.LEGACY_ERROR_LOADING_DRIVER, JOptionPane.ERROR_MESSAGE);
 		}
 	}
 	
@@ -181,11 +182,11 @@ public class MySQLSchnittstelle extends Schnittstelle {
 		 * Changed to utilise a new language loader
 		 */
 		if(!caseSensitive && checkConstraintsExists)
-			JOptionPane.showMessageDialog(null, "Achtung: Es existieren Check-Constraints. Diese funktionieren in MySQL-Datenbanken nicht!", "Warnung", JOptionPane.WARNING_MESSAGE);
+			JOptionPane.showMessageDialog(null, BOSS_Strings.LEGACY_MYSQL_CHECK_CONSTRAINT_WARNING, BOSS_Strings.LEGACY_WARNING, JOptionPane.WARNING_MESSAGE);
 		else if(caseSensitive && checkConstraintsExists)
-			JOptionPane.showMessageDialog(null, "Achtung: Es existieren Check-Constraints. Diese funktionieren in MySQL-Datenbanken nicht!" + "\n\n" + "Stellen Sie sicher, dass die Groß- und Kleinschreibung serverseitig aktiviert ist. Andernfalls kann diese vom Server ignoriert werden.", "Warnung", JOptionPane.WARNING_MESSAGE);
+			JOptionPane.showMessageDialog(null, BOSS_Strings.LEGACY_MYSQL_CHECK_CONSTRAINT_WARNING + "\n\n" + BOSS_Strings.LEGACY_CHECK_SERVER_CASESENSITIVE, BOSS_Strings.LEGACY_WARNING, JOptionPane.WARNING_MESSAGE);
 		else if(caseSensitive)
-			JOptionPane.showMessageDialog(null, "Stellen Sie sicher, dass die Groß- und Kleinschreibung serverseitig aktiviert ist. Andernfalls kann diese vom Server ignoriert werden.", "Warnung", JOptionPane.WARNING_MESSAGE);
+			JOptionPane.showMessageDialog(null, BOSS_Strings.LEGACY_CHECK_SERVER_CASESENSITIVE, BOSS_Strings.LEGACY_WARNING, JOptionPane.WARNING_MESSAGE);
 		/*
 		String schema = "";
 		if(schemaName == null){

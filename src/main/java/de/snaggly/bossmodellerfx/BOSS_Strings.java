@@ -78,4 +78,15 @@ public class BOSS_Strings {
     public static final String RELATION_EDITOR_TRANSFORMATION_WARNING_HEADER = resourceBundle.getString("RELATION_EDITOR_TRANSFORMATION_WARNING_HEADER");
     public static final String JSON_FILE = resourceBundle.getString("JSON_FILE");
     public static final String PNG_FILE = resourceBundle.getString("PNG_FILE");
+    public static final String LEGACY_ERROR_LOADING_DRIVER = resourceBundle.getString("LEGACY_ERROR_LOADING_DRIVER");
+    public static final String LEGACY_INSERT_SCHEMA = resourceBundle.getString("LEGACY_INSERT_SCHEMA");
+    public static final String LEGACY_MYSQL_CHECK_CONSTRAINT_WARNING = resourceBundle.getString("LEGACY_MYSQL_CHECK_CONSTRAINT_WARNING");
+    public static final String LEGACY_WARNING = resourceBundle.getString("LEGACY_WARNING");
+    public static final String LEGACY_CHECK_SERVER_CASESENSITIVE = resourceBundle.getString("LEGACY_CHECK_SERVER_CASESENSITIVE");
+    public static final String LEGACY_PROMPT_OVERRIDING_EXISTING_FILE = resourceBundle.getString("LEGACY_PROMPT_OVERRIDING_EXISTING_FILE");
+    public static final String LEGACY_FILE_CONFLICT = resourceBundle.getString("LEGACY_FILE_CONFLICT");
+    public static final String LEGACY_SQL_FILE_CREATION_SUCCESS = resourceBundle.getString("LEGACY_SQL_FILE_CREATION_SUCCESS");
+    public static final String LEGACY_SUCCESS = resourceBundle.getString("LEGACY_SUCCESS");
+    public static final String LEGACY_SQLCOILDNOTBESAVED = resourceBundle.getString("LEGACY_sqlCouldNotBeSaved");
+    public static final String LEGACY_ERROR = resourceBundle.getString("LEGACY_ERROR");
 }
