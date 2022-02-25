@@ -1,5 +1,6 @@
 package de.snaggly.bossmodellerfx.relation_logic;
 
+import de.snaggly.bossmodellerfx.BOSS_Strings;
 import de.snaggly.bossmodellerfx.guiLogic.GUIMethods;
 import de.snaggly.bossmodellerfx.model.subdata.Attribute;
 import de.snaggly.bossmodellerfx.model.subdata.Relation;
@@ -15,6 +16,7 @@ import java.util.LinkedList;
  * @author Omar Emshani
  */
 public class ForeignKeyHandler {
+
     /**
      * Adds ForeignKey(s) according to set relation.
      * To be used after WeakType, relation and cardinality have been set in relation.
@@ -43,13 +45,13 @@ public class ForeignKeyHandler {
                     performAddForeignKeys(relation.getTableB(), relation.getTableA(), relation.isStrongRelation(), true, true);
                 }
                 else {
-                    var userInputResult = GUIMethods.showYesNoConfirmationDialog("BOSSModellerFX", "Relations Editor", "Soll der Fremdschlüssel zu Tabelle A eingetragen werden?");
+                    var userInputResult = GUIMethods.showYesNoConfirmationDialog(BOSS_Strings.PRODUCT_NAME, BOSS_Strings.RELATION_EDITOR, BOSS_Strings.RELATION_EDITOR_PROMPT_IF_TABLEA_GETS_FK);
                     if (userInputResult.isPresent() && userInputResult.get() == ButtonType.YES) {
                         performAddForeignKeys(relation.getTableA(), relation.getTableB(), relation.isStrongRelation(), true, true);
                     } else {
                         performAddForeignKeys(relation.getTableB(), relation.getTableA(), relation.isStrongRelation(), true, true);
                     }
-                    GUIMethods.showWarning("Relations Editor", "Trigger Warnung", "Gewählte Relation erfordert einen Trigger!");
+                    GUIMethods.showWarning(BOSS_Strings.RELATION_EDITOR, BOSS_Strings.RELATION_EDITOR_TRIGGER_WARNING_HEADER, BOSS_Strings.RELATION_EDITOR_TRIGGER_WARNING);
                 }
             }
         }
@@ -59,7 +61,7 @@ public class ForeignKeyHandler {
             if (relation.getTableA_Obligation() == CrowsFootOptions.Obligation.CAN
             && relation.getTableB_Obligation() == CrowsFootOptions.Obligation.CAN) {
                 //Can-Can -> Can be transformed
-                GUIMethods.showInfo("Relations Editor", "Transformation", "Gewählte Relation könnte Transformiert werden!");
+                GUIMethods.showInfo(BOSS_Strings.RELATION_EDITOR, BOSS_Strings.RELATION_EDITOR_TRANSFORMATION_WARNING_HEADER, BOSS_Strings.RELATION_EDITOR_TRANSFORMATION_WARNING);
                 performAddForeignKeys(relation.getTableB(), relation.getTableA(), relation.isStrongRelation(), false, false);
             }
             else if (relation.getTableA_Obligation() == CrowsFootOptions.Obligation.MUST
@@ -73,7 +75,7 @@ public class ForeignKeyHandler {
             //N-1 -> FK always goes to TabA
             if (relation.getTableA_Obligation() == CrowsFootOptions.Obligation.CAN
             && relation.getTableB_Obligation() == CrowsFootOptions.Obligation.CAN) {
-                GUIMethods.showInfo("Relations Editor", "Transformation", "Gewählte Relation könnte Transformiert werden!");
+                GUIMethods.showInfo(BOSS_Strings.RELATION_EDITOR, BOSS_Strings.RELATION_EDITOR_TRANSFORMATION_WARNING_HEADER, BOSS_Strings.RELATION_EDITOR_TRANSFORMATION_WARNING);
                 performAddForeignKeys(relation.getTableA(), relation.getTableB(), relation.isStrongRelation(), false, false);
             }
             else if (relation.getTableA_Obligation() == CrowsFootOptions.Obligation.CAN

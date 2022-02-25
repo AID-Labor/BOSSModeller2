@@ -1,5 +1,6 @@
 package de.snaggly.bossmodellerfx.view.factory.windowtype;
 
+import de.snaggly.bossmodellerfx.BOSS_Strings;
 import de.snaggly.bossmodellerfx.Main;
 import de.snaggly.bossmodellerfx.model.subdata.Relation;
 import de.snaggly.bossmodellerfx.view.controller.EditRelationWindowController;
@@ -23,7 +24,7 @@ public class RelationEditorWindowBuilder implements WindowFactory<Relation, Edit
 
     @Override
     public Map.Entry<Scene, EditRelationWindowController> buildWindow(Relation model) throws IOException {
-        var fxmlLoader = new FXMLLoader(Main.class.getResource("view/EditRelationWindow.fxml"));
+        var fxmlLoader = new FXMLLoader(Main.class.getResource("view/EditRelationWindow.fxml"), BOSS_Strings.resourceBundle);
         var scene = new Scene(fxmlLoader.load());
         var controller = (EditRelationWindowController)(fxmlLoader.getController());
         if (model != null) {

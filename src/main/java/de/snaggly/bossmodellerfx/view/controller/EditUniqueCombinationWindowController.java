@@ -1,5 +1,6 @@
 package de.snaggly.bossmodellerfx.view.controller;
 
+import de.snaggly.bossmodellerfx.BOSS_Strings;
 import de.snaggly.bossmodellerfx.guiLogic.GUIMethods;
 import de.snaggly.bossmodellerfx.model.subdata.Attribute;
 import de.snaggly.bossmodellerfx.model.subdata.AttributeCombination;
@@ -84,7 +85,7 @@ public class EditUniqueCombinationWindowController implements ModelController<Un
     private TextField generateUniqueCombinationKeyTextField(String name, AttributeCombination attributeCombination) {
         var textFieldCombination = new TextField();
         if (name == null) {
-            textFieldCombination.setPromptText("Unique Name...");
+            textFieldCombination.setPromptText(BOSS_Strings.NEW_UNIQUE_NAME_PROMPT);
         }
         else {
             textFieldCombination.setText(name);

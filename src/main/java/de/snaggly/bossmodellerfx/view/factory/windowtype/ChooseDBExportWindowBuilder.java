@@ -1,5 +1,6 @@
 package de.snaggly.bossmodellerfx.view.factory.windowtype;
 
+import de.snaggly.bossmodellerfx.BOSS_Strings;
 import de.snaggly.bossmodellerfx.Main;
 import de.snaggly.bossmodellerfx.model.adapter.DBLAHolder;
 import de.snaggly.bossmodellerfx.view.controller.ChooseDBExportWindowController;
@@ -23,7 +24,7 @@ public class ChooseDBExportWindowBuilder implements WindowFactory<DBLAHolder, Ch
 
     @Override
     public Map.Entry<Scene, ChooseDBExportWindowController> buildWindow(DBLAHolder model) throws IOException {
-        var fxmlLoader = new FXMLLoader(Main.class.getResource("view/ChooseDBExportWindow.fxml"));
+        var fxmlLoader = new FXMLLoader(Main.class.getResource("view/ChooseDBExportWindow.fxml"), BOSS_Strings.resourceBundle);
         var scene = new Scene(fxmlLoader.load());
         var controller = (ChooseDBExportWindowController)(fxmlLoader.getController());
         controller.loadModel(model);

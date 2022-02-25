@@ -1,5 +1,6 @@
 package de.snaggly.bossmodellerfx.view.controller;
 
+import de.snaggly.bossmodellerfx.BOSS_Strings;
 import de.snaggly.bossmodellerfx.guiLogic.*;
 import de.snaggly.bossmodellerfx.model.subdata.Attribute;
 import de.snaggly.bossmodellerfx.model.view.Entity;
@@ -92,43 +93,43 @@ public class EditRelationWindowController implements ModelController<Relation> {
 
     @FXML
     private void showInfo() {
-        String infoText = "Ein ";
+        String infoText = BOSS_Strings.RELATION_INFO_ONE1;
         infoText += relation.getTableA().getName();
 
         if (radioBtnObligationBCan.isSelected()) {
-            infoText += " kann";
+            infoText += BOSS_Strings.RELATION_INFO_CAN;
         } else {
-            infoText += " muss";
+            infoText += BOSS_Strings.RELATION_INFO_MUST;
         }
 
         if (radioBtnPolyB1.isSelected()) {
-            infoText += " einen ";
+            infoText += BOSS_Strings.RELATION_INFO_ONE2;
         } else {
-            infoText += " mehrere ";
+            infoText += BOSS_Strings.RELATION_INFO_MANY;
         }
 
         infoText += relation.getTableB().getName();
-        infoText += " haben.\n";
+        infoText += BOSS_Strings.RELATION_INFO_HAS;
 
-        infoText += "Ein ";
+        infoText += BOSS_Strings.RELATION_INFO_ONE1;
         infoText += relation.getTableB().getName();
 
         if (radioBtnObligationACan.isSelected()) {
-            infoText += " kann";
+            infoText += BOSS_Strings.RELATION_INFO_CAN;
         } else {
-            infoText += " muss";
+            infoText += BOSS_Strings.RELATION_INFO_MUST;
         }
 
         if (radioBtnPolyA1.isSelected()) {
-            infoText += " einen ";
+            infoText += BOSS_Strings.RELATION_INFO_ONE2;
         } else {
-            infoText += " mehrere ";
+            infoText += BOSS_Strings.RELATION_INFO_MANY;
         }
 
         infoText += relation.getTableA().getName();
-        infoText += " haben.";
+        infoText += BOSS_Strings.RELATION_INFO_HAS;
 
-        GUIMethods.showInfo("Relation Information", "", infoText);
+        GUIMethods.showInfo(BOSS_Strings.RELATION_INFO, "", infoText);
     }
 
     @FXML
@@ -356,7 +357,7 @@ public class EditRelationWindowController implements ModelController<Relation> {
 
             handleRelationLines();
         } catch (IOException e) {
-            GUIMethods.showError(EditRelationWindowController.class.getSimpleName(), "BOSSModellerFX", e.getLocalizedMessage());
+            GUIMethods.showError(EditRelationWindowController.class.getSimpleName(), BOSS_Strings.PRODUCT_NAME, e.getLocalizedMessage());
         }
     }
 

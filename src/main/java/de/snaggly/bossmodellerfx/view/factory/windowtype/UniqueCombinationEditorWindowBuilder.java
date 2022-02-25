@@ -1,5 +1,6 @@
 package de.snaggly.bossmodellerfx.view.factory.windowtype;
 
+import de.snaggly.bossmodellerfx.BOSS_Strings;
 import de.snaggly.bossmodellerfx.Main;
 import de.snaggly.bossmodellerfx.model.subdata.Attribute;
 import de.snaggly.bossmodellerfx.model.subdata.UniqueCombination;
@@ -33,7 +34,7 @@ public class UniqueCombinationEditorWindowBuilder implements WindowFactory<Uniqu
     }
 
     public Map.Entry<Scene, EditUniqueCombinationWindowController> buildWindow(UniqueCombination model, ArrayList<Attribute> attributes) throws IOException {
-        var fxmlLoader = new FXMLLoader(Main.class.getResource("view/EditUniqueCombinationWindow.fxml"));
+        var fxmlLoader = new FXMLLoader(Main.class.getResource("view/EditUniqueCombinationWindow.fxml"), BOSS_Strings.resourceBundle);
         var scene = new Scene(fxmlLoader.load());
         var controller = (EditUniqueCombinationWindowController)(fxmlLoader.getController());
         if (model != null) {

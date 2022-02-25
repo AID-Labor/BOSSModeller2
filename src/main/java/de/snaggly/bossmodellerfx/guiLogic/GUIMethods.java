@@ -1,5 +1,6 @@
 package de.snaggly.bossmodellerfx.guiLogic;
 
+import de.snaggly.bossmodellerfx.BOSS_Strings;
 import de.snaggly.bossmodellerfx.model.view.ResizableDataModel;
 import de.snaggly.bossmodellerfx.model.view.ViewModel;
 import de.snaggly.bossmodellerfx.view.EntityView;
@@ -261,7 +262,7 @@ public class GUIMethods {
         var fileChooser = new FileChooser();
         fileChooser.setTitle(title);
         fileChooser.setInitialFileName("BOSS-Project.json");
-        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("JSON-Datei", "*.json"));
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter(BOSS_Strings.JSON_FILE, "*.json"));
         return fileChooser;
     }
 
@@ -275,7 +276,7 @@ public class GUIMethods {
         var fileChooser = new FileChooser();
         fileChooser.setTitle(title);
         fileChooser.setInitialFileName("BOSS-Project.png");
-        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("PNG-Datei", "*.png"));
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter(BOSS_Strings.PNG_FILE, "*.png"));
         return fileChooser.showSaveDialog(window);
     }
 

@@ -1,5 +1,6 @@
 package de.snaggly.bossmodellerfx.view.factory.windowtype;
 
+import de.snaggly.bossmodellerfx.BOSS_Strings;
 import de.snaggly.bossmodellerfx.Main;
 import de.snaggly.bossmodellerfx.model.view.Entity;
 import de.snaggly.bossmodellerfx.view.controller.EditEntityWindowController;
@@ -23,7 +24,7 @@ public class EntityEditorWindowBuilder implements WindowFactory<Entity, EditEnti
 
     @Override
     public Map.Entry<Scene, EditEntityWindowController> buildWindow(Entity model) throws IOException {
-        var fxmlLoader = new FXMLLoader(Main.class.getResource("view/EditEntityWindow.fxml"));
+        var fxmlLoader = new FXMLLoader(Main.class.getResource("view/EditEntityWindow.fxml"), BOSS_Strings.resourceBundle);
         var scene = new Scene(fxmlLoader.load());
         var controller = (EditEntityWindowController)(fxmlLoader.getController());
         if (model != null) {

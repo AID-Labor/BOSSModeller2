@@ -1,5 +1,6 @@
 package de.snaggly.bossmodellerfx.view.factory.windowtype;
 
+import de.snaggly.bossmodellerfx.BOSS_Strings;
 import de.snaggly.bossmodellerfx.Main;
 import de.snaggly.bossmodellerfx.model.adapter.DBLAHolder;
 import de.snaggly.bossmodellerfx.view.controller.ConnectToDBWindowController;
@@ -33,7 +34,7 @@ public class ConnectToDBWindowBuilder implements WindowFactory<DBLAHolder, Conne
 
     @Override
     public Map.Entry<Scene, ConnectToDBWindowController> buildWindow(DBLAHolder model) throws IOException {
-        var fxmlLoader = new FXMLLoader(Main.class.getResource("view/ConnectToDBWindow.fxml"));
+        var fxmlLoader = new FXMLLoader(Main.class.getResource("view/ConnectToDBWindow.fxml"), BOSS_Strings.resourceBundle);
         var scene = new Scene(fxmlLoader.load());
         var controller = (ConnectToDBWindowController)(fxmlLoader.getController());
         if (model!=null)

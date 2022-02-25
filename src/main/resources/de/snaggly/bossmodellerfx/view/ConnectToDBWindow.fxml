@@ -26,37 +26,37 @@
         </rowConstraints>
          <children>
             <ChoiceBox fx:id="sqlLangChoiceBox" GridPane.columnIndex="1" GridPane.columnSpan="2" />
-            <Label fx:id="usernameLabel" text="Benutzername:" GridPane.rowIndex="1">
+            <Label fx:id="usernameLabel" text="%connectToDBWindow.Username" GridPane.rowIndex="1">
                <font>
                   <Font name="System Bold" size="18.0" />
                </font>
             </Label>
             <TextField fx:id="usernameTf" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-            <Label fx:id="passwordLabel" layoutX="20.0" layoutY="200.0" text="Password:" GridPane.rowIndex="2">
+            <Label fx:id="passwordLabel" layoutX="20.0" layoutY="200.0" text="%connectToDBWindow.Password" GridPane.rowIndex="2">
                <font>
                   <Font name="System Bold" size="18.0" />
                </font>
             </Label>
             <PasswordField fx:id="passwordTf" layoutX="310.0" layoutY="198.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-            <Label fx:id="hostLabel" layoutX="20.0" layoutY="330.0" text="Host:" GridPane.rowIndex="3">
+            <Label fx:id="hostLabel" layoutX="20.0" layoutY="330.0" text="%connectToDBWindow.Host" GridPane.rowIndex="3">
                <font>
                   <Font name="System Bold" size="18.0" />
                </font>
             </Label>
             <TextField fx:id="hostTf" layoutX="310.0" layoutY="328.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-            <Label fx:id="portLabel" layoutX="20.0" layoutY="266.0" text="Port:" GridPane.rowIndex="4">
+            <Label fx:id="portLabel" layoutX="20.0" layoutY="266.0" text="%connectToDBWindow.Port" GridPane.rowIndex="4">
                <font>
                   <Font name="System Bold" size="18.0" />
                </font>
             </Label>
             <TextField fx:id="portTf" layoutX="210.0" layoutY="265.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-            <Label fx:id="dbNameLabel" layoutX="20.0" layoutY="286.0" text="Datenbank:" GridPane.rowIndex="5">
+            <Label fx:id="dbNameLabel" layoutX="20.0" layoutY="286.0" text="%connectToDBWindow.DBName" GridPane.rowIndex="5">
                <font>
                   <Font name="System Bold" size="18.0" />
                </font>
             </Label>
             <TextField fx:id="dbNameTf" layoutX="210.0" layoutY="284.0" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-            <Label fx:id="schemeNameLabel" layoutX="20.0" layoutY="300.0" text="Schema:" GridPane.rowIndex="6">
+            <Label fx:id="schemeNameLabel" layoutX="20.0" layoutY="300.0" text="%connectToDBWindow.SchemaName" GridPane.rowIndex="6">
                <font>
                   <Font name="System Bold" size="18.0" />
                </font>
@@ -65,12 +65,12 @@
             <ProgressIndicator fx:id="progressIndicator" GridPane.halignment="RIGHT" GridPane.rowIndex="7" />
             <HBox alignment="CENTER" spacing="5.0" GridPane.columnIndex="1" GridPane.rowIndex="7">
                <children>
-                  <Button fx:id="connectBtn" mnemonicParsing="false" onAction="#connectClick" text="Verbinden">
+                  <Button fx:id="connectBtn" mnemonicParsing="false" onAction="#connectClick" text="%connectToDBWindow.ConnectBtn">
                      <font>
                         <Font name="System Bold" size="14.0" />
                      </font>
                   </Button>
-                  <Button fx:id="cancelBtn" mnemonicParsing="false" onAction="#onCancel" text="Abbrechen">
+                  <Button fx:id="cancelBtn" mnemonicParsing="false" onAction="#onCancel" text="%mainWindow.MenuBar.File.Cancel">
                      <font>
                         <Font name="System Bold" size="14.0" />
                      </font>

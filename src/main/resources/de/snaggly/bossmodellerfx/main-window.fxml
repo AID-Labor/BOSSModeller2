@@ -11,7 +11,7 @@
       <left>
          <Accordion fx:id="leftNavigationAccordion" maxHeight="1.7976931348623157E308" maxWidth="100.0" BorderPane.alignment="TOP_LEFT">
             <panes>
-               <TitledPane layoutX="10.0" layoutY="62.0" text="Projekt">
+               <TitledPane layoutX="10.0" layoutY="62.0" text="%mainWindow.SideBar.Project">
                   <content>
                      <ScrollPane>
                         <content>
@@ -102,7 +102,7 @@
                      </ScrollPane>
                   </content>
                </TitledPane>
-               <TitledPane alignment="TOP_LEFT" text="Bearbeiten">
+               <TitledPane alignment="TOP_LEFT" text="%mainWindow.SideBar.Edit">
                   <content>
                      <ScrollPane fitToWidth="true">
                         <content>
@@ -197,19 +197,6 @@
                      </ScrollPane>
                   </content>
                </TitledPane>
-               <TitledPane text="Einstellungen">
-                  <content>
-                     <ScrollPane fitToWidth="true">
-                        <content>
-                           <VBox alignment="TOP_CENTER" spacing="10.0">
-                              <padding>
-                                 <Insets left="10.0" right="10.0" top="10.0" />
-                              </padding>
-                           </VBox>
-                        </content>
-                     </ScrollPane>
-                  </content>
-               </TitledPane>
             </panes>
          </Accordion>
       </left>
@@ -217,47 +204,44 @@
          <VBox BorderPane.alignment="CENTER">
             <MenuBar maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
                <menus>
-                  <Menu mnemonicParsing="false" text="Datei">
-                     <MenuItem mnemonicParsing="false" onAction="#startNewProject" text="Neu" />
-                     <MenuItem mnemonicParsing="false" onAction="#openFileClick" text="Öffnen" />
-                     <Menu mnemonicParsing="false" text="Import">
-                        <MenuItem mnemonicParsing="false" onAction="#importFromDBClick" text="Datenbankmodell aus Datenbank lesen" />
-                        <MenuItem mnemonicParsing="false" text="Aus SQL-Skript importieren" />
+                  <Menu mnemonicParsing="false" text="%mainWindow.MenuBar.File">
+                     <MenuItem mnemonicParsing="false" onAction="#startNewProject" text="%mainWindow.MenuBar.File.New" />
+                     <MenuItem mnemonicParsing="false" onAction="#openFileClick" text="%mainWindow.MenuBar.File.Open" />
+                     <Menu mnemonicParsing="false" text="%mainWindow.MenuBar.File.Import">
+                        <MenuItem mnemonicParsing="false" onAction="#importFromDBClick" text="%mainWindow.MenuBar.File.Import.FromDB" />
+                        <MenuItem mnemonicParsing="false" text="%mainWindow.MenuBar.File.Import.FromSQL" />
                      </Menu>
-                     <MenuItem mnemonicParsing="false" onAction="#saveFileClick" text="Speichern" />
-                     <MenuItem mnemonicParsing="false" onAction="#saveUnderFileClick" text="Speichern Unter" />
-                     <Menu mnemonicParsing="false" text="Export">
-                        <MenuItem mnemonicParsing="false" onAction="#exportPictureClick" text="Als Bild speichern" />
-                        <MenuItem mnemonicParsing="false" text="Als SQL-Skript speichern" />
-                        <MenuItem mnemonicParsing="false" onAction="#exportToDBClick" text="Projekt in Datenbank schreiben" />
+                     <MenuItem mnemonicParsing="false" onAction="#saveFileClick" text="%mainWindow.MenuBar.File.Save" />
+                     <MenuItem mnemonicParsing="false" onAction="#saveUnderFileClick" text="%mainWindow.MenuBar.File.SaveAs" />
+                     <Menu mnemonicParsing="false" text="%mainWindow.MenuBar.File.Export">
+                        <MenuItem mnemonicParsing="false" onAction="#exportPictureClick" text="%mainWindow.MenuBar.File.Export.AsPicture" />
+                        <MenuItem mnemonicParsing="false" text="%mainWindow.MenuBar.File.Export.AsSQL" />
+                        <MenuItem mnemonicParsing="false" onAction="#exportToDBClick" text="%mainWindow.MenuBar.File.Export.ToDB" />
                      </Menu>
-                     <MenuItem mnemonicParsing="false" onAction="#closeApp" text="Beenden" />
+                     <MenuItem mnemonicParsing="false" onAction="#closeApp" text="%mainWindow.MenuBar.File.Close" />
                   </Menu>
-                  <Menu mnemonicParsing="false" text="Bearbeiten">
-                     <Menu mnemonicParsing="false" text="Entität">
-                        <MenuItem mnemonicParsing="false" onAction="#newEntityClick" text="Neu erstellen" />
-                        <MenuItem mnemonicParsing="false" onAction="#editEntityClick" text="Ausgewählte bearbeiten" />
-                        <MenuItem mnemonicParsing="false" onAction="#deleteEntityClick" text="Ausgewählte löschen" />
+                  <Menu mnemonicParsing="false" text="%mainWindow.MenuBar.Edit">
+                     <Menu mnemonicParsing="false" text="%mainWindow.MenuBar.Edit.Entity">
+                        <MenuItem mnemonicParsing="false" onAction="#newEntityClick" text="%mainWindow.MenuBar.Edit.CreateNew" />
+                        <MenuItem mnemonicParsing="false" onAction="#editEntityClick" text="%mainWindow.MenuBar.Edit.EditSelected" />
+                        <MenuItem mnemonicParsing="false" onAction="#deleteEntityClick" text="%mainWindow.MenuBar.Edit.DeleteSelected" />
                      </Menu>
-                     <Menu mnemonicParsing="false" text="Relation">
-                        <MenuItem mnemonicParsing="false" onAction="#newRelationClick" text="Neu erstellen" />
-                        <MenuItem mnemonicParsing="false" onAction="#editRelationClick" text="Ausgewählte bearbeiten" />
-                        <MenuItem mnemonicParsing="false" onAction="#deleteRelationClick" text="Ausgewählte löschen" />
+                     <Menu mnemonicParsing="false" text="%mainWindow.MenuBar.Edit.Relation">
+                        <MenuItem mnemonicParsing="false" onAction="#newRelationClick" text="%mainWindow.MenuBar.Edit.CreateNew" />
+                        <MenuItem mnemonicParsing="false" onAction="#editRelationClick" text="%mainWindow.MenuBar.Edit.EditSelected" />
+                        <MenuItem mnemonicParsing="false" onAction="#deleteRelationClick" text="%mainWindow.MenuBar.Edit.DeleteSelected" />
                      </Menu>
-                     <Menu mnemonicParsing="false" text="Kommentar">
-                        <MenuItem mnemonicParsing="false" onAction="#newCommentClick" text="Neu erstellen" />
-                        <MenuItem mnemonicParsing="false" onAction="#editCommentClick" text="Ausgewählte bearbeiten" />
-                        <MenuItem mnemonicParsing="false" onAction="#deleteCommentClick" text="Ausgewählte löschen" />
+                     <Menu mnemonicParsing="false" text="%mainWindow.MenuBar.Edit.Comment">
+                        <MenuItem mnemonicParsing="false" onAction="#newCommentClick" text="%mainWindow.MenuBar.Edit.CreateNew" />
+                        <MenuItem mnemonicParsing="false" onAction="#editCommentClick" text="%mainWindow.MenuBar.Edit.EditSelected" />
+                        <MenuItem mnemonicParsing="false" onAction="#deleteCommentClick" text="%mainWindow.MenuBar.Edit.DeleteSelected" />
                      </Menu>
                   </Menu>
-                  <Menu mnemonicParsing="false" text="Einstellungen">
-                     <MenuItem mnemonicParsing="false" text="Datenbanksprache" />
-                     <MenuItem mnemonicParsing="false" text="Sprache" />
-                  </Menu>
-                  <Menu mnemonicParsing="false" text="Hilfe">
-                     <MenuItem mnemonicParsing="false" text="FAQ" />
-                     <MenuItem mnemonicParsing="false" text="Bedienungsanleitung" />
-                     <MenuItem mnemonicParsing="false" onAction="#showAboutUsWindow" text="Über Uns" />
+                  <Menu mnemonicParsing="false" text="%mainWindow.MenuBar.Language" />
+                  <Menu mnemonicParsing="false" text="%mainWindow.MenuBar.Help">
+                     <MenuItem mnemonicParsing="false" text="%mainWindow.MenuBar.Help.FAQ" />
+                     <MenuItem mnemonicParsing="false" text="%mainWindow.MenuBar.Help.UserManual" />
+                     <MenuItem mnemonicParsing="false" onAction="#showAboutUsWindow" text="%mainWindow.MenuBar.Help.AboutUs" />
                   </Menu>
                </menus>
             </MenuBar>

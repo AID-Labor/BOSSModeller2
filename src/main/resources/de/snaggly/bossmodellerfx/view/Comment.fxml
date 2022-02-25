@@ -5,6 +5,6 @@
 
 <fx:root type="de.snaggly.bossmodellerfx.view.viewtypes.CustomNode" onMouseClicked="#onMouseClickOnPane" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.snaggly.bossmodellerfx.view.controller.CommentController" minHeight="0" minWidth="0" prefHeight="100" prefWidth="150">
    <children>
-      <TextArea fx:id="commentTextArea" disable="true" onMouseClicked="#onMouseClickOnText" prefColumnCount="0" prefRowCount="0" promptText="Kommentar eingeben..." style="-fx-opacity: 1.0;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0"/>
+      <TextArea fx:id="commentTextArea" disable="true" onMouseClicked="#onMouseClickOnText" prefColumnCount="0" prefRowCount="0" promptText="%commentView.PromptText" style="-fx-opacity: 1.0;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0"/>
    </children>
 </fx:root>

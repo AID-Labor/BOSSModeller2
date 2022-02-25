@@ -1,5 +1,6 @@
 package de.snaggly.bossmodellerfx.view.controller;
 
+import de.snaggly.bossmodellerfx.BOSS_Strings;
 import de.snaggly.bossmodellerfx.guiLogic.GUIActionListener;
 import de.snaggly.bossmodellerfx.guiLogic.GUIMethods;
 import de.snaggly.bossmodellerfx.model.adapter.DBLAHolder;
@@ -67,7 +68,7 @@ public class ChooseDBEntityWindowController implements ModelController<DBLAHolde
                     localDBLA.getDbla().getTables(),
                     localDBLA.getDbla().getRelations()));
         } catch (SQLException e) {
-            GUIMethods.showError("DBConnector", "Fehler beim lesen der Tabellen", e.getLocalizedMessage());
+            GUIMethods.showError(BOSS_Strings.DB_CONNECTOR, BOSS_Strings.DBINTERFACE_ERROR_READING_TABLES, e.getLocalizedMessage());
         }
     }
 
@@ -93,7 +94,7 @@ public class ChooseDBEntityWindowController implements ModelController<DBLAHolde
                 entityListVBox.getChildren().add(checkBox);
             }
         } catch (SQLException e) {
-            GUIMethods.showError("DBConnector", "Fehler beim lesen der Tabellen", e.getLocalizedMessage());
+            GUIMethods.showError(BOSS_Strings.DB_CONNECTOR, BOSS_Strings.DBINTERFACE_ERROR_READING_TABLES, e.getLocalizedMessage());
             GUIMethods.closeWindow(entityListVBox.getScene().getWindow());
         }
     }

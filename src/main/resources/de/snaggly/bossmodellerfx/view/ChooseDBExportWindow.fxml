@@ -26,14 +26,14 @@
                         <Insets />
                      </GridPane.margin>
                   </ChoiceBox>
-                  <CheckBox fx:id="useExistingDBChkBox" contentDisplay="CENTER" mnemonicParsing="false" nodeOrientation="RIGHT_TO_LEFT" onAction="#useExistingDBChkBoxOnAction" text="Vorhandene Datebank verwenden" />
-                  <Label fx:id="newDbNameLabel" text="Neue Datenbank verwenden" GridPane.rowIndex="1" />
+                  <CheckBox fx:id="useExistingDBChkBox" contentDisplay="CENTER" mnemonicParsing="false" nodeOrientation="RIGHT_TO_LEFT" onAction="#useExistingDBChkBoxOnAction" text="%exportToDBWindow.UseExistingDB" />
+                  <Label fx:id="newDbNameLabel" text="%exportToDBWindow.UseNewDB" GridPane.rowIndex="1" />
                   <TextField fx:id="newDBNameTf" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                  <CheckBox fx:id="useExistingSchemeCkBox" mnemonicParsing="false" nodeOrientation="RIGHT_TO_LEFT" text="Vorhandenes Schema verwenden" GridPane.rowIndex="2" />
+                  <CheckBox fx:id="useExistingSchemeCkBox" mnemonicParsing="false" nodeOrientation="RIGHT_TO_LEFT" text="%exportToDBWindow.UseExistingSchema" GridPane.rowIndex="2" />
                   <ChoiceBox fx:id="existingSchemesChoiceBox" prefWidth="300.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                  <Label fx:id="createNewSchemeLabel" text="Neues Schema erstellen" GridPane.rowIndex="3" />
+                  <Label fx:id="createNewSchemeLabel" text="%exportToDBWindow.UseNewSchema" GridPane.rowIndex="3" />
                   <TextField fx:id="newSchemeTf" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                  <CheckBox fx:id="caseSensitive" mnemonicParsing="false" nodeOrientation="RIGHT_TO_LEFT" text="Groß- und Kleinschreibung" GridPane.rowIndex="4" />
+                  <CheckBox fx:id="caseSensitive" mnemonicParsing="false" nodeOrientation="RIGHT_TO_LEFT" text="%exportToDBWindow.CaseSensitive" GridPane.rowIndex="4" />
                </children>
             </GridPane>
             <HBox alignment="CENTER_RIGHT" spacing="30.0">
@@ -43,8 +43,8 @@
                         <Insets bottom="10.0" top="10.0" />
                      </HBox.margin>
                   </ProgressIndicator>
-                  <Button fx:id="cancelBtn" mnemonicParsing="false" onAction="#onCancelClick" text="Abbrechen" />
-                  <Button fx:id="exportToDBBtn" mnemonicParsing="false" onAction="#onExportClick" text="In Datenbank schreiben" />
+                  <Button fx:id="cancelBtn" mnemonicParsing="false" onAction="#onCancelClick" text="%mainWindow.MenuBar.File.Cancel" />
+                  <Button fx:id="exportToDBBtn" mnemonicParsing="false" onAction="#onExportClick" text="%exportToDBWindow.ExportBtn" />
                </children>
             </HBox>
          </children>

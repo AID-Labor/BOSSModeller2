@@ -1,6 +1,7 @@
 package de.snaggly.bossmodellerfx.view.controller;
 
 import de.bossmodeler.logicalLayer.elements.DBLanguageNotFoundException;
+import de.snaggly.bossmodellerfx.BOSS_Strings;
 import de.snaggly.bossmodellerfx.guiLogic.GUIMethods;
 import de.snaggly.bossmodellerfx.guiLogic.Project;
 import de.snaggly.bossmodellerfx.model.adapter.DBConnectorException;
@@ -70,12 +71,12 @@ public class ChooseDBExportWindowController implements ModelController<DBLAHolde
 
                 if (!useExistingSchemeCkBox.isSelected()) {
                     if (newSchemeTf.getText().equals("") && dblaHolder.getLanguage() != SQLLanguage.MySQL) {
-                        throw new DBConnectorException("Kein Schema", "Es muss ein Schema angegeben werden!");
+                        throw new DBConnectorException(BOSS_Strings.DBINTERFACE_NO_SCHEMA_HEADER, BOSS_Strings.DBINTERFACE_NO_SCHEMA_WARNING);
                     }
 
                     for (var existingSchemeName : existingSchemesChoiceBox.getItems()) {
                         if (existingSchemeName.equals(dBName)) {
-                            throw new DBConnectorException("Existierender Name", "Es existiert bereits ein Schema mit dem selben Namen!");
+                            throw new DBConnectorException(BOSS_Strings.DBINTERFACE_EXISTING_NAME_HEADER, BOSS_Strings.DBINTERFACE_EXISTING_SCHEMA_WARNING);
                         }
                     }
                 } else {
@@ -85,7 +86,7 @@ public class ChooseDBExportWindowController implements ModelController<DBLAHolde
                 if (!useExistingDBChkBox.isSelected()) {
                     for (var existingDBName : existingDBChoiceBox.getItems()) {
                         if (existingDBName.equals(schemeName)) {
-                            throw new DBConnectorException("Existierender Name", "Es existiert bereits eine Datenbank mit dem selben Namen!");
+                            throw new DBConnectorException(BOSS_Strings.DBINTERFACE_EXISTING_NAME_HEADER, BOSS_Strings.DBINTERFACE_EXISTING_DB_WARNING);
                         }
                     }
                 } else {
@@ -106,11 +107,11 @@ public class ChooseDBExportWindowController implements ModelController<DBLAHolde
 
                 Platform.runLater(() -> GUIMethods.closeWindow(newDBNameTf.getScene().getWindow()));
             } catch (SQLException e) {
-                Platform.runLater(() -> GUIMethods.showError("DBConnector", "SQL Error", e.getLocalizedMessage()));
+                Platform.runLater(() -> GUIMethods.showError(BOSS_Strings.DB_CONNECTOR, BOSS_Strings.DBINTERFACE_SQL_ERROR, e.getLocalizedMessage()));
             } catch (DBLanguageNotFoundException e) {
-                Platform.runLater(() -> GUIMethods.showError("DBConnector", "SQL Language Error", e.getLocalizedMessage()));
+                Platform.runLater(() -> GUIMethods.showError(BOSS_Strings.DB_CONNECTOR, BOSS_Strings.DBINTERFACE_SQL_LANGUAGE_ERROR, e.getLocalizedMessage()));
             } catch (DBConnectorException e) {
-                Platform.runLater(() -> GUIMethods.showError("DBConnector", e.head, e.reason));
+                Platform.runLater(() -> GUIMethods.showError(BOSS_Strings.DB_CONNECTOR, e.head, e.reason));
             } finally {
                 Platform.runLater(() -> progressIndicator.setVisible(false));
             }
@@ -163,7 +164,7 @@ public class ChooseDBExportWindowController implements ModelController<DBLAHolde
                 });
             } catch (SQLException e) {
                 Platform.runLater(() -> {
-                    GUIMethods.showError("DBConnector", "Verbindungsfehler", e.getLocalizedMessage());
+                    GUIMethods.showError(BOSS_Strings.DB_CONNECTOR, BOSS_Strings.CONNECTION_ERROR, e.getLocalizedMessage());
                     GUIMethods.closeWindow(progressIndicator.getScene().getWindow());
                 });
             } finally {

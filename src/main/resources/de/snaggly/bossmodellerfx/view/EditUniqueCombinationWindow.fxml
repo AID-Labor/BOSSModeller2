@@ -13,8 +13,8 @@
                   <Insets bottom="10.0" top="10.0" />
                </padding>
                <children>
-                  <Button focusTraversable="false" mnemonicParsing="false" onAction="#newUniqueComboClick" text="Neue Unique-Kombination" />
-                  <Button focusTraversable="false" mnemonicParsing="false" onAction="#deleteUniqueComboClick" text="Unique-Kombination löschen" />
+                  <Button focusTraversable="false" mnemonicParsing="false" onAction="#newUniqueComboClick" text="%uniqueCombinationEditor.CreateNewCombinationBtn" />
+                  <Button focusTraversable="false" mnemonicParsing="false" onAction="#deleteUniqueComboClick" text="%uniqueCombinationEditor.DeleteCombinationBtn" />
                </children></HBox>
             <SplitPane dividerPositions="0.29797979797979796" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" VBox.vgrow="ALWAYS">
               <items>
@@ -46,7 +46,7 @@
             </SplitPane>
             <ButtonBar prefHeight="40.0" prefWidth="200.0">
               <buttons>
-                <Button mnemonicParsing="false" onAction="#onSaveAction" text="Speichern" />
+                <Button mnemonicParsing="false" onAction="#onSaveAction" text="%mainWindow.MenuBar.File.Save" />
               </buttons>
                <VBox.margin>
                   <Insets bottom="5.0" right="30.0" top="5.0" />

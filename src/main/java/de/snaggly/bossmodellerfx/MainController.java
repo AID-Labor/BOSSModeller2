@@ -13,14 +13,10 @@ import de.snaggly.bossmodellerfx.guiLogic.Project;
 import de.snaggly.bossmodellerfx.view.factory.nodetype.CommentBuilder;
 import de.snaggly.bossmodellerfx.view.factory.nodetype.EntityBuilder;
 import de.snaggly.bossmodellerfx.view.factory.windowtype.*;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableNumberValue;
-import javafx.beans.value.ObservableValue;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Cursor;
 import javafx.scene.Scene;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.control.*;
@@ -37,7 +33,6 @@ import java.io.*;
 import java.util.HashMap;
 import java.util.ArrayList;
 import java.util.LinkedList;
-import java.util.concurrent.atomic.AtomicReference;
 
 import static de.snaggly.bossmodellerfx.guiLogic.KeyCombos.keyComboOpen;
 import static de.snaggly.bossmodellerfx.guiLogic.KeyCombos.keyComboSave;
@@ -70,15 +65,15 @@ public class MainController {
     @FXML
     private void showAboutUsWindow() {
         try {
-            var fxmlLoader = new FXMLLoader(Main.class.getResource("view/AboutUs.fxml"));
+            var fxmlLoader = new FXMLLoader(Main.class.getResource("view/AboutUs.fxml"), BOSS_Strings.resourceBundle);
             var scene = new Scene(fxmlLoader.load());
             var stage = new Stage();
-            stage.setTitle("Über uns");
+            stage.setTitle(BOSS_Strings.ABOUT_US);
             stage.setScene(scene);
             stage.show();
             addSubWindow(scene.getWindow());
         } catch (IOException e) {
-            GUIMethods.showError(MainController.class.getSimpleName(), "BOSSModellerFX", e.getLocalizedMessage());
+            GUIMethods.showError(MainController.class.getSimpleName(), BOSS_Strings.PRODUCT_NAME, e.getLocalizedMessage());
         }
     }
 
@@ -89,7 +84,7 @@ public class MainController {
             currentProject = Project.getProject(_new.intValue());
             initializeContextMenu(currentProject.getWorkField());
         });
-        var newTabMenu = new MenuItem("Neues Projekt");
+        var newTabMenu = new MenuItem(BOSS_Strings.NEW_PROJECT);
         newTabMenu.setOnAction(actionEvent -> addNewProjectTab(new WorkbenchPane(this::onMainWorkbenchClick), false));
         projectsTabPane.setOnContextMenuRequested(contextMenuEvent -> {
             var target = contextMenuEvent.getTarget();
@@ -109,49 +104,49 @@ public class MainController {
 
             if (currentSelection instanceof EntityView){
                 var entityView = (EntityView)(currentProject.getCurrentSelected());
-                var editEntityMenu = new MenuItem("Entität bearbeiten");
+                var editEntityMenu = new MenuItem(BOSS_Strings.EDIT_ENTITY);
                 editEntityMenu.setOnAction(actionEvent -> editEntity(entityView));
-                var removeEntityMenu = new MenuItem("Entität löschen");
+                var removeEntityMenu = new MenuItem(BOSS_Strings.DELETE_ENTITY);
                 removeEntityMenu.setOnAction(actionEvent -> deleteEntity(entityView));
                 var separator = new SeparatorMenuItem();
                 mainWorkbenchContextMenu.getItems().addAll(editEntityMenu, removeEntityMenu, separator);
             } else if (currentSelection instanceof CommentView) {
                 var commentView = (CommentView)(currentProject.getCurrentSelected());
-                var editCommentMenu = new MenuItem("Kommentar bearbeiten");
+                var editCommentMenu = new MenuItem(BOSS_Strings.EDIT_COMMENT);
                 editCommentMenu.setOnAction(actionEvent -> editComment(commentView));
-                var removeCommentMenu = new MenuItem("Kommentar löschen");
+                var removeCommentMenu = new MenuItem(BOSS_Strings.DELETE_COMMENT);
                 removeCommentMenu.setOnAction(actionEvent -> deleteComment(commentView));
                 var separator = new SeparatorMenuItem();
                 mainWorkbenchContextMenu.getItems().addAll(editCommentMenu, removeCommentMenu, separator);
             } else if (currentSelection instanceof RelationViewNode) {
                 var relationView = (RelationViewNode)(currentProject.getCurrentSelected());
-                var editRelationMenu = new MenuItem("Relation bearbeiten");
+                var editRelationMenu = new MenuItem(BOSS_Strings.EDIT_RELATION);
                 editRelationMenu.setOnAction(actionEvent -> editRelation(relationView));
-                var removeRelation = new MenuItem("Relation löschen");
+                var removeRelation = new MenuItem(BOSS_Strings.DELETE_RELATION);
                 removeRelation.setOnAction(actionEvent -> deleteRelation(relationView));
                 var separator = new SeparatorMenuItem();
                 mainWorkbenchContextMenu.getItems().addAll(editRelationMenu, removeRelation, separator);
             }
 
             if (currentSelection instanceof EntityView || currentSelection instanceof CommentView) {
-                var editCommentMenu = new MenuItem("Element vor rücken");
+                var editCommentMenu = new MenuItem(BOSS_Strings.MOVE_TO_FRONT);
                 editCommentMenu.setOnAction(actionEvent -> currentSelection.toFront());
-                var removeCommentMenu = new MenuItem("Element zu rücken");
+                var removeCommentMenu = new MenuItem(BOSS_Strings.MOVE_TO_BACK);
                 removeCommentMenu.setOnAction(actionEvent -> currentSelection.toBack());
                 var separator = new SeparatorMenuItem();
                 mainWorkbenchContextMenu.getItems().addAll(editCommentMenu, removeCommentMenu, separator);
             }
 
-            var newEntityMenu = new MenuItem("Neue Entität");
+            var newEntityMenu = new MenuItem(BOSS_Strings.NEW_ENTITY);
             newEntityMenu.setOnAction(actionEvent -> createNewEntity(
                     ((MenuItem)(actionEvent.getSource())).getParentPopup().getX() - (currentProject.getWorkField().getScene().getWindow().getX() + currentProject.getWorkField().getLayoutX()),
                     ((MenuItem)(actionEvent.getSource())).getParentPopup().getY() - (currentProject.getWorkField().getScene().getWindow().getY() + currentProject.getWorkField().getLayoutY())
             ));
 
-            var newRelationMenu = new MenuItem("Neue Relation");
+            var newRelationMenu = new MenuItem(BOSS_Strings.NEW_RELATION);
             newRelationMenu.setOnAction(actionEvent -> createNewRelation());
 
-            var newCommentMenu = new MenuItem("Neues Kommentar");
+            var newCommentMenu = new MenuItem(BOSS_Strings.NEW_COMMENT);
             newCommentMenu.setOnAction(actionEvent -> createNewComment(
                     ((MenuItem)(actionEvent.getSource())).getParentPopup().getX() - (currentProject.getWorkField().getScene().getWindow().getX() + currentProject.getWorkField().getLayoutX()),
                     ((MenuItem)(actionEvent.getSource())).getParentPopup().getY() - (currentProject.getWorkField().getScene().getWindow().getY() + currentProject.getWorkField().getLayoutY())
@@ -197,7 +192,7 @@ public class MainController {
     private void editEntityClick() {
         var currentSelection = currentProject.getCurrentSelected();
         if (!(currentSelection instanceof EntityView)){
-            GUIMethods.showWarning(MainController.class.getSimpleName(), "BOSSModellerFX", "Keine Entität ausgewählt!");
+            GUIMethods.showWarning(MainController.class.getSimpleName(), BOSS_Strings.PRODUCT_NAME, BOSS_Strings.NO_ENTITY_SELECTED);
             return;
         }
         editEntity((EntityView)currentSelection);
@@ -207,7 +202,7 @@ public class MainController {
     private void deleteEntityClick() {
         var currentSelection = currentProject.getCurrentSelected();
         if (!(currentProject.getCurrentSelected() instanceof EntityView)){
-            GUIMethods.showWarning(MainController.class.getSimpleName(), "BOSSModellerFX", "Keine Entität ausgewählt!");
+            GUIMethods.showWarning(MainController.class.getSimpleName(), BOSS_Strings.PRODUCT_NAME, BOSS_Strings.NO_ENTITY_SELECTED);
             return;
         }
         deleteEntity((EntityView) currentSelection);
@@ -222,7 +217,7 @@ public class MainController {
     private void editCommentClick() {
         var currentSelection = currentProject.getCurrentSelected();
         if (!(currentProject.getCurrentSelected() instanceof CommentView)){
-            GUIMethods.showWarning(MainController.class.getSimpleName(), "BOSSModellerFX", "Kein Kommentar ausgewählt!");
+            GUIMethods.showWarning(MainController.class.getSimpleName(), BOSS_Strings.PRODUCT_NAME, BOSS_Strings.NO_COMMENT_SELECTED);
             return;
         }
         editComment((CommentView) currentSelection);
@@ -232,7 +227,7 @@ public class MainController {
     private void deleteCommentClick() {
         var currentSelection = currentProject.getCurrentSelected();
         if (!(currentProject.getCurrentSelected() instanceof CommentView)){
-            GUIMethods.showWarning(MainController.class.getSimpleName(), "BOSSModellerFX", "Kein Kommentar ausgewählt!");
+            GUIMethods.showWarning(MainController.class.getSimpleName(), BOSS_Strings.PRODUCT_NAME, BOSS_Strings.NO_COMMENT_SELECTED);
             return;
         }
         deleteComment((CommentView) currentSelection);
@@ -247,7 +242,7 @@ public class MainController {
     private void editRelationClick() {
         var currentSelection = currentProject.getCurrentSelected();
         if (!(currentProject.getCurrentSelected() instanceof RelationViewNode)){
-            GUIMethods.showWarning(MainController.class.getSimpleName(), "BOSSModeller FX", "Keine Relation ausgewählt!");
+            GUIMethods.showWarning(MainController.class.getSimpleName(), BOSS_Strings.PRODUCT_NAME, BOSS_Strings.NO_RELATION_SELECTED);
             return;
         }
         editRelation((RelationViewNode) currentSelection);
@@ -257,7 +252,7 @@ public class MainController {
     private void deleteRelationClick() {
         var currentSelection = currentProject.getCurrentSelected();
         if (!(currentProject.getCurrentSelected() instanceof RelationViewNode)){
-            GUIMethods.showWarning(MainController.class.getSimpleName(), "BOSSModeller FX", "Keine Relation ausgewählt!");
+            GUIMethods.showWarning(MainController.class.getSimpleName(), BOSS_Strings.PRODUCT_NAME, BOSS_Strings.NO_RELATION_SELECTED);
             return;
         }
         deleteRelation((RelationViewNode) currentSelection);
@@ -267,7 +262,7 @@ public class MainController {
         try {
             var entityBuilder = EntityEditorWindowBuilder.buildEntityEditor(null);
             var stage = new Stage();
-            stage.setTitle("Neue Entität");
+            stage.setTitle(BOSS_Strings.NEW_ENTITY);
             stage.setScene(entityBuilder.getKey());
             stage.show();
             addSubWindow(entityBuilder.getKey().getWindow());
@@ -278,13 +273,13 @@ public class MainController {
                     var entityView = EntityBuilder.buildEntity(resultedEntity, currentProject.getWorkField(), currentProject.getSelectionHandler);
                     saveNewEntity(entityView);
                 } catch (IOException e) {
-                    GUIMethods.showError(MainController.class.getSimpleName(), "BOSSModellerFX", e.getLocalizedMessage());
+                    GUIMethods.showError(MainController.class.getSimpleName(), BOSS_Strings.PRODUCT_NAME, e.getLocalizedMessage());
                 }
             };
         }
         catch (Exception e) {
             e.printStackTrace();
-            GUIMethods.showError(MainController.class.getSimpleName(), "BOSSModellerFX", e.getLocalizedMessage());
+            GUIMethods.showError(MainController.class.getSimpleName(), BOSS_Strings.PRODUCT_NAME, e.getLocalizedMessage());
         }
     }
 
@@ -293,25 +288,25 @@ public class MainController {
             var selectedEntity = selectedEntityView.getModel();
             var entityBuilder = EntityEditorWindowBuilder.buildEntityEditor(selectedEntity);
             var stage = new Stage();
-            stage.setTitle("Entität bearbeiten");
+            stage.setTitle(BOSS_Strings.EDIT_ENTITY);
             stage.setScene(entityBuilder.getKey());
             stage.show();
             addSubWindow(entityBuilder.getKey().getWindow());
             entityBuilder.getValue().parentObserver = resultedEntity -> selectedEntityView.getController().loadModel(resultedEntity);
         } catch (Exception e) {
-            GUIMethods.showError(MainController.class.getSimpleName(), "BOSSModellerFX", e.getLocalizedMessage());
+            GUIMethods.showError(MainController.class.getSimpleName(), BOSS_Strings.PRODUCT_NAME, e.getLocalizedMessage());
         }
     }
 
     private void createNewComment(double xCoordinate, double yCoordinate) {
         try {
-            var commentModel = new Comment("", xCoordinate, yCoordinate);
+            var commentModel = new Comment(BOSS_Strings.DEFAULT_COMMENT_STRING, xCoordinate, yCoordinate);
             var commentView = CommentBuilder.buildComment(commentModel, currentProject.getWorkField(), currentProject.getSelectionHandler);
             showNewComment(commentView, currentProject);
 
             currentProject.addComment(commentModel);
         } catch (IOException e) {
-            GUIMethods.showError(MainController.class.getSimpleName(), "BOSSModellerFX", e.getLocalizedMessage());
+            GUIMethods.showError(MainController.class.getSimpleName(), BOSS_Strings.PRODUCT_NAME, e.getLocalizedMessage());
         }
     }
 
@@ -326,19 +321,19 @@ public class MainController {
 
     private void createNewRelation() {
         if (currentProject.getEntities().size() < 1) {
-            GUIMethods.showWarning(MainController.class.getSimpleName(), "BOSSModeller FX", "Es muss mindestens eine Entität existieren!");
+            GUIMethods.showWarning(MainController.class.getSimpleName(), BOSS_Strings.PRODUCT_NAME, BOSS_Strings.NO_ENTITIES_WARNING);
             return;
         }
         try {
             var relationBuilderWindow = RelationEditorWindowBuilder.buildRelationEditor(null);
             relationBuilderWindow.getValue().parentObserver = this::saveNewRelation;
             var stage = new Stage();
-            stage.setTitle("Neue Relation");
+            stage.setTitle(BOSS_Strings.NEW_RELATION);
             stage.setScene(relationBuilderWindow.getKey());
             stage.show();
             addSubWindow(relationBuilderWindow.getKey().getWindow());
         } catch (IOException e) {
-            GUIMethods.showError(MainController.class.getSimpleName(), "BOSSModellerFX", e.getLocalizedMessage());
+            GUIMethods.showError(MainController.class.getSimpleName(), BOSS_Strings.PRODUCT_NAME, e.getLocalizedMessage());
         }
     }
 
@@ -445,12 +440,12 @@ public class MainController {
             var relationBuilderWindow = RelationEditorWindowBuilder.buildRelationEditor(selectedRelationModel);
             relationBuilderWindow.getValue().parentObserver = (resultedRelation) -> showNewRelation(resultedRelation, currentProject);
             var stage = new Stage();
-            stage.setTitle("Relation bearbeiten");
+            stage.setTitle(BOSS_Strings.EDIT_RELATION);
             stage.setScene(relationBuilderWindow.getKey());
             stage.show();
             addSubWindow(relationBuilderWindow.getKey().getWindow());
         } catch (IOException e) {
-            GUIMethods.showError(MainController.class.getSimpleName(), "BOSSModellerFX", e.getLocalizedMessage());
+            GUIMethods.showError(MainController.class.getSimpleName(), BOSS_Strings.PRODUCT_NAME, e.getLocalizedMessage());
         }
     }
 
@@ -482,7 +477,7 @@ public class MainController {
 
     @FXML
     private void openFileClick() {
-        var file = GUIMethods.showJSONFileOpenDialog("Projekt öffnen", currentProject.getWorkField().getScene().getWindow());
+        var file = GUIMethods.showJSONFileOpenDialog(BOSS_Strings.OPEN_PROJECT, currentProject.getWorkField().getScene().getWindow());
         if (file == null)
             return;
         try {
@@ -498,7 +493,7 @@ public class MainController {
             initProject(newProject);
 
         } catch (Exception e) {
-            GUIMethods.showError(MainController.class.getSimpleName(), "BOSSModellerFX", e.getLocalizedMessage());
+            GUIMethods.showError(MainController.class.getSimpleName(), BOSS_Strings.PRODUCT_NAME, e.getLocalizedMessage());
         }
     }
 
@@ -514,7 +509,7 @@ public class MainController {
 
     @FXML
     private void saveUnderFileClick() {
-        var file = GUIMethods.showJSONFileSaveDialog("Projekt speichern", currentProject.getWorkField().getScene().getWindow());
+        var file = GUIMethods.showJSONFileSaveDialog(BOSS_Strings.SAVE_PROJECT, currentProject.getWorkField().getScene().getWindow());
         if (file == null)
             return;
         currentProject.activeFile = file;
@@ -528,7 +523,7 @@ public class MainController {
             fileWriter.write(json);
             fileWriter.close();
         } catch (Exception e) {
-            GUIMethods.showError(MainController.class.getSimpleName(), "BOSSModellerFX", e.getLocalizedMessage());
+            GUIMethods.showError(MainController.class.getSimpleName(), BOSS_Strings.PRODUCT_NAME, e.getLocalizedMessage());
         } finally {
             projectsTabPane.getTabs().get(projectsTabPane.getSelectionModel().getSelectedIndex()).setText(file.getName());
         }
@@ -537,14 +532,14 @@ public class MainController {
     @FXML
     private void exportPictureClick() {
         var snapshot = currentProject.getWorkField().snapshot(new SnapshotParameters(), null);
-        var file = GUIMethods.showPNGFileSaveDialog("Bild exportieren", currentProject.getWorkField().getScene().getWindow());
+        var file = GUIMethods.showPNGFileSaveDialog(BOSS_Strings.EXPORT_TO_PICTURE, currentProject.getWorkField().getScene().getWindow());
         if (file == null)
             return;
         try {
             ImageIO.write(SwingFXUtils.fromFXImage(snapshot, null), "png", file);
         }
         catch (Exception e) {
-            GUIMethods.showError(MainController.class.getSimpleName(), "BOSSModellerFX", e.getLocalizedMessage());
+            GUIMethods.showError(MainController.class.getSimpleName(), BOSS_Strings.PRODUCT_NAME, e.getLocalizedMessage());
         }
     }
 
@@ -574,7 +569,7 @@ public class MainController {
 
     private void addNewProjectTab(WorkbenchPane workPane, boolean switchTo) {
         var newProject = Project.createNewProject(workPane);
-        addNewProjectTab("*Neues Projekt", newProject, switchTo);
+        addNewProjectTab(BOSS_Strings.DEFAULT_NEWPROJECT_NAME, newProject, switchTo);
     }
 
     private void addNewProjectTab(String tabName, Project newProject, boolean switchTo) {
@@ -650,20 +645,20 @@ public class MainController {
         tabTooltip.textProperty().bindBidirectional(newTab.textProperty());
         newTab.setTooltip(tabTooltip);
 
-        var renameMenu = new MenuItem("Umbenennen");
+        var renameMenu = new MenuItem(BOSS_Strings.RENAME);
         renameMenu.setOnAction(actionEvent -> {
             var textInputDialog = new TextInputDialog();
             textInputDialog.setResizable(true);
-            textInputDialog.setContentText("Neuen Projektnamen eingeben:");
-            textInputDialog.setTitle("BOSSModellerFX");
-            textInputDialog.setHeaderText("Projektname");
+            textInputDialog.setContentText(BOSS_Strings.ENTER_NEW_PROJECTNAME);
+            textInputDialog.setTitle(BOSS_Strings.PRODUCT_NAME);
+            textInputDialog.setHeaderText(BOSS_Strings.PROJECT_NAME);
             textInputDialog.showAndWait().ifPresent(newTab::setText);
         });
 
-        var closeMenu = new MenuItem("Schließen");
+        var closeMenu = new MenuItem(BOSS_Strings.CLOSE);
         closeMenu.setOnAction(actionEvent -> {
             if (Project.getProjectsAmount() <= 1) {
-                GUIMethods.showWarning(MainController.class.getSimpleName(), "BOSSModeller FX", "Das ist der letzte Tab");
+                GUIMethods.showWarning(MainController.class.getSimpleName(), BOSS_Strings.PRODUCT_NAME, BOSS_Strings.LAST_TAB_WARNING);
                 return;
             }
 
@@ -707,29 +702,29 @@ public class MainController {
                             newProject.addRelation(relation);
                         }
                         addNewProjectTab(
-                                resultedProjectData.projectName.equals("") ? "Importieres Projekelt" : resultedProjectData.projectName,
+                                resultedProjectData.projectName.equals("") ? BOSS_Strings.IMPORTED_PROJECT : resultedProjectData.projectName,
                                 newProject,
                                 subWindows.size() == 0);
                         try {
                             initProject(newProject);
                         } catch (IOException e) {
-                            GUIMethods.showError(MainController.class.getSimpleName(), "BOSSModellerFX", e.getLocalizedMessage());
+                            GUIMethods.showError(MainController.class.getSimpleName(), BOSS_Strings.PRODUCT_NAME, e.getLocalizedMessage());
                         }
                     };
                     chooseWindowStage.setScene(chooserWindow.getKey());
-                    chooseWindowStage.setTitle("Tabellen auswählen");
+                    chooseWindowStage.setTitle(BOSS_Strings.CHOOSE_TABLES);
                     chooseWindowStage.show();
                     addSubWindow(chooseWindowStage);
                 } catch (IOException e) {
-                    GUIMethods.showError(MainController.class.getSimpleName(), "BOSSModellerFX", e.getLocalizedMessage());
+                    GUIMethods.showError(MainController.class.getSimpleName(), BOSS_Strings.PRODUCT_NAME, e.getLocalizedMessage());
                 }
             };
             connectWindowStage.setScene(window.getKey());
-            connectWindowStage.setTitle("Mit Datenbank verbinden");
+            connectWindowStage.setTitle(BOSS_Strings.CONNECT_TO_DATABASE);
             connectWindowStage.show();
             addSubWindow(connectWindowStage);
         } catch (IOException e) {
-            GUIMethods.showError(MainController.class.getSimpleName(), "BOSSModellerFX", e.getLocalizedMessage());
+            GUIMethods.showError(MainController.class.getSimpleName(), BOSS_Strings.PRODUCT_NAME, e.getLocalizedMessage());
         }
     }
 
@@ -746,19 +741,19 @@ public class MainController {
                     var exportWindow = ChooseDBExportWindowBuilder.buildDBChooserWindow(resultedConnection);
                     var exportWindowStage = new Stage();
                     exportWindowStage.setScene(exportWindow.getKey());
-                    exportWindowStage.setTitle("DB und Schema auswählen");
+                    exportWindowStage.setTitle(BOSS_Strings.CHOOSE_DATABASE_AND_SCHEMA);
                     exportWindowStage.show();
                     addSubWindow(exportWindowStage);
                 } catch (IOException e) {
-                    GUIMethods.showError(MainController.class.getSimpleName(), "BOSSModellerFX", e.getLocalizedMessage());
+                    GUIMethods.showError(MainController.class.getSimpleName(), BOSS_Strings.PRODUCT_NAME, e.getLocalizedMessage());
                 }
             };
             connectWindowStage.setScene(window.getKey());
-            connectWindowStage.setTitle("Mit Datenbank verbinden");
+            connectWindowStage.setTitle(BOSS_Strings.CONNECT_TO_DATABASE);
             connectWindowStage.show();
             addSubWindow(connectWindowStage);
         } catch (IOException e) {
-            GUIMethods.showError(MainController.class.getSimpleName(), "BOSSModellerFX", e.getLocalizedMessage());
+            GUIMethods.showError(MainController.class.getSimpleName(), BOSS_Strings.PRODUCT_NAME, e.getLocalizedMessage());
         }
     }
 }

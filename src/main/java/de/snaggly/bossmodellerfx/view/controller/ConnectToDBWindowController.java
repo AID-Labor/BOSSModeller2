@@ -6,6 +6,7 @@ import de.bossmodeler.dbInterface.PostgreSQLSchnittstelle;
 import de.bossmodeler.dbInterface.Schnittstelle;
 import de.bossmodeler.logicalLayer.elements.DBInterfaceCommunication;
 import de.bossmodeler.logicalLayer.elements.DBLogicalAdministration;
+import de.snaggly.bossmodellerfx.BOSS_Strings;
 import de.snaggly.bossmodellerfx.guiLogic.GUIActionListener;
 import de.snaggly.bossmodellerfx.guiLogic.GUIMethods;
 import de.snaggly.bossmodellerfx.model.adapter.DBLAHolder;
@@ -105,7 +106,7 @@ public class ConnectToDBWindowController implements ModelController<DBLAHolder>{
             } catch (SQLException e) {
                 Platform.runLater(() -> {
                     progressIndicator.setVisible(false);
-                    GUIMethods.showError("DBConnector", "Verbindungsfehler", e.getLocalizedMessage());
+                    GUIMethods.showError(BOSS_Strings.DB_CONNECTOR, BOSS_Strings.CONNECTION_ERROR, e.getLocalizedMessage());
                 });
             }
         }).start();
@@ -149,7 +150,7 @@ public class ConnectToDBWindowController implements ModelController<DBLAHolder>{
         }
 
         if (inter == null)
-            throw new SQLException("Datenbank Schnittstelle konnte nicht erstellt werden");
+            throw new SQLException(BOSS_Strings.COULD_NOT_CREATE_DBINTERFACE);
         var interCom = new DBInterfaceCommunication(inter);
         var result = new DBLogicalAdministration(interCom);
         result.initializeTables();

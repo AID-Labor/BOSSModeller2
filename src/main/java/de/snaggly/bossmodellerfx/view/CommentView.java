@@ -1,5 +1,6 @@
 package de.snaggly.bossmodellerfx.view;
 
+import de.snaggly.bossmodellerfx.BOSS_Strings;
 import de.snaggly.bossmodellerfx.model.view.Comment;
 import de.snaggly.bossmodellerfx.view.controller.CommentController;
 import de.snaggly.bossmodellerfx.view.viewtypes.Controllable;
@@ -25,7 +26,7 @@ public abstract class CommentView extends CustomNode<Comment> implements Draggab
 
     public CommentView(Comment comment) throws IOException {
         this.model = comment;
-        FXMLLoader fxmlLoader = new FXMLLoader(EntityView.class.getResource("Comment.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(EntityView.class.getResource("Comment.fxml"), BOSS_Strings.resourceBundle);
         fxmlLoader.setRoot(this);
         fxmlLoader.load();
         controller = fxmlLoader.getController();

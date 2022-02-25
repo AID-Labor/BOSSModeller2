@@ -14,9 +14,9 @@
       </Button>
       <Button fx:id="downBtn" mnemonicParsing="false" text="🡻" HBox.hgrow="NEVER" />
       <VBox fx:id="nameVBox" alignment="CENTER" spacing="2.0">
-         <TextField fx:id="nameTF" promptText="Name des Attributs" />
+         <TextField fx:id="nameTF" promptText="%attributeEditorWindow.AttributeNamePrompt" />
       </VBox>
-      <ComboBox fx:id="dataTypeComboBox" editable="true" prefWidth="150.0" promptText="Datentyp" />
+      <ComboBox fx:id="dataTypeComboBox" editable="true" prefWidth="150.0" promptText="%attributeEditorWindow.AttributeDatatypePrompt" />
       <FlowPane alignment="CENTER" columnHalignment="CENTER" maxWidth="281.0" prefWrapLength="0.0" HBox.hgrow="ALWAYS">
          <CheckBox fx:id="isPrimaryCheck" mnemonicParsing="false" onAction="#onPrimarySelected" text="Primary">
             <FlowPane.margin>

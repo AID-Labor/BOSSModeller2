@@ -1,5 +1,6 @@
 package de.snaggly.bossmodellerfx.view.controller;
 
+import de.snaggly.bossmodellerfx.BOSS_Strings;
 import de.snaggly.bossmodellerfx.guiLogic.GUIActionListener;
 import de.snaggly.bossmodellerfx.guiLogic.GUIMethods;
 import de.snaggly.bossmodellerfx.guiLogic.Project;
@@ -82,7 +83,7 @@ public class EditEntityWindowController implements ModelController<Entity> {
                 attributesListVBOX.getChildren().add(index, attributeEditor);
             }
         } catch (IOException e) {
-            GUIMethods.showError(EditEntityWindowController.class.getSimpleName(), "BOSSModellerFX", e.getLocalizedMessage());
+            GUIMethods.showError(EditEntityWindowController.class.getSimpleName(), BOSS_Strings.PRODUCT_NAME, e.getLocalizedMessage());
         }
         removeAttrbBtn.setDisable(attributesListVBOX.getChildren().size() < 1);
         addAttrbBtn.requestFocus();
@@ -95,7 +96,7 @@ public class EditEntityWindowController implements ModelController<Entity> {
             if (!newValue) {
                 var usedByFks = foreignAttributes.get(attribute);
                 if (usedByFks != null && usedByFks.size() > 0) {
-                    GUIMethods.showWarning(EditEntityWindowController.class.getSimpleName(), "BOSSModellerFX", "Dieses Attribut wird als Fremdschlüssel bei anderen Entitäten verwendet!\nBitte die Relation(en) vorher löschen.");
+                    GUIMethods.showWarning(EditEntityWindowController.class.getSimpleName(), BOSS_Strings.PRODUCT_NAME, BOSS_Strings.ENTITY_EDIT_ATTRIBUTED_USED_IN_FKS);
                     guiEditor.getController().getIsPrimaryCheck().setSelected(true);
                 } else {
                     attribute.setPrimary(false);
@@ -149,11 +150,11 @@ public class EditEntityWindowController implements ModelController<Entity> {
         var isFk = entity.getAttributes().get(index).getFkTableColumn() != null;
         var usedByFks = foreignAttributes.get(entity.getAttributes().get(index));
         if (isFk) {
-            GUIMethods.showWarning(EditEntityWindowController.class.getSimpleName(), "BOSSModellerFX", "Fremdschlüssel können von hier nicht entfernt werden!\nBitte die Relation löschen.");
+            GUIMethods.showWarning(EditEntityWindowController.class.getSimpleName(), BOSS_Strings.PRODUCT_NAME, BOSS_Strings.ENTITY_EDIT_FK_DELETE_WARNING);
             return false;
         }
         else if (usedByFks != null && usedByFks.size() > 0) {
-            GUIMethods.showWarning(EditEntityWindowController.class.getSimpleName(), "BOSSModellerFX", "Dieses Attribut wird als Fremdschlüssel bei anderen Entitäten verwendet!\nBitte die Relation(en) vorher löschen.");
+            GUIMethods.showWarning(EditEntityWindowController.class.getSimpleName(), BOSS_Strings.PRODUCT_NAME, BOSS_Strings.ENTITY_EDIT_ATTRIBUTED_USED_IN_FKS);
             return false;
         }
         else {
@@ -183,8 +184,8 @@ public class EditEntityWindowController implements ModelController<Entity> {
         if (tableNameTextField.getText().equals("")){
             GUIMethods.showWarning(
                     Entity.class.getSimpleName(),
-                    "Keine Namen",
-                    "Die Entität muss ein Namen haben!");
+                    BOSS_Strings.ENTITY_EDIT_NO_NAME_HEADER,
+                    BOSS_Strings.ENTITY_EDIT_NO_NAME_WARNING);
             return;
         } else {
             entity.setName(tableNameTextField.getText());
@@ -209,8 +210,8 @@ public class EditEntityWindowController implements ModelController<Entity> {
         if (!checkIfAllAttributesContainDataType()) {
             GUIMethods.showWarning(
                     Entity.class.getSimpleName(),
-                    "Kein Datentyp",
-                    "Alle Attribute müssen einen Datentypen besitzen!");
+                    BOSS_Strings.ENTITY_EDIT_ATTRIBUTES_NO_DATATYPE_HEADER,
+                    BOSS_Strings.ENTITY_EDIT_ATTRIBUTES_NO_DATATYPE_WARNING);
             return;
         }
 
@@ -218,8 +219,8 @@ public class EditEntityWindowController implements ModelController<Entity> {
         if (testDoubleNameResult != null) {
             GUIMethods.showWarning(
                     Entity.class.getSimpleName(),
-                    "Identischer Name",
-                    "Das Attribut: \"" + testDoubleNameResult + "\" taucht mehrfach auf!");
+                    BOSS_Strings.ENTITY_EDIT_ATTRIBUTES_IDENTICAL_NAME_HEADER,
+                    BOSS_Strings.ENTITY_EDIT_ATTRIBUTES_IDENTICAL_NAME_THE_ATTRIBUTE + testDoubleNameResult + BOSS_Strings.ENTITY_EDIT_ATTRIBUTES_IDENTICAL_NAME_USED_MULTIPLE_TIMES);
             return;
         }
 
@@ -227,8 +228,8 @@ public class EditEntityWindowController implements ModelController<Entity> {
             if (!(entityRef != null && entity.getName().equals(entityRef.getName()))) {
                 GUIMethods.showWarning(
                         Entity.class.getSimpleName(),
-                        "Identischer Name",
-                        "Im Projekt existiert bereits eine Entität mit dem selben Namen!");
+                        BOSS_Strings.ENTITY_EDIT_IDENTICAL_NAME_HEADER,
+                        BOSS_Strings.ENTITY_EDIT_IDENTICAL_NAME_WARNING);
                 return;
             }
         }
@@ -263,8 +264,8 @@ public class EditEntityWindowController implements ModelController<Entity> {
         if (attributesListVBOX.getChildren().size() < 1 || checkAttributesHaveNoNames()) {
             GUIMethods.showWarning(
                 Entity.class.getSimpleName(),
-                "Keine Attribute",
-                "Die Entität muss mindestens ein Attribut besitzen!"
+                    BOSS_Strings.ENTITY_EDIT_NO_ATTRIBUTES_HEADER,
+                    BOSS_Strings.ENTITY_EDIT_NO_ATTRIBUTES_WARNING
             );
         }
         else {
@@ -272,10 +273,10 @@ public class EditEntityWindowController implements ModelController<Entity> {
                 var uniqueEditorWindow = UniqueCombinationEditorWindowBuilder.buildEntityEditor(entity.getUniqueCombination(), entity.getAttributes());
                 var stage = new Stage();
                 stage.setScene(uniqueEditorWindow.getKey());
-                stage.setTitle("UniqueCombo Editor");
+                stage.setTitle(BOSS_Strings.UNIQUE_COMBO_EDITOR_TITLE);
                 stage.show();
             } catch (IOException e) {
-                GUIMethods.showError(EditEntityWindowController.class.getSimpleName(), "BOSSModellerFX", e.getLocalizedMessage());
+                GUIMethods.showError(EditEntityWindowController.class.getSimpleName(), BOSS_Strings.PRODUCT_NAME, e.getLocalizedMessage());
             }
         }
     }
@@ -331,7 +332,7 @@ public class EditEntityWindowController implements ModelController<Entity> {
                     bindAttributeToGui(attributeModel, attributeEditor);
                     attributesListVBOX.getChildren().add(new Separator());
                 } catch (IOException e) {
-                    GUIMethods.showError(EditEntityWindowController.class.getSimpleName(), "BOSSModellerFX", e.getLocalizedMessage());
+                    GUIMethods.showError(EditEntityWindowController.class.getSimpleName(), BOSS_Strings.PRODUCT_NAME, e.getLocalizedMessage());
                 }
             }
             attributesListVBOX.getChildren().remove(attributesListVBOX.getChildren().size()-1);

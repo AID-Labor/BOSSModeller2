@@ -4,12 +4,11 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-
 <AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.snaggly.bossmodellerfx.view.controller.ChooseDBEntityWindowController">
    <children>
       <BorderPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <top>
-            <CheckBox fx:id="checkAllChkbox" mnemonicParsing="false" onAction="#onCheckAllChkBox" text="Alles auswählen" BorderPane.alignment="CENTER_LEFT">
+            <CheckBox fx:id="checkAllChkbox" mnemonicParsing="false" onAction="#onCheckAllChkBox" text="%importDBTables.CheckAll" BorderPane.alignment="CENTER_LEFT">
                <BorderPane.margin>
                   <Insets left="20.0" top="10.0" />
                </BorderPane.margin>
@@ -35,8 +34,8 @@
          <bottom>
             <HBox alignment="CENTER_RIGHT" spacing="20.0" BorderPane.alignment="CENTER">
                <children>
-                  <Button fx:id="cancelBtn" alignment="CENTER" mnemonicParsing="false" onAction="#onCancelClick" text="Abbrechen" />
-                  <Button fx:id="createBtn" alignment="CENTER" mnemonicParsing="false" onAction="#onCreateClick" text="Erstellen" />
+                  <Button fx:id="cancelBtn" alignment="CENTER" mnemonicParsing="false" onAction="#onCancelClick" text="%mainWindow.MenuBar.File.Cancel" />
+                  <Button fx:id="createBtn" alignment="CENTER" mnemonicParsing="false" onAction="#onCreateClick" text="%importDBTables.ImportBtn" />
                </children>
                <padding>
                   <Insets bottom="15.0" right="20.0" />

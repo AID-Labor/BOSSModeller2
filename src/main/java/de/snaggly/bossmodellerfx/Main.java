@@ -24,9 +24,9 @@ public class Main extends Application {
      */
     @Override
     public void start(Stage primaryStage) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("main-window.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("main-window.fxml"), BOSS_Strings.resourceBundle);
         Scene scene = new Scene(fxmlLoader.load());
-        primaryStage.setTitle("BOSSModellerFX");
+        primaryStage.setTitle(BOSS_Strings.PRODUCT_NAME);
         primaryStage.setScene(scene);
         primaryStage.show();
         //To close all subwindows when main application closes.

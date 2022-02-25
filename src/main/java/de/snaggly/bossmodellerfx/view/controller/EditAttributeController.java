@@ -1,5 +1,6 @@
 package de.snaggly.bossmodellerfx.view.controller;
 
+import de.snaggly.bossmodellerfx.BOSS_Strings;
 import de.snaggly.bossmodellerfx.model.subdata.Attribute;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -99,7 +100,7 @@ public class EditAttributeController implements ModelController<Attribute> {
             this.isPrimaryCheck.setDisable(true);
             this.isNonNullCheck.setDisable(true);
             this.isUniqueCheck.setDisable(true);
-            nameVBox.getChildren().add(new Label("*Fremdschlüssel zu: " + model.getFkTableColumn().getName()));
+            nameVBox.getChildren().add(new Label(BOSS_Strings.ATTRIBUTE_EDITOR_FK_TO + model.getFkTableColumn().getName()));
         }
 
         if (model.isPrimary()) {

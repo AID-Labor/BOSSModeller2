@@ -1,5 +1,6 @@
 package de.snaggly.bossmodellerfx.view;
 
+import de.snaggly.bossmodellerfx.BOSS_Strings;
 import de.snaggly.bossmodellerfx.model.view.Entity;
 import de.snaggly.bossmodellerfx.view.controller.EntityViewController;
 import de.snaggly.bossmodellerfx.view.viewtypes.BiSelectable;
@@ -22,7 +23,7 @@ public abstract class EntityView extends CustomNode<Entity> implements Draggable
 
     public EntityView(Entity entity) throws IOException {
         this.model = entity;
-        FXMLLoader fxmlLoader = new FXMLLoader(EntityView.class.getResource("Entity.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(EntityView.class.getResource("Entity.fxml"), BOSS_Strings.resourceBundle);
         fxmlLoader.setRoot(this);
         fxmlLoader.load();
         controller = fxmlLoader.getController();

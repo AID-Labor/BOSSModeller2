@@ -1,5 +1,6 @@
 package de.snaggly.bossmodellerfx.view;
 
+import de.snaggly.bossmodellerfx.BOSS_Strings;
 import de.snaggly.bossmodellerfx.model.subdata.Attribute;
 import de.snaggly.bossmodellerfx.view.controller.EditAttributeController;
 import de.snaggly.bossmodellerfx.view.viewtypes.CustomNode;
@@ -19,7 +20,7 @@ public abstract class AttributeEditor extends CustomNode<Attribute> {
 
     public AttributeEditor(Attribute model) throws IOException {
         this.model = model;
-        var fxmlLoader = new FXMLLoader(AttributeEditor.class.getResource("EditAttribute.fxml"));
+        var fxmlLoader = new FXMLLoader(AttributeEditor.class.getResource("EditAttribute.fxml"), BOSS_Strings.resourceBundle);
         fxmlLoader.setRoot(this);
         fxmlLoader.load();
         controller = fxmlLoader.getController();
