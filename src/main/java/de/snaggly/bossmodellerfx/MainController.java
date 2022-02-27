@@ -293,7 +293,10 @@ public class MainController {
             stage.setScene(entityBuilder.getKey());
             stage.show();
             addSubWindow(entityBuilder.getKey().getWindow());
-            entityBuilder.getValue().parentObserver = resultedEntity -> selectedEntityView.getController().loadModel(resultedEntity);
+            entityBuilder.getValue().parentObserver = resultedEntity -> {
+                selectedEntityView.getController().loadModel(resultedEntity);
+                showNewRelation(currentProject);
+            };
         } catch (Exception e) {
             GUIMethods.showError(MainController.class.getSimpleName(), BOSS_Strings.PRODUCT_NAME, e.getLocalizedMessage());
         }
@@ -370,17 +373,17 @@ public class MainController {
 
     private void saveNewRelation(Relation dataset) {
         currentProject.addRelation(dataset);
-        showNewRelation(dataset, currentProject);
+        showNewRelation(currentProject);
     }
 
-    private void showNewRelation(Relation relation, Project project) {
+    private void showNewRelation(Project project) {
         //Reload all relations to get the FKs more properly set at strong connections
         for (var projRelation : project.getRelations()) {
             Entity prefFkTable = null;
-            if (relation.getFkAttributesA().size() > 0) {
-                prefFkTable = relation.getTableA();
+            if (projRelation.getFkAttributesA().size() > 0) {
+                prefFkTable = projRelation.getTableA();
             } else {
-                prefFkTable = relation.getTableB();
+                prefFkTable = projRelation.getTableB();
             }
 
             var removedKeysList = ForeignKeyHandler.removeAllForeignKeys(projRelation);
@@ -462,7 +465,7 @@ public class MainController {
 
         try {
             var relationBuilderWindow = RelationEditorWindowBuilder.buildRelationEditor(selectedRelationModel);
-            relationBuilderWindow.getValue().parentObserver = (resultedRelation) -> showNewRelation(resultedRelation, currentProject);
+            relationBuilderWindow.getValue().parentObserver = (resultedRelation) -> showNewRelation(currentProject);
             var stage = new Stage();
             stage.setTitle(BOSS_Strings.EDIT_RELATION);
             stage.setScene(relationBuilderWindow.getKey());
@@ -488,9 +491,7 @@ public class MainController {
             showNewComment(commentView, project);
         }
 
-        for (var relation : project.getRelations()) {
-            showNewRelation(relation, project);
-        }
+        showNewRelation(project);
     }
 
     private void clearProject() {
