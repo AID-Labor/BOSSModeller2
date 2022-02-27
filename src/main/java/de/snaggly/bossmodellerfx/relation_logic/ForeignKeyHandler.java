@@ -197,8 +197,9 @@ public class ForeignKeyHandler {
                     attributeDuplicates.add(i);
                 }
             }
-            for (int i : attributeDuplicates)
-                attrCombo.getAttributes().remove(i);
+            for (int i = attributeDuplicates.size()-1; i>=0; i--) {
+                attrCombo.getAttributes().remove(attributeDuplicates.get(i).intValue());
+            }
         }
     }
 
