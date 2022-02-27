@@ -7,6 +7,7 @@ import de.snaggly.bossmodellerfx.model.subdata.AttributeCombination;
 import de.snaggly.bossmodellerfx.model.subdata.UniqueCombination;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
@@ -31,6 +32,10 @@ public class EditUniqueCombinationWindowController implements ModelController<Un
     private VBox attributesListVBox;
     @FXML
     private VBox uniqueCombNamesListVBox;
+    @FXML
+    private Button newBtn;
+    @FXML
+    private Button deleteBtn;
 
     @FXML
     private void initialize() {
@@ -71,6 +76,7 @@ public class EditUniqueCombinationWindowController implements ModelController<Un
         for (var combination : model.getCombinations()) {
             var attriCombinationL = new AttributeCombination();
             attriCombinationL.setCombinationName(combination.getCombinationName());
+            attriCombinationL.setPrimaryCombination(combination.isPrimaryCombination());
             for (var attribute : combination.getAttributes()){
                 attriCombinationL.addAttribute(attribute);
             }
@@ -111,7 +117,8 @@ public class EditUniqueCombinationWindowController implements ModelController<Un
             tabSwitchMutex = false;
 
             currentActiveCombination = attributeCombination;
-            attributesListVBox.setDisable(false);
+            attributesListVBox.setDisable(attributeCombination.isPrimaryCombination());
+            deleteBtn.setDisable(attributeCombination.isPrimaryCombination());
         });
 
         attributeCombinationOverview.put(textFieldCombination, attributeCombination);

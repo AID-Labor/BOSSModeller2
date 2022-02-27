@@ -3,6 +3,7 @@ package de.snaggly.bossmodellerfx.relation_logic;
 import de.snaggly.bossmodellerfx.BOSS_Strings;
 import de.snaggly.bossmodellerfx.guiLogic.GUIMethods;
 import de.snaggly.bossmodellerfx.model.subdata.Attribute;
+import de.snaggly.bossmodellerfx.model.subdata.AttributeCombination;
 import de.snaggly.bossmodellerfx.model.subdata.Relation;
 import de.snaggly.bossmodellerfx.model.view.Entity;
 import javafx.scene.control.ButtonType;
@@ -102,18 +103,23 @@ public class ForeignKeyHandler {
 
     /**
      * Removes all ForeignKey(s) in relation.
+     * @return A list of a deleted Attributes to keep track of
      */
-    public static void removeAllForeignKeys(Relation relation) {
+    public static LinkedList<Attribute> removeAllForeignKeys(Relation relation) {
         //Removing all ForeignKeys in TabA that reference TabB
         var itemsToRemove = relation.getFkAttributesA();
         relation.getTableA().getAttributes().removeAll(itemsToRemove);
+        var result = new LinkedList<>(itemsToRemove);
         relation.getFkAttributesA().clear();
 
         //Removing all ForeignKeys in TabB that reference TabA
         itemsToRemove.clear();
         itemsToRemove = relation.getFkAttributesB();
         relation.getTableB().getAttributes().removeAll(itemsToRemove);
+        result.addAll(itemsToRemove);
         relation.getFkAttributesB().clear();
+
+        return result;
     }
 
     /**
@@ -138,6 +144,48 @@ public class ForeignKeyHandler {
                 break;
             }
         }
+    }
+
+    /**
+     * When once a ForeignKey is deleted, the UniqueList will leave a ghost behind.
+     * This method will readjust the correct object to remove the ghost if the Key does not live anymore.
+     * @param table The table which contains the UniqueList to be readjusted.
+     * @param removedKeysList A list of all previously removed Key objects. "removeAllForeignKeys" will give that list.
+     * @param newFks A list of the new Key objects.
+     */
+    public static void readjustForeignKeysInUniqueLists(Entity table, LinkedList<Attribute> removedKeysList, LinkedList<Attribute> newFks) {
+        var emptyAttrCombo = new LinkedList<AttributeCombination>();
+        for (var uniqueCombo : table.getUniqueCombination().getCombinations()) {
+            var removedAttrs = new LinkedList<Attribute>();
+            var attrCombo = uniqueCombo.getAttributes();
+            for (int j=0; j<attrCombo.size(); j++) {
+                var attr = attrCombo.get(j);
+                var removedKeyIndex = removedKeysList.indexOf(attr);
+                if (removedKeyIndex >= 0) {
+                    var removedKey = removedKeysList.get(removedKeyIndex);
+                    int newIndex = -1;
+                    for (int i = 0; i<newFks.size(); i++) {
+                        var newFk = newFks.get(i);
+                        if (newFk.getFkTableColumn() == removedKey.getFkTableColumn()
+                                && newFk.getFkTable() == removedKey.getFkTable()) {
+                            newIndex = i;
+                            break;
+                        }
+                    }
+                    if (newIndex < 0) {
+                        removedAttrs.add(attr);
+                    }
+                    else {
+                        attrCombo.set(j, newFks.get(newIndex));
+                    }
+                }
+            }
+            attrCombo.removeAll(removedAttrs);
+            if (attrCombo.size() < 1) { //There is nothing left -> Causes SQL Error
+                emptyAttrCombo.add(uniqueCombo);
+            }
+        }
+        table.getUniqueCombination().getCombinations().removeAll(emptyAttrCombo);
     }
 
     /**
@@ -168,6 +216,15 @@ public class ForeignKeyHandler {
     private static void performAddForeignKeys(Relation relation, Entity tableToAdd, Entity tableFKeyReferencesTo, boolean isStrongRelation, boolean isMust, boolean isUnique) {
         var primaryKeysInA = tableFKeyReferencesTo.getPrimaryKeys();
         var newFks = relation.getFkAttributes(tableToAdd);
+
+        AttributeCombination primaryCombination = null;
+        for (var combination : tableToAdd.getUniqueCombination().getCombinations()) {
+            if (combination.isPrimaryCombination()) {
+                primaryCombination = combination;
+                break;
+            }
+        }
+
         for (var primaryKey : primaryKeysInA) {
             var fkName = primaryKey.getName();
             while (checkIfNameAlreadyExists(fkName, tableToAdd.getAttributes())) {
@@ -185,8 +242,21 @@ public class ForeignKeyHandler {
                     tableFKeyReferencesTo
             );
             newFks.add(fk);
+
+            //New Key has to be enlisted into primary unique list if is set to PrimaryKey
+            if (fk.isPrimary()) {
+                if (primaryCombination == null) {
+                    primaryCombination = new AttributeCombination();
+                    primaryCombination.setPrimaryCombination(true);
+                    primaryCombination.setCombinationName("Primary-Combination");
+                    primaryCombination.getAttributes().addAll(tableToAdd.getPrimaryKeys());
+                    tableToAdd.getUniqueCombination().addCombination(primaryCombination);
+                }
+                primaryCombination.addAttribute(fk);
+            }
         }
         tableToAdd.getAttributes().addAll(newFks);
+
     }
 
     private static boolean checkIfNameAlreadyExists(String suggestedName, ArrayList<Attribute> attributes) {

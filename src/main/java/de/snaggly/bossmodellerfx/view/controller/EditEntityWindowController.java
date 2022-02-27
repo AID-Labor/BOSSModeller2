@@ -32,6 +32,7 @@ import java.util.*;
 public class EditEntityWindowController implements ModelController<Entity> {
     private Entity entity = new Entity();
     private Entity entityRef;
+    private AttributeCombination primaryCombination = null;
 
     private final HashMap<Attribute, LinkedList<Attribute>> foreignAttributes = new HashMap<>();
     private final HashMap<Attribute, Attribute> foreignKeyMap = new HashMap<>();
@@ -68,21 +69,23 @@ public class EditEntityWindowController implements ModelController<Entity> {
         }
 
         try {
-            var attributeEditor = AttributeEditorBuilder.buildAttributeEditor(null);
+            var newAttribute = new Attribute();
+            var attributeEditor = AttributeEditorBuilder.buildAttributeEditor(newAttribute);
             attributeEditor.getController().handleDownBtnClick(attributeEditorDownClick);
             attributeEditor.getController().handleUpBtnClick(attributeEditorUpClick);
             if (index >= 1) {
                 attributesListVBOX.getChildren().add(index, new Separator());
                 attributesListVBOX.getChildren().add(index + 1, attributeEditor);
-                addNewAttributeToEntity(attributeEditor, (index + 1) / 2);
+                entity.getAttributes().add((index + 1) / 2, newAttribute);
             } else if (attributesListVBOX.getChildren().size() >= 1){
-                addNewAttributeToEntity(attributeEditor, 0);
                 attributesListVBOX.getChildren().add(index, attributeEditor);
                 attributesListVBOX.getChildren().add(index + 1, new Separator());
+                entity.getAttributes().add(0, newAttribute);
             } else {
-                addNewAttributeToEntity(attributeEditor, 0);
                 attributesListVBOX.getChildren().add(index, attributeEditor);
+                entity.getAttributes().add(0, newAttribute);
             }
+            bindAttributeToGui(newAttribute, attributeEditor);
         } catch (IOException e) {
             GUIMethods.showError(EditEntityWindowController.class.getSimpleName(), BOSS_Strings.PRODUCT_NAME, e.getLocalizedMessage());
         }
@@ -102,20 +105,40 @@ public class EditEntityWindowController implements ModelController<Entity> {
                 } else {
                     attribute.setPrimary(false);
                 }
+                //Remove PrimaryKey from PrimaryList
+                if (primaryCombination != null) {
+                    primaryCombination.removeAttribute(attribute);
+                    //When there is only one PrimaryKey left, there is no reason to keep unique list
+                    if (primaryCombination.getAttributes().size() <= 1) {
+                        entity.getUniqueCombination().getCombinations().remove(primaryCombination);
+                        primaryCombination = null;
+                    }
+                }
+
             } else {
                 attribute.setPrimary(true);
+                //Multiple PrimaryKeys needs to be in one unique list!
+                var primaryKeysList = entity.getPrimaryKeys();
+                if (primaryKeysList.size() > 1) {
+                    if (primaryCombination == null) {
+                        //Create a new list of the new PrimaryKeys when more than one
+                        primaryCombination = new AttributeCombination();
+                        primaryCombination.setPrimaryCombination(true);
+                        primaryCombination.setCombinationName("Primary-Combination");
+                        primaryCombination.getAttributes().addAll(primaryKeysList);
+                        entity.getUniqueCombination().addCombination(primaryCombination);
+                    }
+                    else {
+                        if (!primaryCombination.getAttributes().contains(attribute))
+                            primaryCombination.addAttribute(attribute);
+                    }
+                }
             }
         });
         guiEditor.getController().getIsNonNullCheck().selectedProperty().addListener((observableValue, s, newValue) -> attribute.setNonNull(newValue));
         guiEditor.getController().getIsUniqueCheck().selectedProperty().addListener((observableValue, s, newValue) -> attribute.setUnique(newValue));
         guiEditor.getController().getCheckTF().textProperty().addListener((observableValue, s, newValue) -> attribute.setCheckName(newValue));
         guiEditor.getController().getDefaultTF().textProperty().addListener((observableValue, s, newValue) -> attribute.setDefaultName(newValue));
-    }
-
-    private void addNewAttributeToEntity(AttributeEditor attributeEditor, int index) {
-        var newAttribute = new Attribute();
-        bindAttributeToGui(newAttribute, attributeEditor);
-        entity.getAttributes().add(index, newAttribute);
     }
 
     @FXML
@@ -144,6 +167,16 @@ public class EditEntityWindowController implements ModelController<Entity> {
             }
             removeAttrbBtn.setDisable(attributesListVBOX.getChildren().size() < 1);
             removeAttrbBtn.requestFocus();
+
+            //Also remove ghost from all Combinations
+            for (var uniqueCombination : entity.getUniqueCombination().getCombinations()) {
+                uniqueCombination.removeAttribute(attributeEditor.getModel());
+            }
+            //Check if PrimaryCombo still has at least more than 1
+            if (primaryCombination != null && primaryCombination.getAttributes().size() <= 1) {
+                entity.getUniqueCombination().getCombinations().remove(primaryCombination);
+                primaryCombination = null;
+            }
         }
     }
 
@@ -240,13 +273,23 @@ public class EditEntityWindowController implements ModelController<Entity> {
 
         if (entityRef != null) {
             adjustForeignKeys();
-            entityRef.setUniqueCombination(entity.getUniqueCombination());
             for (var fkSet : foreignKeyMap.entrySet()) { //Reuse object
                 fkSet.getValue().setName(fkSet.getKey().getName());
                 fkSet.getValue().setCheckName(fkSet.getKey().getCheckName());
                 fkSet.getValue().setDefaultName(fkSet.getKey().getDefaultName());
                 entity.getAttributes().set(entity.getAttributes().indexOf(fkSet.getKey()), fkSet.getValue());
+                //Also take account for UniqueCombos, if one of those FKs is used there. Otherwise->Ghost
+                for (var uniqueCombo : entity.getUniqueCombination().getCombinations()) {
+                    var attrCombo = uniqueCombo.getAttributes();
+                    for (int i=0; i<uniqueCombo.getAttributes().size(); i++) {
+                        var origAttrObj = foreignKeyMap.get(uniqueCombo.getAttributes().get(i));
+                        if (origAttrObj != null) {
+                            attrCombo.set(i, origAttrObj);
+                        }
+                    }
+                }
             }
+            entityRef.setUniqueCombination(entity.getUniqueCombination());
             entityRef.setAttributes(entity.getAttributes());
             entityRef.setName(entity.getName());
             entityRef.setWeakType(entity.isWeakType());
@@ -325,11 +368,19 @@ public class EditEntityWindowController implements ModelController<Entity> {
             for (var attribute : combination.getAttributes()) {
                 attributeCombination.addAttribute(entity.getAttributes().get(model.getAttributes().indexOf(attribute)));
             }
+            attributeCombination.setPrimaryCombination(combination.isPrimaryCombination());
             attributeCombination.setCombinationName(combination.getCombinationName());
             attributeCombinations.add(attributeCombination);
         }
         uniqueCombination.setCombinations(attributeCombinations);
         entity.setUniqueCombination(uniqueCombination);
+        //Get Primary UniqueList of given Model
+        for (var combination : entity.getUniqueCombination().getCombinations()) {
+            if (combination.isPrimaryCombination()) {
+                primaryCombination = combination;
+                break;
+            }
+        }
 
         tableNameTextField.setText(entity.getName());
         isWeakTypeCheckBox.setSelected(entity.isWeakType());
@@ -351,6 +402,7 @@ public class EditEntityWindowController implements ModelController<Entity> {
         } else {
             addAttributeAction();
         }
+        removeAttrbBtn.setDisable(entity.getAttributes().size()<=1);
     }
 
     private final EventHandler<MouseEvent> attributeEditorDownClick = mouseEvent ->  {

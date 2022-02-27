@@ -2,6 +2,7 @@ package de.snaggly.bossmodellerfx;
 
 import de.snaggly.bossmodellerfx.model.adapter.DBLAHolder;
 import de.snaggly.bossmodellerfx.model.subdata.Attribute;
+import de.snaggly.bossmodellerfx.model.subdata.AttributeCombination;
 import de.snaggly.bossmodellerfx.model.subdata.Relation;
 import de.snaggly.bossmodellerfx.model.view.Comment;
 import de.snaggly.bossmodellerfx.model.view.Entity;
@@ -381,8 +382,15 @@ public class MainController {
             } else {
                 prefFkTable = relation.getTableB();
             }
-            ForeignKeyHandler.removeAllForeignKeys(projRelation);
+
+            var removedKeysList = ForeignKeyHandler.removeAllForeignKeys(projRelation);
             ForeignKeyHandler.addForeignKeys(projRelation, prefFkTable);
+
+            //Adapt the new Objects on UniqueList to prevent ghosts
+            ForeignKeyHandler.readjustForeignKeysInUniqueLists(projRelation.getTableA(), removedKeysList, projRelation.getFkAttributesA());
+            ForeignKeyHandler.readjustForeignKeysInUniqueLists(projRelation.getTableB(), removedKeysList, projRelation.getFkAttributesB());
+
+
             var tableAView = entitiesOverview.get(projRelation.getTableA());
             var tableBView = entitiesOverview.get(projRelation.getTableB());
             tableAView.getController().loadModel(projRelation.getTableA());
@@ -436,6 +444,16 @@ public class MainController {
                 }
             }
             entity.getAttributes().removeAll(itemsToRemove);
+
+            //There might be ghosts left in UniqueLists
+            var emptyAttrCombo = new LinkedList<AttributeCombination>();
+            for (var uniqueCombo : entity.getUniqueCombination().getCombinations()) {
+                uniqueCombo.getAttributes().removeAll(foreignKeys);
+                if (uniqueCombo.getAttributes().size() < 1) {
+                    emptyAttrCombo.add(uniqueCombo);
+                }
+            }
+            entity.getUniqueCombination().getCombinations().removeAll(emptyAttrCombo);
         }
     }
 
@@ -500,6 +518,7 @@ public class MainController {
 
         } catch (Exception e) {
             GUIMethods.showError(MainController.class.getSimpleName(), BOSS_Strings.PRODUCT_NAME, e.getLocalizedMessage());
+            e.printStackTrace();
         }
     }
 

@@ -13,8 +13,8 @@
                   <Insets bottom="10.0" top="10.0" />
                </padding>
                <children>
-                  <Button focusTraversable="false" mnemonicParsing="false" onAction="#newUniqueComboClick" text="%uniqueCombinationEditor.CreateNewCombinationBtn" />
-                  <Button focusTraversable="false" mnemonicParsing="false" onAction="#deleteUniqueComboClick" text="%uniqueCombinationEditor.DeleteCombinationBtn" />
+                  <Button focusTraversable="false" mnemonicParsing="false" fx:id="newBtn" onAction="#newUniqueComboClick" text="%uniqueCombinationEditor.CreateNewCombinationBtn" />
+                  <Button focusTraversable="false" mnemonicParsing="false" fx:id="deleteBtn" onAction="#deleteUniqueComboClick" text="%uniqueCombinationEditor.DeleteCombinationBtn" />
                </children></HBox>
             <SplitPane dividerPositions="0.29797979797979796" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" VBox.vgrow="ALWAYS">
               <items>

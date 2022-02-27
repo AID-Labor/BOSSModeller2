@@ -53,6 +53,7 @@ public class SerializableEntity extends EntityAbstraction implements Serializabl
                 serAttrCombination.attributeCombinations.add(
                         entity.getAttributes().indexOf(attrEntry)
                 );
+                serAttrCombination.setPrimaryCombination(uniqueComb.isPrimaryCombination());
             }
             serEntity.uniqueCombination.attributeCombination.add(serAttrCombination);
         }
@@ -91,6 +92,7 @@ public class SerializableEntity extends EntityAbstraction implements Serializabl
             for (var serAttrCombinationEntry : serAttrCombination.attributeCombinations) {
                 attrCombination.addAttribute(entity.getAttributes().get(serAttrCombinationEntry));
             }
+            attrCombination.setPrimaryCombination(serAttrCombination.isPrimaryCombination());
             attrCombinations.add(attrCombination);
         }
 
