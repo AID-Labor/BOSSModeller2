@@ -6,7 +6,7 @@ import de.snaggly.bossmodellerfx.guiLogic.GUIMethods;
 import de.snaggly.bossmodellerfx.guiLogic.Project;
 import de.snaggly.bossmodellerfx.model.adapter.DBConnectorException;
 import de.snaggly.bossmodellerfx.model.adapter.DBLAHolder;
-import de.snaggly.bossmodellerfx.model.adapter.ProjectData;
+import de.snaggly.bossmodellerfx.model.adapter.ProjectDataAdapter;
 import de.snaggly.bossmodellerfx.model.adapter.SQLLanguage;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -98,7 +98,7 @@ public class ChooseDBExportWindowController implements ModelController<DBLAHolde
                 var css = caseSensitive.isSelected();
 
                 var dbla = dblaHolder.getDbla();
-                var legacyProjectHolder = ProjectData.convertFXToLegacyModel(
+                var legacyProjectHolder = ProjectDataAdapter.convertFXToLegacyModel(
                         Project.getCurrentProject().getEntities(), Project.getCurrentProject().getRelations()
                 );
                 dbla.getTables().clear();

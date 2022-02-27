@@ -22,7 +22,7 @@ import java.util.LinkedList;
  *
  * @author Omar Emshani
  */
-public class ProjectData implements BOSSModel {
+public class ProjectDataAdapter implements BOSSModel {
     public String projectName;
     public ArrayList<Entity> entities;
     public ArrayList<Relation> relations;
@@ -34,8 +34,8 @@ public class ProjectData implements BOSSModel {
      * @param dbRelations Legacy DBRelations
      * @return ProjectData Holder
      */
-    public static ProjectData convertLegacyToFXModel(String name, LinkedList<DBTable> dbTables, LinkedList<DBRelation> dbRelations) {
-        var projectData = new ProjectData();
+    public static ProjectDataAdapter convertLegacyToFXModel(String name, LinkedList<DBTable> dbTables, LinkedList<DBRelation> dbRelations) {
+        var projectData = new ProjectDataAdapter();
         projectData.projectName = name;
         projectData.entities = new ArrayList<>();
         projectData.relations = new ArrayList<>();
@@ -79,15 +79,33 @@ public class ProjectData implements BOSSModel {
                 }
             }
 
+            var primaryKeys = entity.getPrimaryKeys();
+            var alreadyHasPrimaryCombination = false;
             var uniqueCombo = new UniqueCombination();
             for (var legacyUniqueCombo : dbTable.getuniqueCombinations()) {
                 //Create new UniqueCombination for current entity
+                boolean isPrimaryUniqueList = true;
                 var attributeCombo = new AttributeCombination();
                 attributeCombo.setCombinationName(legacyUniqueCombo.getShortForm());
+                if (attributeCombo.getCombinationName() == null)
+                    attributeCombo.setCombinationName("");
                 for (var dbColumn : legacyUniqueCombo.getColumns()) {
                     attributeCombo.addAttribute(attributeMap.get(dbColumn));
                 }
+                for (var attribute : attributeCombo.getAttributes()) {
+                    if (!primaryKeys.contains(attribute)) {
+                        isPrimaryUniqueList = false;
+                        break;
+                    }
+                }
+                if (isPrimaryUniqueList) {
+                    if (alreadyHasPrimaryCombination)
+                        continue;
+                    alreadyHasPrimaryCombination = true;
+                }
+                attributeCombo.setPrimaryCombination(isPrimaryUniqueList);
                 uniqueCombo.addCombination(attributeCombo);
+
             }
             entity.setUniqueCombination(uniqueCombo);
 
@@ -108,32 +126,32 @@ public class ProjectData implements BOSSModel {
                     dbRelation.getRelationTypeB() == 0 ? CrowsFootOptions.Obligation.MUST : CrowsFootOptions.Obligation.CAN
             );
 
-            //Adjust ForeignKeys in TableA
-            var foreignKeysList = relation.getFkAttributesA();
-            for (var legacyForeignKey : dbRelation.getForeignKey()) {
-                var newForeignKey = attributeMap.get(legacyForeignKey);
-                newForeignKey.setFkTable(tableB);
-                for (var tableAttribute : tableB.getAttributes()) {
-                    if (tableAttribute.getName().equals(legacyForeignKey.getdBCFKRefName())) {
-                        newForeignKey.setFkTableColumn(tableAttribute);
-                        break;
+            relation.setStrongRelation(dbRelation.getStrongTable() != null);
+            if (dbRelation.getFkTable() == dbRelation.getTableA()) { //TableA got FKs
+                for (var dbColumn : dbRelation.getFkColumn()) {
+                    var fk = attributeMap.get(dbColumn);
+                    fk.setFkTable(relation.getTableB()); //Adjust Table and Column, Entity already houses same Object
+                    for (var foreignColumn : dbRelation.getTableB().getdBTColumns()) {
+                        if (foreignColumn.getdBCName().equals(dbColumn.getdBCFKRefName())) {
+                            fk.setFkTableColumn(attributeMap.get(foreignColumn));
+                        }
                     }
+                    if (!relation.getFkAttributesA().contains(fk))
+                        relation.getFkAttributesA().add(fk);
                 }
-                foreignKeysList.add(newForeignKey);
             }
-
-            //Adjust ForeignKeys in TableB
-            foreignKeysList = relation.getFkAttributesB();
-            for (var legacyForeignKey : dbRelation.getForeignKey()) {
-                var newForeignKey = attributeMap.get(legacyForeignKey);
-                newForeignKey.setFkTable(tableA);
-                for (var tableAttribute : tableA.getAttributes()) {
-                    if (tableAttribute.getName().equals(legacyForeignKey.getdBCFKRefName())) {
-                        newForeignKey.setFkTableColumn(tableAttribute);
-                        break;
+            else if (dbRelation.getFkTable() == dbRelation.getTableB()) {
+                for (var dbColumn : dbRelation.getFkColumn()) {
+                    var fk = attributeMap.get(dbColumn);
+                    fk.setFkTable(relation.getTableA()); //Adjust Table and Column, Entity already houses same Object
+                    for (var foreignColumn : dbRelation.getTableA().getdBTColumns()) {
+                        if (foreignColumn.getdBCName().equals(dbColumn.getdBCFKRefName())) {
+                            fk.setFkTableColumn(attributeMap.get(foreignColumn));
+                        }
                     }
+                    if (!relation.getFkAttributesB().contains(fk))
+                        relation.getFkAttributesB().add(fk);
                 }
-                foreignKeysList.add(newForeignKey);
             }
 
             projectData.relations.add(relation);

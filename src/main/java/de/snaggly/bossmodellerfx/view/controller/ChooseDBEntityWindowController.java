@@ -4,7 +4,7 @@ import de.snaggly.bossmodellerfx.BOSS_Strings;
 import de.snaggly.bossmodellerfx.guiLogic.GUIActionListener;
 import de.snaggly.bossmodellerfx.guiLogic.GUIMethods;
 import de.snaggly.bossmodellerfx.model.adapter.DBLAHolder;
-import de.snaggly.bossmodellerfx.model.adapter.ProjectData;
+import de.snaggly.bossmodellerfx.model.adapter.ProjectDataAdapter;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -20,7 +20,7 @@ import java.util.LinkedList;
  * @author Omar Emshani
  */
 public class ChooseDBEntityWindowController implements ModelController<DBLAHolder> {
-    public GUIActionListener<ProjectData> parentObserver;
+    public GUIActionListener<ProjectDataAdapter> parentObserver;
 
     private DBLAHolder localDBLA;
     private boolean selectionTrigger = false;
@@ -63,7 +63,7 @@ public class ChooseDBEntityWindowController implements ModelController<DBLAHolde
             localDBLA.getDbla().initializeSome(selectedEntities);
             localDBLA.getDbla().initializeRelations();
 
-            parentObserver.notify(ProjectData.convertLegacyToFXModel(
+            parentObserver.notify(ProjectDataAdapter.convertLegacyToFXModel(
                     localDBLA.getSchema(),
                     localDBLA.getDbla().getTables(),
                     localDBLA.getDbla().getRelations()));
