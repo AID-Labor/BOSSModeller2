@@ -9,6 +9,7 @@ import de.snaggly.bossmodellerfx.model.view.Entity;
 import javafx.scene.control.ButtonType;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.LinkedList;
 
 /**
@@ -186,6 +187,19 @@ public class ForeignKeyHandler {
             }
         }
         table.getUniqueCombination().getCombinations().removeAll(emptyAttrCombo);
+
+        //Platting duplicates
+        for (var attrCombo : table.getUniqueCombination().getCombinations()) {
+            var attributeHashSet = new HashSet<Attribute>();
+            var attributeDuplicates = new LinkedList<Integer>();
+            for (int i = 0; i < attrCombo.getAttributes().size(); i++) {
+                if (!attributeHashSet.add(attrCombo.getAttributes().get(i))) {
+                    attributeDuplicates.add(i);
+                }
+            }
+            for (int i : attributeDuplicates)
+                attrCombo.getAttributes().remove(i);
+        }
     }
 
     /**
