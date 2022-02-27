@@ -17,41 +17,54 @@ import java.util.LinkedList;
  */
 public class ForeignKeyHandler {
 
+    public enum WarningType {
+        BOTH_TABLES_CAN_HAVE_FK,
+        TRIGGER,
+        TRANSFORMATION,
+        NO_WARNING
+    }
+
     /**
      * Adds ForeignKey(s) according to set relation.
      * To be used after WeakType, relation and cardinality have been set in relation.
+     * @param preferredTable Only used for cases where it's unclear what table gets ForeignKey.
+     *                       Will return BOTH_TABLES_CAN_HAVE_FK if not set and no FK will be added!
      */
-    public static void addForeignKeys(Relation relation) {
+    public static WarningType addForeignKeys(Relation relation, Entity preferredTable) {
+        var result = WarningType.NO_WARNING;
         if (relation.getTableA_Cardinality() == CrowsFootOptions.Cardinality.ONE
         && relation.getTableB_Cardinality() == CrowsFootOptions.Cardinality.ONE) {
             //1-1
             if (relation.getTableA_Obligation() == CrowsFootOptions.Obligation.CAN
             && relation.getTableB_Obligation() == CrowsFootOptions.Obligation.MUST) {
                 //Can-Must -> FK to TabA
-                performAddForeignKeys(relation.getTableA(), relation.getTableB(), relation.isStrongRelation(), true, true);
+                performAddForeignKeys(relation, relation.getTableA(), relation.getTableB(), relation.isStrongRelation(), true, true);
             }
             else if (relation.getTableA_Obligation() == CrowsFootOptions.Obligation.MUST
                     && relation.getTableB_Obligation() == CrowsFootOptions.Obligation.CAN) {
                 //Must-Can -> FK to TabB
-                performAddForeignKeys(relation.getTableB(), relation.getTableA(), relation.isStrongRelation(), true, true);
+                performAddForeignKeys(relation, relation.getTableB(), relation.getTableA(), relation.isStrongRelation(), true, true);
             }
             else if (relation.getTableA_Obligation() == CrowsFootOptions.Obligation.MUST
                     && relation.getTableB_Obligation() == CrowsFootOptions.Obligation.MUST) {
                 //Must-Must -> User decides where FK goes to, or at the weak; Needs trigger
                 if (relation.getTableA().isWeakType()) {
-                    performAddForeignKeys(relation.getTableA(), relation.getTableB(), relation.isStrongRelation(), true, true);
+                    performAddForeignKeys(relation, relation.getTableA(), relation.getTableB(), relation.isStrongRelation(), true, true);
                 }
                 else if (relation.getTableB().isWeakType()) {
-                    performAddForeignKeys(relation.getTableB(), relation.getTableA(), relation.isStrongRelation(), true, true);
+                    performAddForeignKeys(relation, relation.getTableB(), relation.getTableA(), relation.isStrongRelation(), true, true);
                 }
                 else {
-                    var userInputResult = GUIMethods.showYesNoConfirmationDialog(BOSS_Strings.PRODUCT_NAME, BOSS_Strings.RELATION_EDITOR, BOSS_Strings.RELATION_EDITOR_PROMPT_IF_TABLEA_GETS_FK);
-                    if (userInputResult.isPresent() && userInputResult.get() == ButtonType.YES) {
-                        performAddForeignKeys(relation.getTableA(), relation.getTableB(), relation.isStrongRelation(), true, true);
-                    } else {
-                        performAddForeignKeys(relation.getTableB(), relation.getTableA(), relation.isStrongRelation(), true, true);
+                    if (preferredTable == null) {
+                        result = WarningType.BOTH_TABLES_CAN_HAVE_FK;
                     }
-                    GUIMethods.showWarning(BOSS_Strings.RELATION_EDITOR, BOSS_Strings.RELATION_EDITOR_TRIGGER_WARNING_HEADER, BOSS_Strings.RELATION_EDITOR_TRIGGER_WARNING);
+                    else if (preferredTable == relation.getTableA()) {
+                        ForeignKeyHandler.performAddForeignKeys(relation, relation.getTableA(), relation.getTableB(), relation.isStrongRelation(), true, true);
+                        result = WarningType.TRIGGER;
+                    } else if (preferredTable == relation.getTableB()){
+                        ForeignKeyHandler.performAddForeignKeys(relation, relation.getTableB(), relation.getTableA(), relation.isStrongRelation(), true, true);
+                        result = WarningType.TRIGGER;
+                    }
                 }
             }
         }
@@ -61,13 +74,13 @@ public class ForeignKeyHandler {
             if (relation.getTableA_Obligation() == CrowsFootOptions.Obligation.CAN
             && relation.getTableB_Obligation() == CrowsFootOptions.Obligation.CAN) {
                 //Can-Can -> Can be transformed
-                GUIMethods.showInfo(BOSS_Strings.RELATION_EDITOR, BOSS_Strings.RELATION_EDITOR_TRANSFORMATION_WARNING_HEADER, BOSS_Strings.RELATION_EDITOR_TRANSFORMATION_WARNING);
-                performAddForeignKeys(relation.getTableB(), relation.getTableA(), relation.isStrongRelation(), false, false);
+                result = WarningType.TRANSFORMATION;
+                performAddForeignKeys(relation, relation.getTableB(), relation.getTableA(), relation.isStrongRelation(), false, false);
             }
             else if (relation.getTableA_Obligation() == CrowsFootOptions.Obligation.MUST
                     && relation.getTableB_Obligation() == CrowsFootOptions.Obligation.CAN) {
                 //Must-Can
-                performAddForeignKeys(relation.getTableB(), relation.getTableA(), relation.isStrongRelation(), true, false);
+                performAddForeignKeys(relation, relation.getTableB(), relation.getTableA(), relation.isStrongRelation(), true, false);
             }
         }
         else if (relation.getTableA_Cardinality() == CrowsFootOptions.Cardinality.MANY
@@ -75,15 +88,16 @@ public class ForeignKeyHandler {
             //N-1 -> FK always goes to TabA
             if (relation.getTableA_Obligation() == CrowsFootOptions.Obligation.CAN
             && relation.getTableB_Obligation() == CrowsFootOptions.Obligation.CAN) {
-                GUIMethods.showInfo(BOSS_Strings.RELATION_EDITOR, BOSS_Strings.RELATION_EDITOR_TRANSFORMATION_WARNING_HEADER, BOSS_Strings.RELATION_EDITOR_TRANSFORMATION_WARNING);
-                performAddForeignKeys(relation.getTableA(), relation.getTableB(), relation.isStrongRelation(), false, false);
+                result = WarningType.TRANSFORMATION;
+                performAddForeignKeys(relation, relation.getTableA(), relation.getTableB(), relation.isStrongRelation(), false, false);
             }
             else if (relation.getTableA_Obligation() == CrowsFootOptions.Obligation.CAN
                     && relation.getTableB_Obligation() == CrowsFootOptions.Obligation.MUST) {
                 //Can-Must
-                performAddForeignKeys(relation.getTableA(), relation.getTableB(), relation.isStrongRelation(), true, false);
+                performAddForeignKeys(relation, relation.getTableA(), relation.getTableB(), relation.isStrongRelation(), true, false);
             }
         }
+        return result;
     }
 
     /**
@@ -91,28 +105,15 @@ public class ForeignKeyHandler {
      */
     public static void removeAllForeignKeys(Relation relation) {
         //Removing all ForeignKeys in TabA that reference TabB
-        var itemsToRemove = new LinkedList<Attribute>();
-        for (var attributeA : relation.getTableA().getAttributes()) {
-            var fTable = attributeA.getFkTable();
-            if (fTable == null)
-                continue;
-            if (fTable != relation.getTableB())
-                continue;
-            itemsToRemove.add(attributeA);
-        }
+        var itemsToRemove = relation.getFkAttributesA();
         relation.getTableA().getAttributes().removeAll(itemsToRemove);
+        relation.getFkAttributesA().clear();
 
         //Removing all ForeignKeys in TabB that reference TabA
         itemsToRemove.clear();
-        for (var attributeB : relation.getTableB().getAttributes()) {
-            var fTable = attributeB.getFkTable();
-            if (fTable == null)
-                continue;
-            if (fTable != relation.getTableA())
-                continue;
-            itemsToRemove.add(attributeB);
-        }
+        itemsToRemove = relation.getFkAttributesB();
         relation.getTableB().getAttributes().removeAll(itemsToRemove);
+        relation.getFkAttributesB().clear();
     }
 
     /**
@@ -164,25 +165,28 @@ public class ForeignKeyHandler {
         return result;
     }
 
-    private static void performAddForeignKeys(Entity tableToAdd, Entity tableFKeyReferencesTo, boolean isStrongRelation, boolean isMust, boolean isUnique) {
+    private static void performAddForeignKeys(Relation relation, Entity tableToAdd, Entity tableFKeyReferencesTo, boolean isStrongRelation, boolean isMust, boolean isUnique) {
         var primaryKeysInA = tableFKeyReferencesTo.getPrimaryKeys();
+        var newFks = relation.getFkAttributes(tableToAdd);
         for (var primaryKey : primaryKeysInA) {
             var fkName = primaryKey.getName();
             while (checkIfNameAlreadyExists(fkName, tableToAdd.getAttributes())) {
                 fkName += "X";
             }
-            tableToAdd.addAttribute(new Attribute(
+            var fk = new Attribute(
                     fkName,
                     primaryKey.getType(),
                     isStrongRelation,
                     isMust, //Must->NotNull
                     isUnique, //Unsure if ForeignKey are always Unique!
-                    primaryKey.getCheckName(),
-                    primaryKey.getDefaultName(),
+                    "",
+                    "",
                     primaryKey,
                     tableFKeyReferencesTo
-            ));
+            );
+            newFks.add(fk);
         }
+        tableToAdd.getAttributes().addAll(newFks);
     }
 
     private static boolean checkIfNameAlreadyExists(String suggestedName, ArrayList<Attribute> attributes) {

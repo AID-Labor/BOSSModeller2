@@ -333,6 +333,7 @@ public class MainController {
             stage.show();
             addSubWindow(relationBuilderWindow.getKey().getWindow());
         } catch (IOException e) {
+            e.printStackTrace();
             GUIMethods.showError(MainController.class.getSimpleName(), BOSS_Strings.PRODUCT_NAME, e.getLocalizedMessage());
         }
     }
@@ -373,15 +374,20 @@ public class MainController {
 
     private void showNewRelation(Relation relation, Project project) {
         //Reload all relations to get the FKs more properly set at strong connections
-        for (var profRelation : project.getRelations()) {
-            ForeignKeyHandler.removeAllForeignKeys(profRelation);
-            ForeignKeyHandler.addForeignKeys(profRelation);
-
-            var tableAView = entitiesOverview.get(profRelation.getTableA());
-            var tableBView = entitiesOverview.get(profRelation.getTableB());
-            tableAView.getController().loadModel(profRelation.getTableA());
+        for (var projRelation : project.getRelations()) {
+            Entity prefFkTable = null;
+            if (relation.getFkAttributesA().size() > 0) {
+                prefFkTable = relation.getTableA();
+            } else {
+                prefFkTable = relation.getTableB();
+            }
+            ForeignKeyHandler.removeAllForeignKeys(projRelation);
+            ForeignKeyHandler.addForeignKeys(projRelation, prefFkTable);
+            var tableAView = entitiesOverview.get(projRelation.getTableA());
+            var tableBView = entitiesOverview.get(projRelation.getTableB());
+            tableAView.getController().loadModel(projRelation.getTableA());
             if (tableAView != tableBView) {
-                tableBView.getController().loadModel(profRelation.getTableB());
+                tableBView.getController().loadModel(projRelation.getTableB());
             }
         }
 

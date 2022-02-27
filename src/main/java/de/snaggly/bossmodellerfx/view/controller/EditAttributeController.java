@@ -95,8 +95,6 @@ public class EditAttributeController implements ModelController<Attribute> {
         if (model.getFkTableColumn() != null) {
             isForeignKey = true;
             this.dataTypeComboBox.setDisable(true);
-            this.checkTF.setDisable(true);
-            this.defaultTF.setDisable(true);
             this.isPrimaryCheck.setDisable(true);
             this.isNonNullCheck.setDisable(true);
             this.isUniqueCheck.setDisable(true);

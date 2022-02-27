@@ -109,7 +109,8 @@ public class ProjectData implements BOSSModel {
             );
 
             //Adjust ForeignKeys in TableA
-            for (var legacyForeignKey : dbRelation.getTableA().getdBTFKeyList()) {
+            var foreignKeysList = relation.getFkAttributesA();
+            for (var legacyForeignKey : dbRelation.getForeignKey()) {
                 var newForeignKey = attributeMap.get(legacyForeignKey);
                 newForeignKey.setFkTable(tableB);
                 for (var tableAttribute : tableB.getAttributes()) {
@@ -118,10 +119,12 @@ public class ProjectData implements BOSSModel {
                         break;
                     }
                 }
+                foreignKeysList.add(newForeignKey);
             }
 
             //Adjust ForeignKeys in TableB
-            for (var legacyForeignKey : dbRelation.getTableB().getdBTFKeyList()) {
+            foreignKeysList = relation.getFkAttributesB();
+            for (var legacyForeignKey : dbRelation.getForeignKey()) {
                 var newForeignKey = attributeMap.get(legacyForeignKey);
                 newForeignKey.setFkTable(tableA);
                 for (var tableAttribute : tableA.getAttributes()) {
@@ -130,6 +133,7 @@ public class ProjectData implements BOSSModel {
                         break;
                     }
                 }
+                foreignKeysList.add(newForeignKey);
             }
 
             projectData.relations.add(relation);
@@ -219,13 +223,17 @@ public class ProjectData implements BOSSModel {
 
             //Set foreign Table and Keys
             var fkColumns = new LinkedList<DBColumn>();
-            if (dbRelation.getCardinalityA() > 0) {
+            if (relation.getFkAttributesA().size() > 0) {
                 dbRelation.setFkTable(dbRelation.getTableA());
-                fkColumns.addAll(dbRelation.getTableA().getdBTFKeyList());
+                for (var fk : relation.getFkAttributesA()) {
+                    fkColumns.add(columnMap.get(fk));
+                }
             }
-            else if (dbRelation.getCardinalityB() > 0) {
+            else {
                 dbRelation.setFkTable(dbRelation.getTableB());
-                fkColumns.addAll(dbRelation.getTableB().getdBTFKeyList());
+                for (var fk : relation.getFkAttributesB()) {
+                    fkColumns.add(columnMap.get(fk));
+                }
             }
             dbRelation.setFkColumn(fkColumns);
 

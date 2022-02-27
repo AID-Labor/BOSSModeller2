@@ -34,6 +34,7 @@ public class EditEntityWindowController implements ModelController<Entity> {
     private Entity entityRef;
 
     private final HashMap<Attribute, LinkedList<Attribute>> foreignAttributes = new HashMap<>();
+    private final HashMap<Attribute, Attribute> foreignKeyMap = new HashMap<>();
 
     public GUIActionListener<Entity> parentObserver;
 
@@ -240,6 +241,12 @@ public class EditEntityWindowController implements ModelController<Entity> {
         if (entityRef != null) {
             adjustForeignKeys();
             entityRef.setUniqueCombination(entity.getUniqueCombination());
+            for (var fkSet : foreignKeyMap.entrySet()) { //Reuse object
+                fkSet.getValue().setName(fkSet.getKey().getName());
+                fkSet.getValue().setCheckName(fkSet.getKey().getCheckName());
+                fkSet.getValue().setDefaultName(fkSet.getKey().getDefaultName());
+                entity.getAttributes().set(entity.getAttributes().indexOf(fkSet.getKey()), fkSet.getValue());
+            }
             entityRef.setAttributes(entity.getAttributes());
             entityRef.setName(entity.getName());
             entityRef.setWeakType(entity.isWeakType());
@@ -254,6 +261,7 @@ public class EditEntityWindowController implements ModelController<Entity> {
     private void adjustForeignKeys() {
         for (var foreignKeysSet : foreignAttributes.entrySet()) {
             for (var foreignAttribute : foreignKeysSet.getValue()) {
+                foreignAttribute.setType(foreignKeysSet.getKey().getType());
                 foreignAttribute.setFkTableColumn(foreignKeysSet.getKey());
             }
         }
@@ -304,6 +312,10 @@ public class EditEntityWindowController implements ModelController<Entity> {
 
             if (newAttribute.isPrimary())
                 foreignAttributes.put(newAttribute, getForeignEntities(modelAttribute));
+
+            if (modelAttribute.getFkTableColumn() != null) { //It's a ForeignKey. Making sure to reuse the same object on save, to match Object on relation's foreignKeyList
+                foreignKeyMap.put(newAttribute, modelAttribute);
+            }
         }
 
         var uniqueCombination = new UniqueCombination();

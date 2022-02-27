@@ -19,6 +19,7 @@ import javafx.scene.shape.Line;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 /**
  * Controller for Relation Edit Window
@@ -145,21 +146,25 @@ public class EditRelationWindowController implements ModelController<Relation> {
         entityBModelReference.setWeakType(relation.getTableB().isWeakType());
         entityBModelReference.setAttributes(relation.getTableB().getAttributes());
         //Readjust ForeignKey from TempEntity
-        for (var attribute : relation.getTableA().getAttributes()) { //In TabA
-            if (attribute.getFkTable() == relation.getTableB())
-                attribute.setFkTable(entityBModelReference);
+        for (var attribute : relation.getFkAttributesA()) { //In TabA
+            attribute.setFkTable(entityBModelReference);
         }
-        for (var attribute : relation.getTableB().getAttributes()) { //In TabB
-            if (attribute.getFkTable() == relation.getTableA())
-                attribute.setFkTable(entityAModelReference);
+        for (var attribute : relation.getFkAttributesB()) { //In TabB
+            attribute.setFkTable(entityAModelReference);
         }
+        var preStashedFksA = relation.getFkAttributesA();
+        var preStashedFksB = relation.getFkAttributesB();
         relation.setTableA(entityAModelReference);
         relation.setTableB(entityBModelReference);
+        relation.setFkAttributesA(preStashedFksA);
+        relation.setFkAttributesB(preStashedFksB);
         if (refRelation != null) {
             refRelation.setTableA_Cardinality(relation.getTableA_Cardinality());
             refRelation.setTableA_Obligation(relation.getTableA_Obligation());
             refRelation.setTableB_Cardinality(relation.getTableB_Cardinality());
             refRelation.setTableB_Obligation(relation.getTableB_Obligation());
+            refRelation.setFkAttributesA(relation.getFkAttributesA());
+            refRelation.setFkAttributesB(relation.getFkAttributesB());
             relation = refRelation;
         }
         relation.setStrongRelation(isStrongRelation());
@@ -186,6 +191,12 @@ public class EditRelationWindowController implements ModelController<Relation> {
     @FXML
     private void updateConnectionLine() {
         entityAModelReference = workspace.getEntities().get(tableAEntityCmboBox.getSelectionModel().getSelectedIndex());
+        LinkedList<Attribute> fKeysA = null;
+        LinkedList<Attribute> fKeysB = null;
+        if (refRelation != null) {
+            fKeysA = refRelation.getFkAttributesA();
+            fKeysB = refRelation.getFkAttributesB();
+        }
         var entityAttributes = new ArrayList<>(entityAModelReference.getAttributes());
         //Work on a temp Model, do not apply changes on main model until user saves!
         relation.setTableA(new Entity(
@@ -195,6 +206,9 @@ public class EditRelationWindowController implements ModelController<Relation> {
                 entityAttributes,
                 entityAModelReference.isWeakType()
         ));
+        if (fKeysA != null) {
+            relation.setFkAttributesA(fKeysA);
+        }
 
         if (radioBtnPolyAN.isSelected())
             relation.setTableA_Cardinality(CrowsFootOptions.Cardinality.MANY);
@@ -219,39 +233,8 @@ public class EditRelationWindowController implements ModelController<Relation> {
                     entityBModelReference.isWeakType()
             ));
         }
-
-        //Adjust ForeignKey Table Reference
-        for (int i=0; i<entityAModelReference.getAttributes().size(); i++) { //In TabA
-            var attribute = entityAModelReference.getAttributes().get(i);
-            if (attribute.getFkTable() == entityBModelReference) {
-                relation.getTableA().getAttributes().set(i, new Attribute(
-                        attribute.getName(),
-                        attribute.getType(),
-                        attribute.isPrimary(),
-                        attribute.isNonNull(),
-                        attribute.isUnique(),
-                        attribute.getCheckName(),
-                        attribute.getDefaultName(),
-                        attribute.getFkTableColumn(),
-                        relation.getTableB()
-                ));
-            }
-        }
-        for (int i=0; i<entityBModelReference.getAttributes().size(); i++) { //In TabB
-            var attribute = entityBModelReference.getAttributes().get(i);
-            if (attribute.getFkTable() == entityAModelReference) {
-                relation.getTableB().getAttributes().set(i, new Attribute(
-                        attribute.getName(),
-                        attribute.getType(),
-                        attribute.isPrimary(),
-                        attribute.isNonNull(),
-                        attribute.isUnique(),
-                        attribute.getCheckName(),
-                        attribute.getDefaultName(),
-                        attribute.getFkTableColumn(),
-                        relation.getTableA()
-                ));
-            }
+        if (fKeysB != null) {
+            relation.setFkAttributesB(fKeysB);
         }
 
         if (radioBtnPolyBN.isSelected())
@@ -262,6 +245,42 @@ public class EditRelationWindowController implements ModelController<Relation> {
             relation.setTableB_Obligation(CrowsFootOptions.Obligation.MUST);
         else
             relation.setTableB_Obligation(CrowsFootOptions.Obligation.CAN);
+
+        //Adjust ForeignKey Table Reference
+        var fKeysInA = relation.getFkAttributesA();
+        var allAttributesInA = relation.getTableA().getAttributes();
+        for (int i=0; i<fKeysInA.size(); i++) {
+            var attribute = fKeysInA.get(i);
+            var tableIndex = allAttributesInA.indexOf(attribute);
+            var fk = new Attribute(attribute.getName(),
+                    attribute.getType(),
+                    attribute.isPrimary(),
+                    attribute.isNonNull(),
+                    attribute.isUnique(),
+                    attribute.getCheckName(),
+                    attribute.getDefaultName(),
+                    attribute.getFkTableColumn(),
+                    relation.getTableB());
+            fKeysInA.set(i, fk);
+            allAttributesInA.set(tableIndex, fk);
+        }
+        var fKeysInB = relation.getFkAttributesB();
+        var allAttributesInB = relation.getTableB().getAttributes();
+        for (int i=0; i<relation.getFkAttributesB().size(); i++) {
+            var attribute = fKeysInB.get(i);
+            var tableIndex = allAttributesInB.indexOf(attribute);
+            var fk = new Attribute(attribute.getName(),
+                    attribute.getType(),
+                    attribute.isPrimary(),
+                    attribute.isNonNull(),
+                    attribute.isUnique(),
+                    attribute.getCheckName(),
+                    attribute.getDefaultName(),
+                    attribute.getFkTableColumn(),
+                    relation.getTableA());
+            fKeysInB.set(i, fk);
+            allAttributesInB.set(tableIndex, fk);
+        }
 
         relation.setStrongRelation(tableAIsWeakChkBox.isSelected() || tableBIsWeakChkBox.isSelected());
 
@@ -279,6 +298,8 @@ public class EditRelationWindowController implements ModelController<Relation> {
                 model.getTableA_Obligation(),
                 model.getTableB_Obligation()
         );
+        relation.setFkAttributesA(refRelation.getFkAttributesA());
+        relation.setFkAttributesB(refRelation.getFkAttributesB());
         relation.setStrongRelation(model.isStrongRelation());
         entityAModelReference = relation.getTableA();
         entityBModelReference = relation.getTableB();
@@ -298,7 +319,7 @@ public class EditRelationWindowController implements ModelController<Relation> {
         }
         tableAEntityCmboBox.setDisable(true);
         tableBEntityCmboBox.setDisable(true);
-        rebuildEntityView();
+        updateConnectionLine();
     }
 
     private void handleRelationLines() {
@@ -324,7 +345,24 @@ public class EditRelationWindowController implements ModelController<Relation> {
             examplePane.getChildren().clear();
 
             ForeignKeyHandler.removeAllForeignKeys(relation);
-            ForeignKeyHandler.addForeignKeys(relation);
+            var warning = ForeignKeyHandler.addForeignKeys(relation, null);
+            switch (warning) {
+                case TRANSFORMATION:
+                    GUIMethods.showInfo(BOSS_Strings.RELATION_EDITOR, BOSS_Strings.RELATION_EDITOR_TRANSFORMATION_WARNING_HEADER, BOSS_Strings.RELATION_EDITOR_TRANSFORMATION_WARNING);
+                    break;
+                case BOTH_TABLES_CAN_HAVE_FK:
+                    var userInputResult = GUIMethods.showYesNoConfirmationDialog(BOSS_Strings.PRODUCT_NAME, BOSS_Strings.RELATION_EDITOR, BOSS_Strings.RELATION_EDITOR_PROMPT_IF_TABLEA_GETS_FK);
+                    if (userInputResult.isPresent() && userInputResult.get() == ButtonType.YES) {
+                        ForeignKeyHandler.addForeignKeys(relation, relation.getTableA());
+                    } else {
+                        ForeignKeyHandler.addForeignKeys(relation, relation.getTableB());
+                    }
+                    GUIMethods.showWarning(BOSS_Strings.RELATION_EDITOR, BOSS_Strings.RELATION_EDITOR_TRIGGER_WARNING_HEADER, BOSS_Strings.RELATION_EDITOR_TRIGGER_WARNING);
+                    break;
+                case TRIGGER:
+                    GUIMethods.showWarning(BOSS_Strings.RELATION_EDITOR, BOSS_Strings.RELATION_EDITOR_TRIGGER_WARNING_HEADER, BOSS_Strings.RELATION_EDITOR_TRIGGER_WARNING);
+                    break;
+            }
 
             //Determine if Tables are really weak
             ForeignKeyHandler.setWeakType(relation);
