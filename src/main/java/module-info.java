@@ -28,5 +28,6 @@ module de.snaggly.bossmodellerfx {
     exports de.snaggly.bossmodellerfx.model.abstraction;
     exports de.snaggly.bossmodellerfx.relation_logic;
     exports de.bossmodeler.logicalLayer.elements;
+    exports de.bossmodeler.dbInterface;
     exports de.snaggly.bossmodellerfx.model.adapter;
 }

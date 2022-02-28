@@ -10,6 +10,7 @@ import de.snaggly.bossmodellerfx.BOSS_Strings;
 import de.snaggly.bossmodellerfx.guiLogic.GUIActionListener;
 import de.snaggly.bossmodellerfx.guiLogic.GUIMethods;
 import de.snaggly.bossmodellerfx.model.adapter.DBLAHolder;
+import de.snaggly.bossmodellerfx.model.adapter.SQLInterface;
 import de.snaggly.bossmodellerfx.model.adapter.SQLLanguage;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -118,36 +119,15 @@ public class ConnectToDBWindowController implements ModelController<DBLAHolder>{
     }
 
     private DBLogicalAdministration setDB() throws SQLException {
-        Schnittstelle inter = null;
-        switch (sqlLangChoiceBox.getSelectionModel().getSelectedItem()) {
-            case "PostgreSQL":
-                inter = new PostgreSQLSchnittstelle(
-                        hostTf.getText(),
-                        portTf.getText(),
-                        dbNameTf.getText(),
-                        usernameTf.getText(),
-                        passwordTf.getText(),
-                        schemeNameTf.getText());
-                break;
-            case "MSSQL":
-                inter = new MSSQLServerSchnittstelle(
-                        hostTf.getText(),
-                        portTf.getText(),
-                        dbNameTf.getText(),
-                        usernameTf.getText(),
-                        passwordTf.getText(),
-                        schemeNameTf.getText());
-                break;
-            case "MySQL":
-                inter = new MySQLSchnittstelle(
-                        hostTf.getText(),
-                        portTf.getText(),
-                        dbNameTf.getText(),
-                        usernameTf.getText(),
-                        passwordTf.getText(),
-                        "");
-                break;
-        }
+        var inter = SQLInterface.getDBInterface(
+            SQLLanguage.values()[sqlLangChoiceBox.getSelectionModel().getSelectedIndex()],
+            hostTf.getText(),
+            portTf.getText(),
+            dbNameTf.getText(),
+            usernameTf.getText(),
+            passwordTf.getText(),
+            schemeNameTf.getText()
+        );
 
         if (inter == null)
             throw new SQLException(BOSS_Strings.COULD_NOT_CREATE_DBINTERFACE);
