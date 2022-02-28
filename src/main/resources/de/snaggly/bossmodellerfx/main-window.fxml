@@ -13,7 +13,7 @@
             <panes>
                <TitledPane layoutX="10.0" layoutY="62.0" text="%mainWindow.SideBar.Project">
                   <content>
-                     <ScrollPane>
+                     <ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER">
                         <content>
                            <VBox alignment="TOP_CENTER" spacing="10.0">
                               <Button alignment="CENTER" contentDisplay="CENTER" layoutX="23.0" layoutY="196.0" maxHeight="78.0" maxWidth="78.0" minHeight="78.0" minWidth="78.0" mnemonicParsing="false" onAction="#startNewProject" textAlignment="CENTER" VBox.vgrow="NEVER">
@@ -104,7 +104,7 @@
                </TitledPane>
                <TitledPane alignment="TOP_LEFT" text="%mainWindow.SideBar.Edit">
                   <content>
-                     <ScrollPane fitToWidth="true">
+                     <ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER">
                         <content>
                            <VBox alignment="TOP_CENTER" spacing="10.0">
                               <Button alignment="CENTER" maxHeight="78.0" maxWidth="78.0" minHeight="78.0" minWidth="78.0" mnemonicParsing="false" onAction="#newEntityClick" textAlignment="CENTER" VBox.vgrow="NEVER">
