@@ -89,4 +89,6 @@ public class BOSS_Strings {
     public static final String LEGACY_SUCCESS = resourceBundle.getString("LEGACY_SUCCESS");
     public static final String LEGACY_SQLCOILDNOTBESAVED = resourceBundle.getString("LEGACY_sqlCouldNotBeSaved");
     public static final String LEGACY_ERROR = resourceBundle.getString("LEGACY_ERROR");
+    public static final String TABLE = resourceBundle.getString("table");
+    public static final String ATTRIBUTE = resourceBundle.getString("attribute");
 }
