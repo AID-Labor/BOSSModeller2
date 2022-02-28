@@ -35,8 +35,7 @@ import java.util.HashMap;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
-import static de.snaggly.bossmodellerfx.guiLogic.KeyCombos.keyComboOpen;
-import static de.snaggly.bossmodellerfx.guiLogic.KeyCombos.keyComboSave;
+import static de.snaggly.bossmodellerfx.guiLogic.KeyCombos.*;
 
 /**
  * Controller for Main Window
@@ -581,6 +580,15 @@ public class MainController {
             currentProject.getPressedKeys().clear();
             saveFileClick();
         }
+        else if (currentProject.getPressedKeys().containsAll(keyComboZoomIn)) {
+            zoomInClick();
+        }
+        else if (currentProject.getPressedKeys().containsAll(keyComboZoomOut)) {
+            zoomOutClick();
+        }
+        else if (currentProject.getPressedKeys().containsAll(keyComboZoomRestore)) {
+            zoomResetClick();
+        }
     }
 
     @FXML
@@ -718,5 +726,23 @@ public class MainController {
         } catch (IOException e) {
             GUIMethods.showError(MainController.class.getSimpleName(), BOSS_Strings.PRODUCT_NAME, e.getLocalizedMessage());
         }
+    }
+
+    @FXML
+    private void zoomInClick() {
+        currentProject.getWorkField().setScaleX(currentProject.getWorkField().getScaleX() + 0.1);
+        currentProject.getWorkField().setScaleY(currentProject.getWorkField().getScaleY() + 0.1);
+    }
+
+    @FXML
+    private void zoomOutClick() {
+        currentProject.getWorkField().setScaleX(currentProject.getWorkField().getScaleX() - 0.1);
+        currentProject.getWorkField().setScaleY(currentProject.getWorkField().getScaleY() - 0.1);
+    }
+
+    @FXML
+    private void zoomResetClick() {
+        currentProject.getWorkField().setScaleX(1);
+        currentProject.getWorkField().setScaleY(1);
     }
 }

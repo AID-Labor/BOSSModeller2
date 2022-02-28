@@ -236,6 +236,9 @@
                         <MenuItem mnemonicParsing="false" onAction="#editCommentClick" text="%mainWindow.MenuBar.Edit.EditSelected" />
                         <MenuItem mnemonicParsing="false" onAction="#deleteCommentClick" text="%mainWindow.MenuBar.Edit.DeleteSelected" />
                      </Menu>
+                     <MenuItem mnemonicParsing="false" onAction="#zoomInClick" text="%mainWindow.MenuBar.Edit.ZoomIn" />
+                     <MenuItem mnemonicParsing="false" onAction="#zoomOutClick" text="%mainWindow.MenuBar.Edit.ZoomOut" />
+                     <MenuItem mnemonicParsing="false" onAction="#zoomResetClick" text="%mainWindow.MenuBar.Edit.ZoomReset" />
                   </Menu>
                   <Menu mnemonicParsing="false" text="%mainWindow.MenuBar.Language" />
                   <Menu mnemonicParsing="false" text="%mainWindow.MenuBar.Help">

@@ -2,6 +2,7 @@ package de.snaggly.bossmodellerfx.view;
 
 import de.snaggly.bossmodellerfx.view.viewtypes.Pannable;
 import javafx.event.EventHandler;
+import javafx.scene.Group;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
@@ -15,6 +16,7 @@ import javafx.scene.layout.Pane;
 public class WorkbenchPane extends ScrollPane implements Pannable {
     boolean[] canExtendSize = {true, true};
     double[] startingPos = {0.0, 0.0};
+    private final Pane contentWorkfield = new Pane();
 
     public WorkbenchPane(EventHandler<MouseEvent> onMouseClick) {
         AnchorPane.setTopAnchor(this, 0.0);
@@ -23,16 +25,29 @@ public class WorkbenchPane extends ScrollPane implements Pannable {
         AnchorPane.setRightAnchor(this, 0.0);
         this.setStyle("-fx-border-color: grey;");
 
-        this.setContent(new Pane());
+        this.setContent(contentWorkfield);
         this.setPannable(true);
         this.setHbarPolicy(ScrollBarPolicy.ALWAYS);
         this.setVbarPolicy(ScrollBarPolicy.ALWAYS);
-        this.setFitToWidth(true);
         this.setFitToHeight(true);
+        this.setFitToWidth(true);
 
         setInfinitePannable();
 
+        //If not translated properly, the pane ends up centered when zooming in.
+        //The "proper" solution, wrapping the Pane into a group causes panning to bug out.
+        contentWorkfield.scaleXProperty().addListener((observableValue, number, t1) -> {
+            contentWorkfield.setTranslateX((contentWorkfield.getWidth()*t1.doubleValue() - contentWorkfield.getWidth())/2);
+        });
+        contentWorkfield.scaleYProperty().addListener((observableValue, number, t1) -> {
+            contentWorkfield.setTranslateY((contentWorkfield.getHeight()*t1.doubleValue() - contentWorkfield.getHeight())/2);
+        });
+
         this.getContent().setOnMouseClicked(onMouseClick);
+    }
+
+    public Pane getContentWorkfield() {
+        return contentWorkfield;
     }
 
     /**
@@ -56,13 +71,13 @@ public class WorkbenchPane extends ScrollPane implements Pannable {
             if (canExtendSize[0]) {
                 var deltaX = startingPos[0] - mouseEvent.getX();
                 if (deltaX > 0) {
-                    ((Pane)this.getContent()).setMinWidth(((Pane)this.getContent()).getWidth() + deltaX);
+                    contentWorkfield.setMinWidth(contentWorkfield.getWidth() + deltaX);
                 }
             }
             if (canExtendSize[1]) {
                 var deltaY = startingPos[1] - mouseEvent.getY();
                 if (deltaY > 0) {
-                    ((Pane)this.getContent()).setMinHeight(((Pane)this.getContent()).getHeight() + deltaY);
+                    contentWorkfield.setMinHeight(contentWorkfield.getHeight() + deltaY);
                 }
             }
         });

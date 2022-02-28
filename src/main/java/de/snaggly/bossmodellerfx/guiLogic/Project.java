@@ -7,6 +7,7 @@ import de.snaggly.bossmodellerfx.model.view.Entity;
 import de.snaggly.bossmodellerfx.view.WorkbenchPane;
 import de.snaggly.bossmodellerfx.view.viewtypes.BiSelectable;
 import de.snaggly.bossmodellerfx.view.viewtypes.Selectable;
+import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.input.KeyCode;
 import com.google.gson.Gson;
@@ -106,7 +107,7 @@ public class Project {
     }
 
     public Pane getWorkField() {
-        return (Pane)workField.getContent();
+        return workField.getContentWorkfield();
     }
 
     public WorkbenchPane getWorkFieldWrapper() {

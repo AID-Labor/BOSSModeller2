@@ -18,4 +18,16 @@ public class KeyCombos {
     public static final ArrayList<KeyCode> keyComboSave = new ArrayList<>(Arrays.asList(
             KeyCode.CONTROL, KeyCode.S
     ));
+
+    public static final ArrayList<KeyCode> keyComboZoomIn = new ArrayList<>(Arrays.asList(
+            KeyCode.CONTROL, KeyCode.PLUS
+    ));
+
+    public static final ArrayList<KeyCode> keyComboZoomOut = new ArrayList<>(Arrays.asList(
+            KeyCode.CONTROL, KeyCode.MINUS
+    ));
+
+    public static final ArrayList<KeyCode> keyComboZoomRestore = new ArrayList<>(Arrays.asList(
+            KeyCode.CONTROL, KeyCode.DIGIT0
+    ));
 }
