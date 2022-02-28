@@ -2,6 +2,11 @@ package de.snaggly.bossmodellerfx;
 
 import java.util.ResourceBundle;
 
+/**
+ * Gets translated string from ResourceBundle "strings".
+ * Language is set by current system Locale or by messing with default Locale.
+ * @author Omar Emshani
+ */
 public class BOSS_Strings {
     public static final ResourceBundle resourceBundle = ResourceBundle.getBundle("de.snaggly.bossmodellerfx.strings");
     public static final String PRODUCT_NAME = resourceBundle.getString("bossmodellerfx");
@@ -94,4 +99,19 @@ public class BOSS_Strings {
     public static final String TABLE = resourceBundle.getString("table");
     public static final String ATTRIBUTE = resourceBundle.getString("attribute");
     public static final String SQL_DISPLAY = resourceBundle.getString("SQL_DISPLAY");
+    public static final String DESCRIPTOR_START_NEW_PROJECT = resourceBundle.getString("DESCRIPTOR_START_NEW_PROJECT");
+    public static final String DESCRIPTOR_OPEN_PROJECT = resourceBundle.getString("DESCRIPTOR_OPEN_PROJECT");
+    public static final String DESCRIPTOR_SAVE_PROJECT = resourceBundle.getString("DESCRIPTOR_SAVE_PROJECT");
+    public static final String DESCRIPTOR_EXPORT_PICTURE = resourceBundle.getString("DESCRIPTOR_EXPORT_PICTURE");
+    public static final String DESCRIPTOR_DB_IMPORT = resourceBundle.getString("DESCRIPTOR_DB_IMPORT");
+    public static final String DESCRIPTOR_DB_EXPORT = resourceBundle.getString("DESCRIPTOR_DB_EXPORT");
+    public static final String DESCRIPTOR_EXPORT_SQL = resourceBundle.getString("DESCRIPTOR_EXPORT_SQL");
+    public static final String DESCRIPTOR_NEW_ENTITY = resourceBundle.getString("DESCRIPTOR_NEW_ENTITY");
+    public static final String DESCRIPTOR_EDIT_ENTITY = resourceBundle.getString("DESCRIPTOR_EDIT_ENTITY");
+    public static final String DESCRIPTOR_DELETE_ENTITY = resourceBundle.getString("DESCRIPTOR_DELETE_ENTITY");
+    public static final String DESCRIPTOR_NEW_RELATION = resourceBundle.getString("DESCRIPTOR_NEW_RELATION");
+    public static final String DESCRIPTOR_EDIT_RELATION = resourceBundle.getString("DESCRIPTOR_EDIT_RELATION");
+    public static final String DESCRIPTOR_DELETE_RELATION = resourceBundle.getString("DESCRIPTOR_DELETE_RELATION");
+    public static final String DESCRIPTOR_NEW_COMMENT = resourceBundle.getString("DESCRIPTOR_NEW_COMMENT");
+    public static final String DESCRIPTOR_DELETE_COMMENT = resourceBundle.getString("DESCRIPTOR_DELETE_COMMENT");
 }

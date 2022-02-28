@@ -44,6 +44,38 @@ import static de.snaggly.bossmodellerfx.guiLogic.KeyCombos.*;
  */
 public class MainController {
     @FXML
+    private Label infoLabel;
+    @FXML
+    private Button startNewProjectBtn;
+    @FXML
+    private Button openFileBtn;
+    @FXML
+    private Button saveFileBtn;
+    @FXML
+    private Button exportPictureBtn;
+    @FXML
+    private Button importFromDBBtn;
+    @FXML
+    private Button exportToDBBtn;
+    @FXML
+    private Button exportSQLBtn;
+    @FXML
+    private Button newEntityBtn;
+    @FXML
+    private Button editEntityBtn;
+    @FXML
+    private Button deleteEntityBtn;
+    @FXML
+    private Button newRelationBtn;
+    @FXML
+    private Button editRelationBtn;
+    @FXML
+    private Button deleteRelationBtn;
+    @FXML
+    private Button newCommentBtn;
+    @FXML
+    private Button deleteCommentBtn;
+    @FXML
     private Accordion leftNavigationAccordion;
     @FXML
     private TabPane projectsTabPane;
@@ -95,6 +127,38 @@ public class MainController {
             }
         });
         addNewProjectTab(new WorkbenchPane(this::onMainWorkbenchClick), true);
+
+        //Setting up InfoLabel
+        startNewProjectBtn.setOnMouseEntered(mouseEvent -> infoLabel.setText(BOSS_Strings.DESCRIPTOR_START_NEW_PROJECT));
+        startNewProjectBtn.setOnMouseExited(mouseEvent -> infoLabel.setText(""));
+        openFileBtn.setOnMouseEntered(mouseEvent -> infoLabel.setText(BOSS_Strings.DESCRIPTOR_OPEN_PROJECT));
+        openFileBtn.setOnMouseExited(mouseEvent -> infoLabel.setText(""));
+        saveFileBtn.setOnMouseEntered(mouseEvent -> infoLabel.setText(BOSS_Strings.DESCRIPTOR_SAVE_PROJECT));
+        saveFileBtn.setOnMouseExited(mouseEvent -> infoLabel.setText(""));
+        exportPictureBtn.setOnMouseEntered(mouseEvent -> infoLabel.setText(BOSS_Strings.DESCRIPTOR_EXPORT_PICTURE));
+        exportPictureBtn.setOnMouseExited(mouseEvent -> infoLabel.setText(""));
+        importFromDBBtn.setOnMouseEntered(mouseEvent -> infoLabel.setText(BOSS_Strings.DESCRIPTOR_DB_IMPORT));
+        importFromDBBtn.setOnMouseExited(mouseEvent -> infoLabel.setText(""));
+        exportToDBBtn.setOnMouseEntered(mouseEvent -> infoLabel.setText(BOSS_Strings.DESCRIPTOR_DB_EXPORT));
+        exportToDBBtn.setOnMouseExited(mouseEvent -> infoLabel.setText(""));
+        exportSQLBtn.setOnMouseEntered(mouseEvent -> infoLabel.setText(BOSS_Strings.DESCRIPTOR_EXPORT_SQL));
+        exportSQLBtn.setOnMouseExited(mouseEvent -> infoLabel.setText(""));
+        newEntityBtn.setOnMouseEntered(mouseEvent -> infoLabel.setText(BOSS_Strings.DESCRIPTOR_NEW_ENTITY));
+        newEntityBtn.setOnMouseExited(mouseEvent -> infoLabel.setText(""));
+        editEntityBtn.setOnMouseEntered(mouseEvent -> infoLabel.setText(BOSS_Strings.DESCRIPTOR_EDIT_ENTITY));
+        editEntityBtn.setOnMouseExited(mouseEvent -> infoLabel.setText(""));
+        deleteEntityBtn.setOnMouseEntered(mouseEvent -> infoLabel.setText(BOSS_Strings.DESCRIPTOR_DELETE_ENTITY));
+        deleteEntityBtn.setOnMouseExited(mouseEvent -> infoLabel.setText(""));
+        newRelationBtn.setOnMouseEntered(mouseEvent -> infoLabel.setText(BOSS_Strings.DESCRIPTOR_NEW_RELATION));
+        newRelationBtn.setOnMouseExited(mouseEvent -> infoLabel.setText(""));
+        editRelationBtn.setOnMouseEntered(mouseEvent -> infoLabel.setText(BOSS_Strings.DESCRIPTOR_EDIT_RELATION));
+        editRelationBtn.setOnMouseExited(mouseEvent -> infoLabel.setText(""));
+        deleteRelationBtn.setOnMouseEntered(mouseEvent -> infoLabel.setText(BOSS_Strings.DESCRIPTOR_DELETE_RELATION));
+        deleteRelationBtn.setOnMouseExited(mouseEvent -> infoLabel.setText(""));
+        newCommentBtn.setOnMouseEntered(mouseEvent -> infoLabel.setText(BOSS_Strings.DESCRIPTOR_NEW_COMMENT));
+        newCommentBtn.setOnMouseExited(mouseEvent -> infoLabel.setText(""));
+        deleteCommentBtn.setOnMouseEntered(mouseEvent -> infoLabel.setText(BOSS_Strings.DESCRIPTOR_DELETE_COMMENT));
+        deleteCommentBtn.setOnMouseExited(mouseEvent -> infoLabel.setText(""));
     }
 
     private void initializeContextMenu(Pane workBench) {
