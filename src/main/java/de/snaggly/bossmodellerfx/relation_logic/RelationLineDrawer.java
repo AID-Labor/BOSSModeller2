@@ -69,7 +69,7 @@ public class RelationLineDrawer {
             }
 
             if (relationViewNode == null) {
-                relationViewNode = new RelationViewNode(relation);
+                relationViewNode = new RelationViewNode(relation, node1, node2);
                 relationViewNode.line1 = new RelationLineView(relationViewNode, currentProject::setCurrentSelected);
                 relationViewNode.line2 = new RelationLineView(relationViewNode, currentProject::setCurrentSelected);
                 relationViewNode.line3 = new RelationLineView(relationViewNode, currentProject::setCurrentSelected);

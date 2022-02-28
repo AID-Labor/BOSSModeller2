@@ -5,6 +5,7 @@ import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 
 /**
@@ -44,5 +45,21 @@ public class EntityViewController implements ModelController<Entity> {
         weakLineNE.setVisible(model.isWeakType());
         weakLineSW.setVisible(model.isWeakType());
         weakLineSE.setVisible(model.isWeakType());
+    }
+
+    public void highlightAttributeAt(int index) throws IndexOutOfBoundsException {
+        var attributeLabel = ((Label)entityAttributesVBox.getChildren().get(index));
+        if (attributeLabel == null)
+            throw new IndexOutOfBoundsException();
+
+        attributeLabel.setTextFill(Color.rgb(3,158,211));
+    }
+
+    public void unHighlightAttributeAt(int index) throws IndexOutOfBoundsException {
+        var attributeLabel = ((Label)entityAttributesVBox.getChildren().get(index));
+        if (attributeLabel == null)
+            throw new IndexOutOfBoundsException();
+
+        attributeLabel.setTextFill(Color.BLACK);
     }
 }

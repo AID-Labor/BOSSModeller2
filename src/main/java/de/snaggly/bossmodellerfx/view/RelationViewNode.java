@@ -6,6 +6,7 @@ import de.snaggly.bossmodellerfx.view.viewtypes.CustomNode;
 import javafx.scene.Node;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 /**
  * Wrapper ViewNode to bundle all required views for a relation.
@@ -14,6 +15,12 @@ import java.util.ArrayList;
  */
 public class RelationViewNode extends CustomNode<Relation> {
     private final Relation model;
+    private final EntityView tableAView;
+    private final EntityView tableBView;
+
+    private final LinkedList<Integer> fkAttributesA = new LinkedList<>();
+    private final LinkedList<Integer> fkAttributesB = new LinkedList<>();
+
     public RelationLineView line1;
     public RelationLineView line2;
     public RelationLineView line3;
@@ -21,8 +28,23 @@ public class RelationViewNode extends CustomNode<Relation> {
     public CrowsFootShape crowsFootA;
     public CrowsFootShape crowsFootB;
 
-    public RelationViewNode(Relation model) {
+    public RelationViewNode(Relation model, EntityView tableAView, EntityView tableBView) {
         this.model = model;
+        this.tableAView = tableAView;
+        this.tableBView = tableBView;
+
+        for (var fk : model.getFkAttributesA()) {
+            var index = model.getTableA().getAttributes().indexOf(fk);
+            if (index >= 0) {
+                fkAttributesA.add(index);
+            }
+        }
+        for (var fk : model.getFkAttributesB()) {
+            var index = model.getTableB().getAttributes().indexOf(fk);
+            if (index >= 0) {
+                fkAttributesB.add(index);
+            }
+        }
     }
 
     public ArrayList<Node> getAllNodes() {
@@ -83,6 +105,11 @@ public class RelationViewNode extends CustomNode<Relation> {
             line3.highlight();
         if (line4 != null)
             line4.highlight();
+
+        for (var index : fkAttributesA)
+            tableAView.getController().highlightAttributeAt(index);
+        for (var index : fkAttributesB)
+            tableBView.getController().highlightAttributeAt(index);
     }
 
     @Override
@@ -99,5 +126,10 @@ public class RelationViewNode extends CustomNode<Relation> {
             line3.deHighlight();
         if (line4 != null)
             line4.deHighlight();
+
+        for (var index : fkAttributesA)
+            tableAView.getController().unHighlightAttributeAt(index);
+        for (var index : fkAttributesB)
+            tableBView.getController().unHighlightAttributeAt(index);
     }
 }
