@@ -246,6 +246,34 @@ public class GUIMethods {
      * @param window Related window to draw dialog from.
      * @return Selected file.
      */
+    public static File showSQLFileSaveDialog(String title, Window window) {
+        return getSQLFileChooser(title).showSaveDialog(window);
+    }
+
+    /**
+     * Shows the open file dialog to save a project file.
+     * @param title Text to be shown on title
+     * @param window Related window to draw dialog from.
+     * @return Selected file.
+     */
+    public static File showSQLFileOpenDialog(String title, Window window) {
+        return getSQLFileChooser(title).showOpenDialog(window);
+    }
+
+    private static FileChooser getSQLFileChooser(String title) {
+        var fileChooser = new FileChooser();
+        fileChooser.setTitle(title);
+        fileChooser.setInitialFileName("SQL-Skript.sql");
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter(BOSS_Strings.SQL_FILE, "*.sql"));
+        return fileChooser;
+    }
+
+    /**
+     * Shows the save file dialog to save a project file.
+     * @param title Text to be shown on title
+     * @param window Related window to draw dialog from.
+     * @return Selected file.
+     */
     public static File showJSONFileSaveDialog(String title, Window window) {
         return getJSONFileChooser(title).showSaveDialog(window);
     }

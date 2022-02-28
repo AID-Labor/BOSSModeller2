@@ -24,6 +24,7 @@ public class BOSS_Strings {
     public static final String NO_RELATION_SELECTED = resourceBundle.getString("NO_RELATION_SELECTED");
     public static final String OPEN_PROJECT = resourceBundle.getString("OPEN_PROJECT");
     public static final String SAVE_PROJECT = resourceBundle.getString("SAVE_PROJECT");
+    public static final String SAVE_SQL = resourceBundle.getString("SAVE_SQL");
     public static final String DEFAULT_COMMENT_STRING = resourceBundle.getString("DEFAULT_COMMENT_STRING");
     public static final String EXPORT_TO_PICTURE = resourceBundle.getString("EXPORT_TO_PICTURE");
     public static final String DEFAULT_NEWPROJECT_NAME = resourceBundle.getString("DEFAULT_NEWPROJECT_NAME");
@@ -78,6 +79,7 @@ public class BOSS_Strings {
     public static final String RELATION_EDITOR_TRANSFORMATION_WARNING_HEADER = resourceBundle.getString("RELATION_EDITOR_TRANSFORMATION_WARNING_HEADER");
     public static final String JSON_FILE = resourceBundle.getString("JSON_FILE");
     public static final String PNG_FILE = resourceBundle.getString("PNG_FILE");
+    public static final String SQL_FILE = resourceBundle.getString("SQL_FILE");
     public static final String LEGACY_ERROR_LOADING_DRIVER = resourceBundle.getString("LEGACY_ERROR_LOADING_DRIVER");
     public static final String LEGACY_INSERT_SCHEMA = resourceBundle.getString("LEGACY_INSERT_SCHEMA");
     public static final String LEGACY_MYSQL_CHECK_CONSTRAINT_WARNING = resourceBundle.getString("LEGACY_MYSQL_CHECK_CONSTRAINT_WARNING");
@@ -91,4 +93,5 @@ public class BOSS_Strings {
     public static final String LEGACY_ERROR = resourceBundle.getString("LEGACY_ERROR");
     public static final String TABLE = resourceBundle.getString("table");
     public static final String ATTRIBUTE = resourceBundle.getString("attribute");
+    public static final String SQL_DISPLAY = resourceBundle.getString("SQL_DISPLAY");
 }

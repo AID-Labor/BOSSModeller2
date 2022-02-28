@@ -745,4 +745,18 @@ public class MainController {
         currentProject.getWorkField().setScaleX(1);
         currentProject.getWorkField().setScaleY(1);
     }
+
+    @FXML
+    public void exportSQLClick() {
+        try {
+            var window = SQLViewerBuilder.buildSQLViewer(currentProject);
+            var sqlWindowStage = new Stage();
+            sqlWindowStage.setScene(window.getKey());
+            sqlWindowStage.setTitle(BOSS_Strings.SQL_DISPLAY);
+            sqlWindowStage.show();
+            addSubWindow(sqlWindowStage);
+        } catch (IOException e) {
+            GUIMethods.showError(MainController.class.getSimpleName(), BOSS_Strings.PRODUCT_NAME, e.getLocalizedMessage());
+        }
+    }
 }

@@ -82,7 +82,7 @@
                                     </ImageView>
                                  </graphic>
                               </Button>
-                              <Button alignment="CENTER" contentDisplay="CENTER" layoutX="23.0" layoutY="475.0" maxHeight="78.0" maxWidth="78.0" minHeight="78.0" minWidth="78.0" mnemonicParsing="false" textAlignment="CENTER">
+                              <Button alignment="CENTER" contentDisplay="CENTER" layoutX="23.0" layoutY="475.0" maxHeight="78.0" maxWidth="78.0" minHeight="78.0" minWidth="78.0" mnemonicParsing="false" onAction="#exportSQLClick" textAlignment="CENTER">
                                  <font>
                                     <Font name="System Bold" size="31.0" />
                                  </font>
@@ -215,7 +215,7 @@
                      <MenuItem mnemonicParsing="false" onAction="#saveUnderFileClick" text="%mainWindow.MenuBar.File.SaveAs" />
                      <Menu mnemonicParsing="false" text="%mainWindow.MenuBar.File.Export">
                         <MenuItem mnemonicParsing="false" onAction="#exportPictureClick" text="%mainWindow.MenuBar.File.Export.AsPicture" />
-                        <MenuItem mnemonicParsing="false" text="%mainWindow.MenuBar.File.Export.AsSQL" />
+                        <MenuItem fx:id="exportSQLClick" mnemonicParsing="false" text="%mainWindow.MenuBar.File.Export.AsSQL" />
                         <MenuItem mnemonicParsing="false" onAction="#exportToDBClick" text="%mainWindow.MenuBar.File.Export.ToDB" />
                      </Menu>
                      <MenuItem mnemonicParsing="false" onAction="#closeApp" text="%mainWindow.MenuBar.File.Close" />
