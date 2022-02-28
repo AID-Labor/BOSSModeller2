@@ -15,7 +15,9 @@ import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
 import javafx.stage.FileChooser;
 import javafx.stage.Window;
@@ -74,11 +76,11 @@ public class GUIMethods {
                     final double translateX = nodeToDrag.getLayoutX() + deltaX;
                     final double translateY = nodeToDrag.getLayoutY() + deltaY;
 
-                    if (translateX >= 0 && translateX < parent.getWidth() - nodeToDrag.getWidth() - 40) {
+                    if (translateX >= 0) {
                         nodeToDrag.setLayoutX(translateX);
                         model.setXCoordinate(translateX);
                     }
-                    if (translateY >= 0 && translateY < parent.getHeight() - nodeToDrag.getHeight() - 40) {
+                    if (translateY >= 0) {
                         nodeToDrag.setLayoutY(translateY);
                         model.setYCoordinate(translateY);
                     }

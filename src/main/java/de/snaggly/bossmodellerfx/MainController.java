@@ -98,7 +98,7 @@ public class MainController {
         addNewProjectTab(new WorkbenchPane(this::onMainWorkbenchClick), true);
     }
 
-    private void initializeContextMenu(WorkbenchPane workBench) {
+    private void initializeContextMenu(Pane workBench) {
         workBench.setOnContextMenuRequested(contextMenuEvent -> {
             mainWorkbenchContextMenu.getItems().clear();
             var currentSelection = currentProject.getCurrentSelected();
@@ -140,8 +140,8 @@ public class MainController {
 
             var newEntityMenu = new MenuItem(BOSS_Strings.NEW_ENTITY);
             newEntityMenu.setOnAction(actionEvent -> createNewEntity(
-                    ((MenuItem)(actionEvent.getSource())).getParentPopup().getX() - (currentProject.getWorkField().getScene().getWindow().getX() + currentProject.getWorkField().getLayoutX()),
-                    ((MenuItem)(actionEvent.getSource())).getParentPopup().getY() - (currentProject.getWorkField().getScene().getWindow().getY() + currentProject.getWorkField().getLayoutY())
+                    contextMenuEvent.getX(),
+                    contextMenuEvent.getY()
             ));
 
             var newRelationMenu = new MenuItem(BOSS_Strings.NEW_RELATION);
@@ -149,8 +149,8 @@ public class MainController {
 
             var newCommentMenu = new MenuItem(BOSS_Strings.NEW_COMMENT);
             newCommentMenu.setOnAction(actionEvent -> createNewComment(
-                    ((MenuItem)(actionEvent.getSource())).getParentPopup().getX() - (currentProject.getWorkField().getScene().getWindow().getX() + currentProject.getWorkField().getLayoutX()),
-                    ((MenuItem)(actionEvent.getSource())).getParentPopup().getY() - (currentProject.getWorkField().getScene().getWindow().getY() + currentProject.getWorkField().getLayoutY())
+                    contextMenuEvent.getX(),
+                    contextMenuEvent.getY()
             ));
             mainWorkbenchContextMenu.getItems().addAll(newEntityMenu, newCommentMenu, newRelationMenu);
             mainWorkbenchContextMenu.show(
@@ -599,71 +599,8 @@ public class MainController {
     }
 
     private void addNewProjectTab(String tabName, Project newProject, boolean switchTo) {
-        var workbench = newProject.getWorkField();
-        //var scrollPane = new ScrollPane(workbench); ScrollPane implementation yet does not work.
+        var workbench = newProject.getWorkFieldWrapper();
         var newTab = new Tab(tabName, workbench);
-
-        //Automatically increase Workbench size when resizing. Keep size when shrinking.
-        //TODO YET TO IMPLEMENT PROPERLY!
-        //TODO When dragging Entity over edge, also increase bench size
-        /*scrollPane.setFitToWidth(true);
-        scrollPane.setFitToHeight(true);
-        var initialTabTotalWidth = new AtomicReference<>(0);
-        var initialTabTotalHeight = new AtomicReference<>(0);
-        //Get initial Tab size when stage has been drawn
-        projectsTabPane.widthProperty().addListener(new ChangeListener<>() {
-            @Override
-            public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
-                initialTabTotalWidth.set(t1.intValue());
-                projectsTabPane.widthProperty().removeListener(this);
-            }
-        });
-        projectsTabPane.heightProperty().addListener(new ChangeListener<>() {
-            @Override
-            public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
-                initialTabTotalHeight.set(t1.intValue());
-                projectsTabPane.widthProperty().removeListener(this);
-            }
-        });
-
-        //Get delta of bench to bad size
-        workbench.widthProperty().addListener(new ChangeListener<>() {
-            @Override
-            public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
-                workbench.widthProperty().removeListener(this);
-
-                var delta = initialTabTotalWidth.get() - t1.intValue();
-                final int[] previousVal = {0};
-                scrollPane.setFitToWidth(false);
-                //When resizing window -> Tab gets resized -> explicitly delegate Bench resize
-                projectsTabPane.widthProperty().addListener((observableValue1, number1, t11) -> {
-                    var newVal = t11.intValue() - delta;
-                    if (newVal > previousVal[0]) {
-                        previousVal[0] = newVal;
-                        workbench.setPrefWidth(newVal);
-                    }
-                });
-            }
-        });
-        workbench.heightProperty().addListener(new ChangeListener<>() {
-            @Override
-            public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
-                workbench.heightProperty().removeListener(this);
-
-                var delta = initialTabTotalHeight.get() - t1.intValue();
-                final int[] previousVal = {0};
-                scrollPane.setFitToHeight(false);
-                projectsTabPane.heightProperty().addListener((observableValue1, number1, t11) -> {
-                    var newVal = t11.intValue() - delta;
-                    if (newVal > previousVal[0]) {
-                        previousVal[0] = newVal;
-                        workbench.setPrefHeight(newVal);
-                    }
-                });
-            }
-        });
-
-        scrollPane.setPannable(true);*/
 
         projectsTabPane.getTabs().add(newTab);
 

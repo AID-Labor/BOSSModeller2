@@ -10,6 +10,7 @@ import de.snaggly.bossmodellerfx.view.viewtypes.Selectable;
 import javafx.scene.Node;
 import javafx.scene.input.KeyCode;
 import com.google.gson.Gson;
+import javafx.scene.layout.Pane;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -101,10 +102,14 @@ public class Project {
         pressedKeys.clear();
         currentSelected = null;
         secondSelection = null;
-        workField.getChildren().clear();
+        ((Pane)workField.getContent()).getChildren().clear();
     }
 
-    public WorkbenchPane getWorkField() {
+    public Pane getWorkField() {
+        return (Pane)workField.getContent();
+    }
+
+    public WorkbenchPane getWorkFieldWrapper() {
         return workField;
     }
 
