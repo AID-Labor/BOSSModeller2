@@ -209,7 +209,7 @@
                      <MenuItem mnemonicParsing="false" onAction="#openFileClick" text="%mainWindow.MenuBar.File.Open" />
                      <Menu mnemonicParsing="false" text="%mainWindow.MenuBar.File.Import">
                         <MenuItem mnemonicParsing="false" onAction="#importFromDBClick" text="%mainWindow.MenuBar.File.Import.FromDB" />
-                        <MenuItem mnemonicParsing="false" text="%mainWindow.MenuBar.File.Import.FromSQL" />
+                        <!--MenuItem mnemonicParsing="false" text="%mainWindow.MenuBar.File.Import.FromSQL" /-->
                      </Menu>
                      <MenuItem mnemonicParsing="false" onAction="#saveFileClick" text="%mainWindow.MenuBar.File.Save" />
                      <MenuItem mnemonicParsing="false" onAction="#saveUnderFileClick" text="%mainWindow.MenuBar.File.SaveAs" />
