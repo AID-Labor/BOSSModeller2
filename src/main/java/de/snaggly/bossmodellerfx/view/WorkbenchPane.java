@@ -1,6 +1,8 @@
 package de.snaggly.bossmodellerfx.view;
 
 import de.snaggly.bossmodellerfx.view.viewtypes.Pannable;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.control.ScrollPane;
@@ -16,6 +18,7 @@ import javafx.scene.layout.Pane;
 public class WorkbenchPane extends ScrollPane implements Pannable {
     boolean[] canExtendSize = {true, true};
     double[] startingPos = {0.0, 0.0};
+    double[] minSize = {0.0, 0.0};
     private final Pane contentWorkfield = new Pane();
 
     public WorkbenchPane(EventHandler<MouseEvent> onMouseClick) {
@@ -43,6 +46,25 @@ public class WorkbenchPane extends ScrollPane implements Pannable {
             contentWorkfield.setTranslateY((contentWorkfield.getHeight()*t1.doubleValue() - contentWorkfield.getHeight())/2);
         });
 
+        this.widthProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
+                if (t1.doubleValue() > minSize[0]) {
+                    minSize[0] = t1.doubleValue();
+                    contentWorkfield.setMinWidth(minSize[0]);
+                }
+            }
+        });
+        this.heightProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
+                if (t1.doubleValue() > minSize[1]) {
+                    minSize[1] = t1.doubleValue();
+                    contentWorkfield.setMinHeight(t1.doubleValue());
+                }
+            }
+        });
+
         this.getContent().setOnMouseClicked(onMouseClick);
     }
 
@@ -58,10 +80,20 @@ public class WorkbenchPane extends ScrollPane implements Pannable {
     @Override
     public void setInfinitePannable() {
         this.hvalueProperty().addListener((observableValue, number, t1) -> {
-            canExtendSize[0] = t1.doubleValue() >= 1.0 || t1.doubleValue() <= 0.0;
+            if (t1.doubleValue() >= 1.0 || t1.doubleValue() <= 0.0) {
+                canExtendSize[0] = true;
+                contentWorkfield.setMinWidth(contentWorkfield.getWidth() + 5.0);
+            } else {
+                canExtendSize[0] = false;
+            }
         });
         this.vvalueProperty().addListener((observableValue, number, t1) -> {
-            canExtendSize[1] = t1.doubleValue() >= 1.0 || t1.doubleValue() <= 0.0;
+            if (t1.doubleValue() >= 1.0 || t1.doubleValue() <= 0.0) {
+                canExtendSize[1] = true;
+                contentWorkfield.setMinHeight(contentWorkfield.getHeight() + 5.0);
+            } else {
+                canExtendSize[1] = false;
+            }
         });
         this.getContent().addEventHandler(MouseEvent.MOUSE_PRESSED, mouseEvent -> {
             startingPos[0] = mouseEvent.getX();
