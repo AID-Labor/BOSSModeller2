@@ -86,7 +86,7 @@ public class MainController {
     private final HashMap<Entity, EntityView> entitiesOverview = new HashMap<>();
     private final HashMap<Relation, RelationViewNode> relationsOverview = new HashMap<>();
 
-    private final ArrayList<Window> subWindows = new ArrayList<>();
+    private final HashMap<SubWindowType, Window> subWindows = new HashMap<>();
 
     private final ContextMenu mainWorkbenchContextMenu = new ContextMenu();
 
@@ -96,6 +96,10 @@ public class MainController {
 
     @FXML
     private void showAboutUsWindow() {
+        if (subWindows.get(SubWindowType.Misc) != null){
+            subWindows.get(SubWindowType.Misc).requestFocus();
+            return;
+        }
         try {
             var fxmlLoader = new FXMLLoader(Main.class.getResource("view/AboutUs.fxml"), BOSS_Strings.resourceBundle);
             var scene = new Scene(fxmlLoader.load());
@@ -103,7 +107,7 @@ public class MainController {
             stage.setTitle(BOSS_Strings.ABOUT_US);
             stage.setScene(scene);
             stage.show();
-            addSubWindow(scene.getWindow());
+            addSubWindow(SubWindowType.Misc, scene.getWindow());
         } catch (IOException e) {
             GUIMethods.showError(MainController.class.getSimpleName(), BOSS_Strings.PRODUCT_NAME, e.getLocalizedMessage());
         }
@@ -241,8 +245,8 @@ public class MainController {
 
     @FXML
     public void closeApp() {
-        for (var window : subWindows) {
-            ((Stage)window).close();
+        for (var windowSet : subWindows.entrySet()) {
+            ((Stage) windowSet.getValue()).close();
         }
         System.exit(0);
     }
@@ -323,13 +327,17 @@ public class MainController {
     }
 
     private void createNewEntity(double xCoordinate, double yCoordinate) {
+        if (subWindows.get(SubWindowType.Editor) != null) {
+            subWindows.get(SubWindowType.Editor).requestFocus();
+            return;
+        }
         try {
             var entityBuilder = EntityEditorWindowBuilder.buildEntityEditor(null);
             var stage = new Stage();
             stage.setTitle(BOSS_Strings.NEW_ENTITY);
             stage.setScene(entityBuilder.getKey());
             stage.show();
-            addSubWindow(entityBuilder.getKey().getWindow());
+            addSubWindow(SubWindowType.Editor, entityBuilder.getKey().getWindow());
             entityBuilder.getValue().parentObserver = resultedEntity -> {
                 try {
                     resultedEntity.setXCoordinate(xCoordinate);
@@ -348,6 +356,10 @@ public class MainController {
     }
 
     private void editEntity(EntityView selectedEntityView) {
+        if (subWindows.get(SubWindowType.Editor) != null) {
+            subWindows.get(SubWindowType.Editor).requestFocus();
+            return;
+        }
         try {
             var selectedEntity = selectedEntityView.getModel();
             var entityBuilder = EntityEditorWindowBuilder.buildEntityEditor(selectedEntity);
@@ -355,7 +367,7 @@ public class MainController {
             stage.setTitle(BOSS_Strings.EDIT_ENTITY);
             stage.setScene(entityBuilder.getKey());
             stage.show();
-            addSubWindow(entityBuilder.getKey().getWindow());
+            addSubWindow(SubWindowType.Editor, entityBuilder.getKey().getWindow());
             entityBuilder.getValue().parentObserver = resultedEntity -> {
                 selectedEntityView.getController().loadModel(resultedEntity);
                 showNewRelation(currentProject);
@@ -387,6 +399,10 @@ public class MainController {
     }
 
     private void createNewRelation() {
+        if (subWindows.get(SubWindowType.Editor) != null) {
+            subWindows.get(SubWindowType.Editor).requestFocus();
+            return;
+        }
         if (currentProject.getEntities().size() < 1) {
             GUIMethods.showWarning(MainController.class.getSimpleName(), BOSS_Strings.PRODUCT_NAME, BOSS_Strings.NO_ENTITIES_WARNING);
             return;
@@ -398,7 +414,7 @@ public class MainController {
             stage.setTitle(BOSS_Strings.NEW_RELATION);
             stage.setScene(relationBuilderWindow.getKey());
             stage.show();
-            addSubWindow(relationBuilderWindow.getKey().getWindow());
+            addSubWindow(SubWindowType.Editor, relationBuilderWindow.getKey().getWindow());
         } catch (IOException e) {
             e.printStackTrace();
             GUIMethods.showError(MainController.class.getSimpleName(), BOSS_Strings.PRODUCT_NAME, e.getLocalizedMessage());
@@ -524,6 +540,10 @@ public class MainController {
     }
 
     private void editRelation(RelationViewNode relationView) {
+        if (subWindows.get(SubWindowType.Editor) != null) {
+            subWindows.get(SubWindowType.Editor).requestFocus();
+            return;
+        }
         var selectedRelationModel = relationView.getModel();
 
         try {
@@ -533,7 +553,7 @@ public class MainController {
             stage.setTitle(BOSS_Strings.EDIT_RELATION);
             stage.setScene(relationBuilderWindow.getKey());
             stage.show();
-            addSubWindow(relationBuilderWindow.getKey().getWindow());
+            addSubWindow(SubWindowType.Editor, relationBuilderWindow.getKey().getWindow());
         } catch (IOException e) {
             GUIMethods.showError(MainController.class.getSimpleName(), BOSS_Strings.PRODUCT_NAME, e.getLocalizedMessage());
         }
@@ -707,17 +727,21 @@ public class MainController {
         }
     }
 
-    private void addSubWindow(Window window) {
+    private void addSubWindow(SubWindowType type, Window window) {
         projectsTabPane.setDisable(true);
-        subWindows.add(window);
+        subWindows.put(type, window);
         window.setOnCloseRequest(windowEvent -> {
-            subWindows.remove(window);
+            subWindows.remove(type);
             projectsTabPane.setDisable(subWindows.size() > 0);
         });
     }
 
     @FXML
     private void importFromDBClick(ActionEvent actionEvent) {
+        if (subWindows.get(SubWindowType.DBConnector) != null) {
+            subWindows.get(SubWindowType.DBConnector).requestFocus();
+            return;
+        }
         try {
             var window = ConnectToDBWindowBuilder.buildDBConnectorWindow(previousDBLA);
             var connectWindowStage = new Stage();
@@ -749,7 +773,7 @@ public class MainController {
                     chooseWindowStage.setScene(chooserWindow.getKey());
                     chooseWindowStage.setTitle(BOSS_Strings.CHOOSE_TABLES);
                     chooseWindowStage.show();
-                    addSubWindow(chooseWindowStage);
+                    addSubWindow(SubWindowType.DBConnector, chooseWindowStage);
                 } catch (IOException e) {
                     GUIMethods.showError(MainController.class.getSimpleName(), BOSS_Strings.PRODUCT_NAME, e.getLocalizedMessage());
                 }
@@ -757,7 +781,7 @@ public class MainController {
             connectWindowStage.setScene(window.getKey());
             connectWindowStage.setTitle(BOSS_Strings.CONNECT_TO_DATABASE);
             connectWindowStage.show();
-            addSubWindow(connectWindowStage);
+            addSubWindow(SubWindowType.DBConnector, connectWindowStage);
         } catch (IOException e) {
             GUIMethods.showError(MainController.class.getSimpleName(), BOSS_Strings.PRODUCT_NAME, e.getLocalizedMessage());
         }
@@ -765,6 +789,10 @@ public class MainController {
 
     @FXML
     private void exportToDBClick(ActionEvent actionEvent) {
+        if (subWindows.get(SubWindowType.DBConnector) != null) {
+            subWindows.get(SubWindowType.DBConnector).requestFocus();
+            return;
+        }
         try {
             var window = ConnectToDBWindowBuilder.buildDBConnectorWindow(previousDBLA);
             var connectWindowStage = new Stage();
@@ -777,7 +805,7 @@ public class MainController {
                     exportWindowStage.setScene(exportWindow.getKey());
                     exportWindowStage.setTitle(BOSS_Strings.CHOOSE_DATABASE_AND_SCHEMA);
                     exportWindowStage.show();
-                    addSubWindow(exportWindowStage);
+                    addSubWindow(SubWindowType.DBConnector, exportWindowStage);
                 } catch (IOException e) {
                     GUIMethods.showError(MainController.class.getSimpleName(), BOSS_Strings.PRODUCT_NAME, e.getLocalizedMessage());
                 }
@@ -785,7 +813,7 @@ public class MainController {
             connectWindowStage.setScene(window.getKey());
             connectWindowStage.setTitle(BOSS_Strings.CONNECT_TO_DATABASE);
             connectWindowStage.show();
-            addSubWindow(connectWindowStage);
+            addSubWindow(SubWindowType.DBConnector, connectWindowStage);
         } catch (IOException e) {
             GUIMethods.showError(MainController.class.getSimpleName(), BOSS_Strings.PRODUCT_NAME, e.getLocalizedMessage());
         }
@@ -811,13 +839,17 @@ public class MainController {
 
     @FXML
     public void exportSQLClick() {
+        if (subWindows.get(SubWindowType.Misc) != null) {
+            subWindows.get(SubWindowType.Misc).requestFocus();
+            return;
+        }
         try {
             var window = SQLViewerBuilder.buildSQLViewer(currentProject);
             var sqlWindowStage = new Stage();
             sqlWindowStage.setScene(window.getKey());
             sqlWindowStage.setTitle(BOSS_Strings.SQL_DISPLAY);
             sqlWindowStage.show();
-            addSubWindow(sqlWindowStage);
+            addSubWindow(SubWindowType.Misc, sqlWindowStage);
         } catch (IOException e) {
             GUIMethods.showError(MainController.class.getSimpleName(), BOSS_Strings.PRODUCT_NAME, e.getLocalizedMessage());
         }
