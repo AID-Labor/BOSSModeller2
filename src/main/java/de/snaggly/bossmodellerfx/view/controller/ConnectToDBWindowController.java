@@ -42,11 +42,6 @@ public class ConnectToDBWindowController implements ModelController<DBLAHolder>{
     private void initialize(){
         progressIndicator.setVisible(false);
 
-        for (var sqlLang : SQLLanguage.values()) {
-            sqlLangChoiceBox.getItems().add(sqlLang.name());
-        }
-        sqlLangChoiceBox.getSelectionModel().selectFirst();
-
         /*usernameTf.setText("postgres");
         hostTf.setText("localhost");
         portTf.setText("5432");
@@ -57,6 +52,14 @@ public class ConnectToDBWindowController implements ModelController<DBLAHolder>{
         passwordTf.setText("admin123");
         hostTf.setText("192.168.0.37");
         portTf.setText("5432");
+
+        for (var sqlLang : SQLLanguage.values()) {
+            sqlLangChoiceBox.getItems().add(sqlLang.name());
+        }
+        sqlLangChoiceBox.getSelectionModel().selectedIndexProperty().addListener((observableValue, number, t1) -> {
+            portTf.setText(SQLInterface.getSQLInterfaceDescriptor(SQLLanguage.values()[t1.intValue()]).getDefaultPort());
+        });
+        sqlLangChoiceBox.getSelectionModel().selectFirst();
     }
 
     @FXML
