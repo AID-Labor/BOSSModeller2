@@ -32,7 +32,6 @@ import javafx.stage.Window;
 import javax.imageio.ImageIO;
 import java.io.*;
 import java.util.HashMap;
-import java.util.ArrayList;
 import java.util.LinkedList;
 
 import static de.snaggly.bossmodellerfx.guiLogic.KeyCombos.*;
@@ -635,6 +634,7 @@ public class MainController {
             var fileWriter = new BufferedWriter(new FileWriter(file));
             fileWriter.write(json);
             fileWriter.close();
+            GUIMethods.showInfo(MainController.class.getSimpleName(), BOSS_Strings.PRODUCT_NAME, BOSS_Strings.PROJECT_SAVED_SUCCESSFULLY);
         } catch (Exception e) {
             GUIMethods.showError(MainController.class.getSimpleName(), BOSS_Strings.PRODUCT_NAME, e.getLocalizedMessage());
         } finally {
