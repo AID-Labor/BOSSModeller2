@@ -18,9 +18,6 @@ public class RelationViewNode extends CustomNode<Relation> {
     private final EntityView tableAView;
     private final EntityView tableBView;
 
-    private final LinkedList<Integer> fkAttributesA = new LinkedList<>();
-    private final LinkedList<Integer> fkAttributesB = new LinkedList<>();
-
     public RelationLineView line1;
     public RelationLineView line2;
     public RelationLineView line3;
@@ -32,19 +29,6 @@ public class RelationViewNode extends CustomNode<Relation> {
         this.model = model;
         this.tableAView = tableAView;
         this.tableBView = tableBView;
-
-        for (var fk : model.getFkAttributesA()) {
-            var index = model.getTableA().getAttributes().indexOf(fk);
-            if (index >= 0) {
-                fkAttributesA.add(index);
-            }
-        }
-        for (var fk : model.getFkAttributesB()) {
-            var index = model.getTableB().getAttributes().indexOf(fk);
-            if (index >= 0) {
-                fkAttributesB.add(index);
-            }
-        }
     }
 
     public ArrayList<Node> getAllNodes() {
@@ -106,10 +90,18 @@ public class RelationViewNode extends CustomNode<Relation> {
         if (line4 != null)
             line4.highlight();
 
-        for (var index : fkAttributesA)
-            tableAView.getController().highlightAttributeAt(index);
-        for (var index : fkAttributesB)
-            tableBView.getController().highlightAttributeAt(index);
+        for (var fk : model.getFkAttributesA()) {
+            var index = model.getTableA().getAttributes().indexOf(fk);
+            if (index >= 0) {
+                tableAView.getController().highlightAttributeAt(index);
+            }
+        }
+        for (var fk : model.getFkAttributesB()) {
+            var index = model.getTableB().getAttributes().indexOf(fk);
+            if (index >= 0) {
+                tableBView.getController().highlightAttributeAt(index);
+            }
+        }
     }
 
     @Override
@@ -127,9 +119,17 @@ public class RelationViewNode extends CustomNode<Relation> {
         if (line4 != null)
             line4.deHighlight();
 
-        for (var index : fkAttributesA)
-            tableAView.getController().unHighlightAttributeAt(index);
-        for (var index : fkAttributesB)
-            tableBView.getController().unHighlightAttributeAt(index);
+        for (var fk : model.getFkAttributesA()) {
+            var index = model.getTableA().getAttributes().indexOf(fk);
+            if (index >= 0) {
+                tableAView.getController().unHighlightAttributeAt(index);
+            }
+        }
+        for (var fk : model.getFkAttributesB()) {
+            var index = model.getTableB().getAttributes().indexOf(fk);
+            if (index >= 0) {
+                tableBView.getController().unHighlightAttributeAt(index);
+            }
+        }
     }
 }
