@@ -215,7 +215,7 @@
                      <MenuItem mnemonicParsing="false" onAction="#saveUnderFileClick" text="%mainWindow.MenuBar.File.SaveAs" />
                      <Menu mnemonicParsing="false" text="%mainWindow.MenuBar.File.Export">
                         <MenuItem mnemonicParsing="false" onAction="#exportPictureClick" text="%mainWindow.MenuBar.File.Export.AsPicture" />
-                        <MenuItem fx:id="exportSQLClick" mnemonicParsing="false" text="%mainWindow.MenuBar.File.Export.AsSQL" />
+                        <MenuItem fx:id="exportSQLClick" onAction="#exportSQLClick" mnemonicParsing="false" text="%mainWindow.MenuBar.File.Export.AsSQL" />
                         <MenuItem mnemonicParsing="false" onAction="#exportToDBClick" text="%mainWindow.MenuBar.File.Export.ToDB" />
                      </Menu>
                      <MenuItem mnemonicParsing="false" onAction="#closeApp" text="%mainWindow.MenuBar.File.Close" />
