@@ -725,7 +725,7 @@ public class MainController {
                 previousDBLA = resultedConnection;
                 GUIMethods.closeWindow(connectWindowStage);
                 try {
-                    var chooserWindow = ChooseDBEntityWindowBuilder.buildDBChooserWindow(resultedConnection);
+                    var chooserWindow = ChooseDBImportWindowBuilder.buildDBChooserWindow(resultedConnection);
                     var chooseWindowStage = new Stage();
                     chooserWindow.getValue().parentObserver = resultedProjectData -> {
                         GUIMethods.closeWindow(chooseWindowStage);
@@ -768,7 +768,6 @@ public class MainController {
         try {
             var window = ConnectToDBWindowBuilder.buildDBConnectorWindow(previousDBLA);
             var connectWindowStage = new Stage();
-            window.getValue().prepForExport(true);
             window.getValue().parentObserver = resultedConnection -> {
                 previousDBLA = resultedConnection;
                 GUIMethods.closeWindow(connectWindowStage);

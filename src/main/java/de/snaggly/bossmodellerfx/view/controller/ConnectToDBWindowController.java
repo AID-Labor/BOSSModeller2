@@ -1,9 +1,5 @@
 package de.snaggly.bossmodellerfx.view.controller;
 
-import de.bossmodeler.dbInterface.MSSQLServerSchnittstelle;
-import de.bossmodeler.dbInterface.MySQLSchnittstelle;
-import de.bossmodeler.dbInterface.PostgreSQLSchnittstelle;
-import de.bossmodeler.dbInterface.Schnittstelle;
 import de.bossmodeler.logicalLayer.elements.DBInterfaceCommunication;
 import de.bossmodeler.logicalLayer.elements.DBLogicalAdministration;
 import de.snaggly.bossmodellerfx.BOSS_Strings;
@@ -27,36 +23,18 @@ import java.sql.SQLException;
 public class ConnectToDBWindowController implements ModelController<DBLAHolder>{
     public GUIActionListener<DBLAHolder> parentObserver;
 
+    private String dbCustomName = "";
+
     @FXML
     private ChoiceBox<String> sqlLangChoiceBox;
     @FXML
-    private Label usernameLabel;
-    @FXML
     private TextField usernameTf;
-    @FXML
-    private Label passwordLabel;
     @FXML
     private TextField passwordTf;
     @FXML
-    private Label hostLabel;
-    @FXML
     private TextField hostTf;
     @FXML
-    private Label portLabel;
-    @FXML
     private TextField portTf;
-    @FXML
-    private Label dbNameLabel;
-    @FXML
-    private TextField dbNameTf;
-    @FXML
-    private Label schemeNameLabel;
-    @FXML
-    private TextField schemeNameTf;
-    @FXML
-    private Button connectBtn;
-    @FXML
-    private Button cancelBtn;
     @FXML
     private ProgressIndicator progressIndicator;
 
@@ -79,8 +57,6 @@ public class ConnectToDBWindowController implements ModelController<DBLAHolder>{
         passwordTf.setText("admin123");
         hostTf.setText("192.168.0.37");
         portTf.setText("5432");
-        dbNameTf.setText("aid");
-        schemeNameTf.setText("boss");
     }
 
     @FXML
@@ -97,10 +73,8 @@ public class ConnectToDBWindowController implements ModelController<DBLAHolder>{
                                 SQLLanguage.values()[sqlLangChoiceBox.getSelectionModel().getSelectedIndex()],
                                 hostTf.getText(),
                                 portTf.getText(),
-                                dbNameTf.getText(),
                                 usernameTf.getText(),
-                                passwordTf.getText(),
-                                schemeNameTf.getText())
+                                passwordTf.getText())
                         );
                     }
                 });
@@ -108,6 +82,13 @@ public class ConnectToDBWindowController implements ModelController<DBLAHolder>{
                 Platform.runLater(() -> {
                     progressIndicator.setVisible(false);
                     GUIMethods.showError(BOSS_Strings.DB_CONNECTOR, BOSS_Strings.CONNECTION_ERROR, e.getLocalizedMessage());
+
+                    var textInputDialog = new TextInputDialog();
+                    textInputDialog.setResizable(true);
+                    textInputDialog.setContentText(BOSS_Strings.TRY_DIFFERENT_DBNAME_PROMPT);
+                    textInputDialog.setHeaderText(BOSS_Strings.TRY_DIFFERENT_DBNAME_HEADER);
+                    textInputDialog.setTitle(BOSS_Strings.DB_CONNECTOR);
+                    textInputDialog.showAndWait().ifPresent(this::setDbCustomName);
                 });
             }
         }).start();
@@ -119,14 +100,15 @@ public class ConnectToDBWindowController implements ModelController<DBLAHolder>{
     }
 
     private DBLogicalAdministration setDB() throws SQLException {
-        var inter = SQLInterface.getDBInterface(
-            SQLLanguage.values()[sqlLangChoiceBox.getSelectionModel().getSelectedIndex()],
-            hostTf.getText(),
-            portTf.getText(),
-            dbNameTf.getText(),
-            usernameTf.getText(),
-            passwordTf.getText(),
-            schemeNameTf.getText()
+        var sqlInterface = SQLInterface.getSQLInterfaceDescriptor(SQLLanguage.values()[sqlLangChoiceBox.getSelectionModel().getSelectedIndex()]);
+        var inter = SQLInterface.getDbDriverInterface(
+                sqlInterface.getLanguage(),
+                hostTf.getText(),
+                portTf.getText(),
+                dbCustomName.equals("") ? sqlInterface.getDefaultDBName() : dbCustomName,
+                usernameTf.getText(),
+                passwordTf.getText(),
+                ""
         );
 
         if (inter == null)
@@ -141,15 +123,15 @@ public class ConnectToDBWindowController implements ModelController<DBLAHolder>{
     public void loadModel(DBLAHolder model) {
         hostTf.setText(model.getHost());
         portTf.setText(model.getPort());
-        dbNameTf.setText(model.getDb());
         usernameTf.setText(model.getUser());
         passwordTf.setText(model.getPass());
-        schemeNameTf.setText(model.getSchema());
     }
 
-    public void prepForExport(boolean willBeUsedForExport) {
-        schemeNameTf.setText("");
-        schemeNameTf.setVisible(!willBeUsedForExport);
-        schemeNameLabel.setVisible(!willBeUsedForExport);
+    public String getDbCustomName() {
+        return dbCustomName;
+    }
+
+    public void setDbCustomName(String dbCustomName) {
+        this.dbCustomName = dbCustomName;
     }
 }

@@ -36,6 +36,7 @@ package de.bossmodeler.dbInterface;
 
 /**
  This source code was modified to utilise a different Language loader.
+ This source code was also modified to offer a method to return a full list of usable schemas.
  The changed lines have been highlighted with the appropriate annotation.
  */
 //import de.bossmodeler.GUI.buttons.XmlClass; *Change to utilise a new language loader
@@ -677,6 +678,9 @@ public class PostgreSQLSchnittstelle extends Schnittstelle {
 		}
 	}
 
+	//Method modified to also ignore system schemas. This change was necessary,
+	// as this class did not offer a method to show filled schemas too.
+	//System Schemas are not in use.
 	@Override
 	public LinkedList<String> getAllDBSchemata(String db) throws SQLException {
 		if(connection.isClosed())
@@ -688,8 +692,17 @@ public class PostgreSQLSchnittstelle extends Schnittstelle {
 		while (dbc.next()) {
 			s.add(dbc.getString(1));
 		}
+		//Ignoring system schemas
+		LinkedList<String> helplist = new LinkedList<String>();
+		for (String value : s) {
+			if (!value.equals("pg_toast") && !value.equals("pg_temp_1") && !value.equals("pg_toast_temp_1")
+					&& !value.equals("pg_catalog") && !value.equals("information_schema")) {
+				helplist.add(value);
+			}
+		}
+
 		closeConnection();
-		return s;	
+		return helplist;
 	}
 
 	@Override

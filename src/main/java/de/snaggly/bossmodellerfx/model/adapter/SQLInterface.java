@@ -11,15 +11,40 @@ import de.bossmodeler.dbInterface.Schnittstelle;
  * @author Omar Emshani
  */
 public class SQLInterface {
-    public static Schnittstelle getDBInterface(SQLLanguage selectedLanguage) {
-        return getDBInterface(selectedLanguage, null, null, null, null, null, null);
+    private boolean isSchemaCompatible;
+    private String defaultDBName;
+    private String defaultPort;
+    private SQLLanguage language;
+
+    private SQLInterface(SQLLanguage selectedLanguage) {
+        this.language = selectedLanguage;
+
+        switch (language) {
+            case PostgreSQL:
+                isSchemaCompatible = true;
+                defaultPort = "5432";
+                defaultDBName = "postgres";
+                break;
+            case MSSQL:
+                isSchemaCompatible = true;
+                defaultPort = "1433";
+                break;
+            case MySQL:
+                isSchemaCompatible = false;
+                defaultPort = "3306";
+                break;
+        }
     }
 
-    public static Schnittstelle getDBInterface(SQLLanguage selectedLanguage, String host, String port, String dbName, String username, String password, String schema) {
-        Schnittstelle result = null;
-        switch (selectedLanguage) {
+    public static Schnittstelle getDbDriverInterface(SQLLanguage language) {
+        return getDbDriverInterface(language, null, null, null, null, null, null);
+    }
+
+    public static Schnittstelle getDbDriverInterface(SQLLanguage language, String host, String port, String dbName, String username, String password, String schema) {
+        Schnittstelle dbInterface = null;
+        switch (language) {
             case PostgreSQL:
-                result = new PostgreSQLSchnittstelle(
+                dbInterface = new PostgreSQLSchnittstelle(
                         host,
                         port,
                         dbName,
@@ -28,7 +53,7 @@ public class SQLInterface {
                         schema);
                 break;
             case MSSQL:
-                result = new MSSQLServerSchnittstelle(
+                dbInterface = new MSSQLServerSchnittstelle(
                         host,
                         port,
                         dbName,
@@ -37,7 +62,7 @@ public class SQLInterface {
                         schema);
                 break;
             case MySQL:
-                result = new MySQLSchnittstelle(
+                dbInterface = new MySQLSchnittstelle(
                         host,
                         port,
                         dbName,
@@ -46,6 +71,27 @@ public class SQLInterface {
                         "");
                 break;
         }
-        return result;
+
+        return dbInterface;
+    }
+
+    public boolean isSchemaCompatible() {
+        return isSchemaCompatible;
+    }
+
+    public String getDefaultDBName() {
+        return defaultDBName;
+    }
+
+    public String getDefaultPort() {
+        return defaultPort;
+    }
+
+    public SQLLanguage getLanguage() {
+        return language;
+    }
+
+    public static SQLInterface getSQLInterfaceDescriptor(SQLLanguage selectedLanguage) {
+        return new SQLInterface(selectedLanguage);
     }
 }

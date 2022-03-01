@@ -3,7 +3,7 @@ package de.snaggly.bossmodellerfx.view.factory.windowtype;
 import de.snaggly.bossmodellerfx.BOSS_Strings;
 import de.snaggly.bossmodellerfx.Main;
 import de.snaggly.bossmodellerfx.model.adapter.DBLAHolder;
-import de.snaggly.bossmodellerfx.view.controller.ChooseDBEntityWindowController;
+import de.snaggly.bossmodellerfx.view.controller.ChooseDBImportWindowController;
 import de.snaggly.bossmodellerfx.view.factory.WindowFactory;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -17,16 +17,16 @@ import java.util.Map;
  *
  * @author Omar Emshani
  */
-public class ChooseDBEntityWindowBuilder implements WindowFactory<DBLAHolder, ChooseDBEntityWindowController> {
-    private final static ChooseDBEntityWindowBuilder instance = new ChooseDBEntityWindowBuilder();
+public class ChooseDBImportWindowBuilder implements WindowFactory<DBLAHolder, ChooseDBImportWindowController> {
+    private final static ChooseDBImportWindowBuilder instance = new ChooseDBImportWindowBuilder();
 
-    private ChooseDBEntityWindowBuilder() {}
+    private ChooseDBImportWindowBuilder() {}
 
     @Override
-    public Map.Entry<Scene, ChooseDBEntityWindowController> buildWindow(DBLAHolder model) throws IOException {
-        var fxmlLoader = new FXMLLoader(Main.class.getResource("view/ChooseDBEntityWindow.fxml"), BOSS_Strings.resourceBundle);
+    public Map.Entry<Scene, ChooseDBImportWindowController> buildWindow(DBLAHolder model) throws IOException {
+        var fxmlLoader = new FXMLLoader(Main.class.getResource("view/ChooseDBImportWindow.fxml"), BOSS_Strings.resourceBundle);
         var scene = new Scene(fxmlLoader.load());
-        var controller = (ChooseDBEntityWindowController)(fxmlLoader.getController());
+        var controller = (ChooseDBImportWindowController)(fxmlLoader.getController());
         controller.loadModel(model);
 
         return new AbstractMap.SimpleEntry<>(scene, controller);
@@ -38,7 +38,7 @@ public class ChooseDBEntityWindowBuilder implements WindowFactory<DBLAHolder, Ch
      * @return Returns the scene and controller.
      * @throws IOException When the file is not found.
      */
-    public static Map.Entry<Scene, ChooseDBEntityWindowController> buildDBChooserWindow(DBLAHolder model) throws IOException {
+    public static Map.Entry<Scene, ChooseDBImportWindowController> buildDBChooserWindow(DBLAHolder model) throws IOException {
         return instance.buildWindow(model);
     }
 }

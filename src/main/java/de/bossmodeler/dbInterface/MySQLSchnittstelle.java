@@ -25,6 +25,11 @@ import java.util.LinkedList;
  * @version 1.0.0
  * 
  */
+
+/**
+ This source code was also modified to offer a method to return a full list of usable schemas.
+ The changed lines have been highlighted with the appropriate annotation.
+ */
 public class MySQLSchnittstelle extends Schnittstelle {
 
 
@@ -688,6 +693,9 @@ public class MySQLSchnittstelle extends Schnittstelle {
 		}
 	}
 
+	//Method modified to also ignore system schemas. This change was necessary,
+	// as this class did not offer a method to show filled schemas too.
+	//System Schemas are not in use.
 	@Override
 	public LinkedList<String> getAllDBSchemata(String db) throws SQLException {
 		if(connection.isClosed())
@@ -699,8 +707,17 @@ public class MySQLSchnittstelle extends Schnittstelle {
 		while (dbc.next()) {
 			s.add(dbc.getString(1));
 		}
+		//Ignoring system schemas
+		LinkedList<String> helplist = new LinkedList<String>();
+		for (String value : s) {
+			if (!value.equals("mysql")
+					&& !value.equals("performance_schema")
+					&& !value.equals("information_schema")) {
+				helplist.add(value);
+			}
+		}
 		closeConnection();
-		return s;	
+		return helplist;
 	}
 
 	@Override

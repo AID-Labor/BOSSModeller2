@@ -10,17 +10,15 @@ import de.snaggly.bossmodellerfx.model.BOSSModel;
  */
 public class DBLAHolder implements BOSSModel {
     private DBLogicalAdministration dbla;
-    private String host, port, db, user, pass, schema;
+    private String host, port, user, pass, db, schema;
     private SQLLanguage language;
 
-    public DBLAHolder(DBLogicalAdministration dbla, SQLLanguage language, String host, String port, String db, String user, String pass, String schema) {
+    public DBLAHolder(DBLogicalAdministration dbla, SQLLanguage language, String host, String port, String user, String pass) {
         this.dbla = dbla;
         this.host = host;
         this.port = port;
-        this.db = db;
         this.user = user;
         this.pass = pass;
-        this.schema = schema;
         this.language = language;
     }
 
@@ -48,14 +46,6 @@ public class DBLAHolder implements BOSSModel {
         this.port = port;
     }
 
-    public String getDb() {
-        return this.db;
-    }
-
-    public void setDb(String db) {
-        this.db = db;
-    }
-
     public String getUser() {
         return user;
     }
@@ -72,19 +62,27 @@ public class DBLAHolder implements BOSSModel {
         this.pass = pass;
     }
 
-    public String getSchema() {
-        return schema;
-    }
-
-    public void setSchema(String schema) {
-        this.schema = schema;
-    }
-
     public SQLLanguage getLanguage() {
         return language;
     }
 
     public void setLanguage(SQLLanguage language) {
         this.language = language;
+    }
+
+    public String getDb() {
+        return db;
+    }
+
+    public void setDb(String db) {
+        this.db = db;
+    }
+
+    public String getSchema() {
+        return schema;
+    }
+
+    public void setSchema(String schema) {
+        this.schema = schema;
     }
 }

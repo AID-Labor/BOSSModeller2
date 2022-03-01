@@ -114,4 +114,6 @@ public class BOSS_Strings {
     public static final String DESCRIPTOR_DELETE_RELATION = resourceBundle.getString("DESCRIPTOR_DELETE_RELATION");
     public static final String DESCRIPTOR_NEW_COMMENT = resourceBundle.getString("DESCRIPTOR_NEW_COMMENT");
     public static final String DESCRIPTOR_DELETE_COMMENT = resourceBundle.getString("DESCRIPTOR_DELETE_COMMENT");
+    public static final String TRY_DIFFERENT_DBNAME_PROMPT = resourceBundle.getString("TRY_DIFFERENT_DBNAME_PROMPT");
+    public static final String TRY_DIFFERENT_DBNAME_HEADER = resourceBundle.getString("TRY_DIFFERENT_DBNAME_HEADER");
 }

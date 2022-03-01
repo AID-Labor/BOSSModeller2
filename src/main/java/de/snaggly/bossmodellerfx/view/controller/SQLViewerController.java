@@ -1,8 +1,5 @@
 package de.snaggly.bossmodellerfx.view.controller;
 
-import de.bossmodeler.dbInterface.MSSQLServerSchnittstelle;
-import de.bossmodeler.dbInterface.MySQLSchnittstelle;
-import de.bossmodeler.dbInterface.PostgreSQLSchnittstelle;
 import de.bossmodeler.dbInterface.Schnittstelle;
 import de.snaggly.bossmodellerfx.BOSS_Strings;
 import de.snaggly.bossmodellerfx.MainController;
@@ -112,7 +109,7 @@ public class SQLViewerController implements ModelController<DBProjectHolder> {
     }
 
     private Schnittstelle getDBInterface() throws SQLException {
-        var inter = SQLInterface.getDBInterface(SQLLanguage.values()[dbmsChoiceBox.getSelectionModel().getSelectedIndex()]);
+        var inter = SQLInterface.getDbDriverInterface(SQLLanguage.values()[dbmsChoiceBox.getSelectionModel().getSelectedIndex()]);
         if (inter == null)
             throw new SQLException(BOSS_Strings.COULD_NOT_CREATE_DBINTERFACE);
 
