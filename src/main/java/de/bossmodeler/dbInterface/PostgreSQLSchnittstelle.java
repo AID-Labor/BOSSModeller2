@@ -605,18 +605,12 @@ public class PostgreSQLSchnittstelle extends Schnittstelle {
 		return helplist;
 	}
 
+	//Method modified to also ignore system DBs. This change was necessary,
+	// as this class did not offer a method to show filled DBs too.
+	//System DBs are not in use.
 	@Override
 	public LinkedList<String> getAllDatabase() throws SQLException {
-		if(connection.isClosed())
-			reestablishConnection();
-		LinkedList<String> s = new LinkedList<String>();
-		ResultSet dbc = query("SELECT datname FROM pg_database");
-		while (dbc.next()) {
-			s.add(dbc.getString(1));
-		}
-			
-		closeConnection();
-		return s;
+		return getDatabase();
 	}
 
 	@Override

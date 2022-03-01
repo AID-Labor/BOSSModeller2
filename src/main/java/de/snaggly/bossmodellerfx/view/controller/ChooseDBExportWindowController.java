@@ -1,6 +1,8 @@
 package de.snaggly.bossmodellerfx.view.controller;
 
+import de.bossmodeler.logicalLayer.elements.DBInterfaceCommunication;
 import de.bossmodeler.logicalLayer.elements.DBLanguageNotFoundException;
+import de.bossmodeler.logicalLayer.elements.DBLogicalAdministration;
 import de.snaggly.bossmodellerfx.BOSS_Strings;
 import de.snaggly.bossmodellerfx.guiLogic.GUIMethods;
 import de.snaggly.bossmodellerfx.guiLogic.Project;
@@ -66,18 +68,23 @@ public class ChooseDBExportWindowController implements ModelController<DBLAHolde
                 var dBName = newDBNameTf.getText();
                 var schemeName = newSchemeTf.getText();
 
-                if (!useExistingSchemeCkBox.isSelected()) {
-                    if (newSchemeTf.getText().equals("") && dblaHolder.getLanguage() != SQLLanguage.MySQL) {
-                        throw new DBConnectorException(BOSS_Strings.DBINTERFACE_NO_SCHEMA_HEADER, BOSS_Strings.DBINTERFACE_NO_SCHEMA_WARNING);
-                    }
-
-                    for (var existingSchemeName : existingSchemesChoiceBox.getItems()) {
-                        if (existingSchemeName.equals(dBName)) {
-                            throw new DBConnectorException(BOSS_Strings.DBINTERFACE_EXISTING_NAME_HEADER, BOSS_Strings.DBINTERFACE_EXISTING_SCHEMA_WARNING);
+                if (dblaHolder.getLanguage() != SQLLanguage.MySQL) {
+                    if (!useExistingSchemeCkBox.isSelected()) {
+                        if (newSchemeTf.getText().equals("")) {
+                            throw new DBConnectorException(BOSS_Strings.DBINTERFACE_NO_SCHEMA_HEADER, BOSS_Strings.DBINTERFACE_NO_SCHEMA_WARNING);
                         }
+
+                        for (var existingSchemeName : existingSchemesChoiceBox.getItems()) {
+                            if (existingSchemeName.equals(dBName)) {
+                                throw new DBConnectorException(BOSS_Strings.DBINTERFACE_EXISTING_NAME_HEADER, BOSS_Strings.DBINTERFACE_EXISTING_SCHEMA_WARNING);
+                            }
+                        }
+                    } else {
+                        schemeName = existingSchemesChoiceBox.getSelectionModel().getSelectedItem();
                     }
-                } else {
-                    schemeName = existingSchemesChoiceBox.getSelectionModel().getSelectedItem();
+                }
+                else {
+                    schemeName = "";
                 }
 
                 if (!useExistingDBChkBox.isSelected()) {
@@ -94,6 +101,17 @@ public class ChooseDBExportWindowController implements ModelController<DBLAHolde
                 var newSchema = !useExistingSchemeCkBox.isSelected() && !schemeName.equals("public");
                 var css = caseSensitive.isSelected();
 
+                dblaHolder.setDbla(new DBLogicalAdministration(new DBInterfaceCommunication(
+                        SQLInterface.getDbDriverInterface(
+                                dblaHolder.getLanguage(),
+                                dblaHolder.getHost(),
+                                dblaHolder.getPort(),
+                                dblaHolder.getDb(),
+                                dblaHolder.getUser(),
+                                dblaHolder.getPass(),
+                                dblaHolder.getSchema()
+                        )
+                )));
                 var dbla = dblaHolder.getDbla();
                 var legacyProjectHolder = ProjectDataAdapter.convertFXToLegacyModel(
                         Project.getCurrentProject().getEntities(), Project.getCurrentProject().getRelations()
@@ -130,10 +148,6 @@ public class ChooseDBExportWindowController implements ModelController<DBLAHolde
             existingSchemesChoiceBox.setDisable(!newValue);
             newSchemeTf.setDisable(newValue);
         });
-        existingDBChoiceBox.getSelectionModel().selectedItemProperty().addListener((observableValue, s, newValue) ->  {
-            existingSchemesChoiceBox.setItems(schemeMap.get(newValue));
-            existingSchemesChoiceBox.getSelectionModel().selectFirst();
-        });
 
         caseSensitive.setSelected(true);
         useExistingDBChkBox.setSelected(false);
@@ -155,6 +169,9 @@ public class ChooseDBExportWindowController implements ModelController<DBLAHolde
             Platform.runLater(() -> progressIndicator.setVisible(true));
             try {
                 var database = holder.getDbla().getDatabase();
+                if (database.size() <= 0) {
+                    useExistingDBChkBox.setDisable(true);
+                }
                 if (holder.getLanguage() != SQLLanguage.MySQL) {
                     for (var dbName : database) {
                         schemeMap.put(dbName, FXCollections.observableArrayList(holder.getDbla().getDBSchemata(dbName)));
@@ -162,6 +179,12 @@ public class ChooseDBExportWindowController implements ModelController<DBLAHolde
                 }
 
                 Platform.runLater(() -> {
+                    if (schemeMap.size() > 0) {
+                        existingDBChoiceBox.getSelectionModel().selectedItemProperty().addListener((observableValue, s, newValue) ->  {
+                            existingSchemesChoiceBox.setItems(schemeMap.get(newValue));
+                            existingSchemesChoiceBox.getSelectionModel().selectFirst();
+                        });
+                    }
                     existingDBChoiceBox.getItems().addAll(database);
                     existingDBChoiceBox.getSelectionModel().selectFirst();
                 });

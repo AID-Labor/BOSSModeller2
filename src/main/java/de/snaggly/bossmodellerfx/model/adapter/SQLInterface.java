@@ -14,7 +14,7 @@ public class SQLInterface {
     private boolean isSchemaCompatible;
     private String defaultDBName;
     private String defaultPort;
-    private SQLLanguage language;
+    private final SQLLanguage language;
 
     private SQLInterface(SQLLanguage selectedLanguage) {
         this.language = selectedLanguage;
@@ -25,13 +25,15 @@ public class SQLInterface {
                 defaultPort = "5432";
                 defaultDBName = "postgres";
                 break;
-            case MSSQL:
+            case Microsoft_SQL:
                 isSchemaCompatible = true;
                 defaultPort = "1433";
+                defaultDBName = "";
                 break;
             case MySQL:
                 isSchemaCompatible = false;
                 defaultPort = "3306";
+                defaultDBName = "";
                 break;
         }
     }
@@ -52,7 +54,7 @@ public class SQLInterface {
                         password,
                         schema);
                 break;
-            case MSSQL:
+            case Microsoft_SQL:
                 dbInterface = new MSSQLServerSchnittstelle(
                         host,
                         port,

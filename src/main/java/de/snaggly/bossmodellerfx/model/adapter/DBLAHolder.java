@@ -13,8 +13,10 @@ public class DBLAHolder implements BOSSModel {
     private String host, port, user, pass, db, schema;
     private SQLLanguage language;
 
-    public DBLAHolder(DBLogicalAdministration dbla, SQLLanguage language, String host, String port, String user, String pass) {
+    public DBLAHolder(DBLogicalAdministration dbla, SQLLanguage language, String db, String schema, String host, String port, String user, String pass) {
         this.dbla = dbla;
+        this.db = db;
+        this.schema = schema;
         this.host = host;
         this.port = port;
         this.user = user;

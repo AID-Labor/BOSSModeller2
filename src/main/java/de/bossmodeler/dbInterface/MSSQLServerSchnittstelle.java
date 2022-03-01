@@ -502,16 +502,20 @@ public class MSSQLServerSchnittstelle extends Schnittstelle {
 		return null;
 	}
 
+	//Edited to only show tables of set DB, Fixed by OE
 	@Override
 	public LinkedList<String> getTableNames() throws SQLException {
 		LinkedList<String> helpList = new LinkedList<String>();
-		ResultSet rs = getMetaData().getTables(null, getSchema(), null,
+		ResultSet rs = getMetaData().getTables(getDb(), getSchema(), null,
 				new String[] { "TABLE" });
 		while (rs.next())
 			helpList.add(rs.getString("TABLE_NAME"));
 		return helpList;
 	}
 
+	//Method modified to also ignore system DBs. This change was necessary,
+	// as this class did not offer a method to show filled DBs too.
+	//System DBs are not in use.
 	@Override
 	public LinkedList<String> getDatabase() throws SQLException {
 		if(connection.isClosed())
@@ -532,18 +536,12 @@ public class MSSQLServerSchnittstelle extends Schnittstelle {
 		return helplist;
 	}
 
+	//Method modified to also ignore system DBs. This change was necessary,
+	// as this class did not offer a method to show filled DBs too.
+	//System DBs are not in use.
 	@Override
 	public LinkedList<String> getAllDatabase() throws SQLException {
-		if(connection.isClosed())
-			reestablishConnection();
-		LinkedList<String> s = new LinkedList<String>();
-		ResultSet dbc = getMetaData().getCatalogs();
-		while (dbc.next()) {
-			s.add(dbc.getString(1));
-		}
-			
-		closeConnection();
-		return s;
+		return getDatabase();
 	}
 
 	@Override

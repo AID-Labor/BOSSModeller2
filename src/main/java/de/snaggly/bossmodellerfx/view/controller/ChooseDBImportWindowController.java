@@ -28,6 +28,8 @@ import java.util.LinkedList;
 public class ChooseDBImportWindowController implements ModelController<DBLAHolder> {
     public GUIActionListener<ProjectDataAdapter> parentObserver;
 
+    private String projectName = "";
+
     @FXML
     private Label schemeNameLabel;
     @FXML
@@ -85,7 +87,7 @@ public class ChooseDBImportWindowController implements ModelController<DBLAHolde
             localDBLA.getDbla().initializeRelations();
 
             parentObserver.notify(ProjectDataAdapter.convertLegacyToFXModel(
-                    chooseSchemaNameChoiceBox.getSelectionModel().getSelectedItem(),
+                    projectName,
                     localDBLA.getDbla().getTables(),
                     localDBLA.getDbla().getRelations()));
         } catch (SQLException e) {
@@ -98,7 +100,6 @@ public class ChooseDBImportWindowController implements ModelController<DBLAHolde
         localDBLA = model;
         entityListVBox.getChildren().clear();
         try {
-            chooseDBNameChoiceBox.getItems().addAll(localDBLA.getDbla().getDatabase());
             if (SQLInterface.getSQLInterfaceDescriptor(model.getLanguage()).isSchemaCompatible()) {
                 chooseDBNameChoiceBox.getSelectionModel().selectedItemProperty().addListener(chooseDBNameChoiceBoxListener);
                 chooseSchemaNameChoiceBox.getSelectionModel().selectedItemProperty().addListener(chooseSchemaNameChoiceBoxListener);
@@ -107,6 +108,13 @@ public class ChooseDBImportWindowController implements ModelController<DBLAHolde
                 schemeNameLabel.setVisible(false);
                 chooseDBNameChoiceBox.getSelectionModel().selectedItemProperty().addListener(chooseDBNameChoiceBoxListener_ForSchemeIncompatibles);
             }
+            var databaseList = localDBLA.getDbla().getAllDatabase();
+            if (databaseList.size() <= 0) {
+                chooseDBNameChoiceBox.getItems().add(localDBLA.getDb());
+                chooseDBNameChoiceBox.setDisable(true);
+            } else {
+                chooseDBNameChoiceBox.getItems().addAll(databaseList);
+            }
             chooseDBNameChoiceBox.getSelectionModel().selectFirst();
         } catch (SQLException e) {
             GUIMethods.showError(BOSS_Strings.DB_CONNECTOR, BOSS_Strings.DBINTERFACE_ERROR_READING_TABLES, e.getLocalizedMessage());
@@ -114,142 +122,112 @@ public class ChooseDBImportWindowController implements ModelController<DBLAHolde
         }
     }
 
+    private void fillTables() {
+        progressIndicator.setVisible(true);
+        createBtn.setDisable(true);
+        checkAllChkbox.setSelected(false);
+        entityListVBox.getChildren().clear();
+        new Thread(() -> {
+            try {
+                localDBLA.setDbla(new DBLogicalAdministration(new DBInterfaceCommunication(SQLInterface.getDbDriverInterface(
+                        localDBLA.getLanguage(),
+                        localDBLA.getHost(),
+                        localDBLA.getPort(),
+                        localDBLA.getDb(),
+                        localDBLA.getUser(),
+                        localDBLA.getPass(),
+                        localDBLA.getSchema()
+                ))));
+                var tableNames = localDBLA.getDbla().getTableNames();
+                Platform.runLater(() -> {
+                    createBtn.setDisable(false);
+                    for (var tableName : tableNames) {
+                        var checkBox = new CheckBox(tableName);
+                        checkBox.selectedProperty().addListener((observableValue2, aBoolean, newValue) -> {
+                            if (selectionTrigger)
+                                return;
+                            boolean hasSelectedAll = true;
+                            for (var vboxCheckBox : entityListVBox.getChildren()) {
+                                if (vboxCheckBox instanceof CheckBox && !((CheckBox)vboxCheckBox).isSelected()) {
+                                    hasSelectedAll = false;
+                                    break;
+                                }
+                            }
+                            checkAllChkbox.setSelected(hasSelectedAll);
+                        });
+                        entityListVBox.getChildren().add(checkBox);
+                    }
+                });
+            }
+            catch (SQLException e) {
+                GUIMethods.showError(BOSS_Strings.DB_CONNECTOR, BOSS_Strings.DBINTERFACE_ERROR_READING_TABLES, e.getLocalizedMessage());
+                GUIMethods.closeWindow(entityListVBox.getScene().getWindow());
+            }
+            finally {
+                Platform.runLater(() -> progressIndicator.setVisible(false));
+            }
+        }).start();
+    }
+
+    private void fillSchemes() {
+        progressIndicator.setVisible(true);
+        createBtn.setDisable(true);
+        entityListVBox.getChildren().clear();
+        new Thread(() -> {
+            try {
+                localDBLA.setDbla(new DBLogicalAdministration(new DBInterfaceCommunication(SQLInterface.getDbDriverInterface(
+                        localDBLA.getLanguage(),
+                        localDBLA.getHost(),
+                        localDBLA.getPort(),
+                        localDBLA.getDb(),
+                        localDBLA.getUser(),
+                        localDBLA.getPass(),
+                        ""
+                ))));
+
+                var dbSchemas = localDBLA.getDbla().getAllDBSchemata(localDBLA.getDb());
+                Platform.runLater(() -> {
+                    chooseSchemaNameChoiceBox.getItems().clear();
+                    chooseSchemaNameChoiceBox.getItems().addAll(dbSchemas);
+                    chooseSchemaNameChoiceBox.getSelectionModel().selectFirst();
+                });
+            }
+            catch (SQLException e) {
+                GUIMethods.showError(BOSS_Strings.DB_CONNECTOR, BOSS_Strings.DBINTERFACE_ERROR_READING_TABLES, e.getLocalizedMessage());
+                GUIMethods.closeWindow(entityListVBox.getScene().getWindow());
+            } finally {
+                Platform.runLater(() -> progressIndicator.setVisible(false));
+            }
+        }).start();
+    }
+
     private final ChangeListener<String> chooseSchemaNameChoiceBoxListener = new ChangeListener<String>() {
         @Override
         public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
             if (t1 == null)
                 return;
-            progressIndicator.setVisible(true);
+            projectName = t1;
             localDBLA.setSchema(t1);
-            createBtn.setDisable(true);
-            checkAllChkbox.setSelected(false);
-            entityListVBox.getChildren().clear();
-            new Thread(() -> {
-                try {
-                    localDBLA.setDbla(new DBLogicalAdministration(new DBInterfaceCommunication(SQLInterface.getDbDriverInterface(
-                            localDBLA.getLanguage(),
-                            localDBLA.getHost(),
-                            localDBLA.getPort(),
-                            localDBLA.getDb(),
-                            localDBLA.getUser(),
-                            localDBLA.getPass(),
-                            localDBLA.getSchema()
-                    ))));
-                    var tableNames = localDBLA.getDbla().getTableNames();
-                    Platform.runLater(() -> {
-                        createBtn.setDisable(false);
-                        for (var tableName : tableNames) {
-                            var checkBox = new CheckBox(tableName);
-                            checkBox.selectedProperty().addListener((observableValue2, aBoolean, newValue) -> {
-                                if (selectionTrigger)
-                                    return;
-                                boolean hasSelectedAll = true;
-                                for (var vboxCheckBox : entityListVBox.getChildren()) {
-                                    if (vboxCheckBox instanceof CheckBox && !((CheckBox)vboxCheckBox).isSelected()) {
-                                        hasSelectedAll = false;
-                                        break;
-                                    }
-                                }
-                                checkAllChkbox.setSelected(hasSelectedAll);
-                            });
-                            entityListVBox.getChildren().add(checkBox);
-                        }
-                    });
-                }
-                catch (SQLException e) {
-                    GUIMethods.showError(BOSS_Strings.DB_CONNECTOR, BOSS_Strings.DBINTERFACE_ERROR_READING_TABLES, e.getLocalizedMessage());
-                    GUIMethods.closeWindow(entityListVBox.getScene().getWindow());
-                }
-                finally {
-                    Platform.runLater(() -> progressIndicator.setVisible(false));
-                }
-            }).start();
-        }
-    };
-
-    private final ChangeListener<String> chooseDBNameChoiceBoxListener = new ChangeListener<>() {
-        @Override
-        public void changed(ObservableValue<? extends String> observableValue, String string, String t1) {
-            progressIndicator.setVisible(true);
-            createBtn.setDisable(true);
-            localDBLA.setDb(t1);
-            entityListVBox.getChildren().clear();
-            new Thread(() -> {
-                try {
-                    localDBLA.setDbla(new DBLogicalAdministration(new DBInterfaceCommunication(SQLInterface.getDbDriverInterface(
-                            localDBLA.getLanguage(),
-                            localDBLA.getHost(),
-                            localDBLA.getPort(),
-                            localDBLA.getDb(),
-                            localDBLA.getUser(),
-                            localDBLA.getPass(),
-                            ""
-                    ))));
-
-                    var dbSchemas = localDBLA.getDbla().getAllDBSchemata(t1);
-                    Platform.runLater(() -> {
-                        chooseSchemaNameChoiceBox.getItems().clear();
-                        chooseSchemaNameChoiceBox.getItems().addAll(dbSchemas);
-                        chooseSchemaNameChoiceBox.getSelectionModel().selectFirst();
-                    });
-                }
-                catch (SQLException e) {
-                    GUIMethods.showError(BOSS_Strings.DB_CONNECTOR, BOSS_Strings.DBINTERFACE_ERROR_READING_TABLES, e.getLocalizedMessage());
-                    GUIMethods.closeWindow(entityListVBox.getScene().getWindow());
-                } finally {
-                    Platform.runLater(() -> progressIndicator.setVisible(false));
-                }
-            }).start();
+            fillTables();
         }
     };
 
     private final ChangeListener<String> chooseDBNameChoiceBoxListener_ForSchemeIncompatibles = new ChangeListener<>() {
         @Override
         public void changed(ObservableValue<? extends String> observableValue, String string, String t1) {
-            progressIndicator.setVisible(true);
-            createBtn.setDisable(true);
+            projectName = t1;
             localDBLA.setDb(t1);
-            entityListVBox.getChildren().clear();
-            new Thread(() -> {
-                try {
-                    localDBLA.setDbla(new DBLogicalAdministration(new DBInterfaceCommunication(SQLInterface.getDbDriverInterface(
-                            localDBLA.getLanguage(),
-                            localDBLA.getHost(),
-                            localDBLA.getPort(),
-                            localDBLA.getDb(),
-                            localDBLA.getUser(),
-                            localDBLA.getPass(),
-                            ""
-                    ))));
+            localDBLA.setSchema("");
+            fillTables();
+        }
+    };
 
-                    var tableNames = localDBLA.getDbla().getTableNames();
-                    Platform.runLater(() -> {
-                        createBtn.setDisable(false);
-                        for (var tableName : tableNames) {
-                            var checkBox = new CheckBox(tableName);
-                            checkBox.selectedProperty().addListener((observableValue2, aBoolean, newValue) -> {
-                                if (selectionTrigger)
-                                    return;
-                                boolean hasSelectedAll = true;
-                                for (var vboxCheckBox : entityListVBox.getChildren()) {
-                                    if (vboxCheckBox instanceof CheckBox && !((CheckBox)vboxCheckBox).isSelected()) {
-                                        hasSelectedAll = false;
-                                        break;
-                                    }
-                                }
-                                checkAllChkbox.setSelected(hasSelectedAll);
-                            });
-                            entityListVBox.getChildren().add(checkBox);
-                        }
-                    });
-                }
-                catch (SQLException e) {
-                    GUIMethods.showError(BOSS_Strings.DB_CONNECTOR, BOSS_Strings.DBINTERFACE_ERROR_READING_TABLES, e.getLocalizedMessage());
-                    GUIMethods.closeWindow(entityListVBox.getScene().getWindow());
-                } finally {
-                    Platform.runLater(() -> progressIndicator.setVisible(false));
-                }
-            }).start();
+    private final ChangeListener<String> chooseDBNameChoiceBoxListener = new ChangeListener<>() {
+        @Override
+        public void changed(ObservableValue<? extends String> observableValue, String string, String t1) {
+            projectName = t1;
+            localDBLA.setDb(t1);
+            fillSchemes();
         }
     };
 }
