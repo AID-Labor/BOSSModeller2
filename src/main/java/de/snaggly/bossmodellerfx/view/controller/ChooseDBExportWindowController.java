@@ -4,10 +4,7 @@ import de.bossmodeler.logicalLayer.elements.DBLanguageNotFoundException;
 import de.snaggly.bossmodellerfx.BOSS_Strings;
 import de.snaggly.bossmodellerfx.guiLogic.GUIMethods;
 import de.snaggly.bossmodellerfx.guiLogic.Project;
-import de.snaggly.bossmodellerfx.model.adapter.DBConnectorException;
-import de.snaggly.bossmodellerfx.model.adapter.DBLAHolder;
-import de.snaggly.bossmodellerfx.model.adapter.ProjectDataAdapter;
-import de.snaggly.bossmodellerfx.model.adapter.SQLLanguage;
+import de.snaggly.bossmodellerfx.model.adapter.*;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -148,6 +145,12 @@ public class ChooseDBExportWindowController implements ModelController<DBLAHolde
     @Override
     public void loadModel(DBLAHolder holder) {
         this.dblaHolder = holder;
+        if (!SQLInterface.getSQLInterfaceDescriptor(holder.getLanguage()).isSchemaCompatible()) {
+            createNewSchemeLabel.setVisible(false);
+            useExistingSchemeCkBox.setVisible(false);
+            newSchemeTf.setVisible(false);
+            existingSchemesChoiceBox.setVisible(false);
+        }
         new Thread(() -> {
             Platform.runLater(() -> progressIndicator.setVisible(true));
             try {

@@ -23,7 +23,7 @@
                         <Insets left="15.0" />
                      </padding>
                   </Label>
-                  <Label text="%connectToDBWindow.SchemaName" GridPane.rowIndex="1">
+                  <Label fx:id="schemeNameLabel" text="%connectToDBWindow.SchemaName" GridPane.rowIndex="1">
                      <padding>
                         <Insets left="15.0" />
                      </padding>

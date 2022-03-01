@@ -14,10 +14,7 @@ import javafx.beans.value.ObservableNumberValue;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.ProgressIndicator;
+import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 
 import java.sql.SQLException;
@@ -31,6 +28,8 @@ import java.util.LinkedList;
 public class ChooseDBImportWindowController implements ModelController<DBLAHolder> {
     public GUIActionListener<ProjectDataAdapter> parentObserver;
 
+    @FXML
+    private Label schemeNameLabel;
     @FXML
     private ChoiceBox<String> chooseDBNameChoiceBox;
     @FXML
@@ -100,8 +99,14 @@ public class ChooseDBImportWindowController implements ModelController<DBLAHolde
         entityListVBox.getChildren().clear();
         try {
             chooseDBNameChoiceBox.getItems().addAll(localDBLA.getDbla().getDatabase());
-            chooseDBNameChoiceBox.getSelectionModel().selectedItemProperty().addListener(chooseDBNameChoiceBoxListener);
-            chooseSchemaNameChoiceBox.getSelectionModel().selectedItemProperty().addListener(chooseSchemaNameChoiceBoxListener);
+            if (SQLInterface.getSQLInterfaceDescriptor(model.getLanguage()).isSchemaCompatible()) {
+                chooseDBNameChoiceBox.getSelectionModel().selectedItemProperty().addListener(chooseDBNameChoiceBoxListener);
+                chooseSchemaNameChoiceBox.getSelectionModel().selectedItemProperty().addListener(chooseSchemaNameChoiceBoxListener);
+            } else {
+                chooseSchemaNameChoiceBox.setVisible(false);
+                schemeNameLabel.setVisible(false);
+                chooseDBNameChoiceBox.getSelectionModel().selectedItemProperty().addListener(chooseDBNameChoiceBoxListener_ForSchemeIncompatibles);
+            }
             chooseDBNameChoiceBox.getSelectionModel().selectFirst();
         } catch (SQLException e) {
             GUIMethods.showError(BOSS_Strings.DB_CONNECTOR, BOSS_Strings.DBINTERFACE_ERROR_READING_TABLES, e.getLocalizedMessage());
@@ -186,6 +191,56 @@ public class ChooseDBImportWindowController implements ModelController<DBLAHolde
                         chooseSchemaNameChoiceBox.getItems().clear();
                         chooseSchemaNameChoiceBox.getItems().addAll(dbSchemas);
                         chooseSchemaNameChoiceBox.getSelectionModel().selectFirst();
+                    });
+                }
+                catch (SQLException e) {
+                    GUIMethods.showError(BOSS_Strings.DB_CONNECTOR, BOSS_Strings.DBINTERFACE_ERROR_READING_TABLES, e.getLocalizedMessage());
+                    GUIMethods.closeWindow(entityListVBox.getScene().getWindow());
+                } finally {
+                    Platform.runLater(() -> progressIndicator.setVisible(false));
+                }
+            }).start();
+        }
+    };
+
+    private final ChangeListener<String> chooseDBNameChoiceBoxListener_ForSchemeIncompatibles = new ChangeListener<>() {
+        @Override
+        public void changed(ObservableValue<? extends String> observableValue, String string, String t1) {
+            progressIndicator.setVisible(true);
+            createBtn.setDisable(true);
+            localDBLA.setDb(t1);
+            entityListVBox.getChildren().clear();
+            new Thread(() -> {
+                try {
+                    localDBLA.setDbla(new DBLogicalAdministration(new DBInterfaceCommunication(SQLInterface.getDbDriverInterface(
+                            localDBLA.getLanguage(),
+                            localDBLA.getHost(),
+                            localDBLA.getPort(),
+                            localDBLA.getDb(),
+                            localDBLA.getUser(),
+                            localDBLA.getPass(),
+                            ""
+                    ))));
+
+                    var tableNames = localDBLA.getDbla().getTableNames();
+                    Platform.runLater(() -> {
+                        createBtn.setDisable(false);
+                        for (var tableName : tableNames) {
+                            var checkBox = new CheckBox(tableName);
+                            checkBox.selectedProperty().addListener((observableValue2, aBoolean, newValue) -> {
+                                if (selectionTrigger)
+                                    return;
+                                boolean hasSelectedAll = true;
+                                for (var vboxCheckBox : entityListVBox.getChildren()) {
+                                    if (vboxCheckBox instanceof CheckBox && !((CheckBox)vboxCheckBox).isSelected()) {
+                                        hasSelectedAll = false;
+                                        break;
+                                    }
+                                }
+                                checkAllChkbox.setSelected(hasSelectedAll);
+                            });
+                            entityListVBox.getChildren().add(checkBox);
+                        }
                     });
                 }
                 catch (SQLException e) {
