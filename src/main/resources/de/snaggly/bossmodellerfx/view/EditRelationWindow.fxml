@@ -94,7 +94,7 @@
             <HBox alignment="CENTER_RIGHT" spacing="15.0">
                <children>
                   <Button fx:id="cancelBtn" layoutX="279.0" layoutY="10.0" mnemonicParsing="false" onAction="#closeWindow" text="%mainWindow.MenuBar.File.Cancel" />
-                  <Button fx:id="saveBtn" disable="true" mnemonicParsing="false" onAction="#save" text="%mainWindow.MenuBar.File.Save" />
+                  <Button fx:id="saveBtn" disable="true" mnemonicParsing="false" onAction="#save" text="%SAVE" />
                </children>
                <VBox.margin>
                   <Insets top="20.0" />

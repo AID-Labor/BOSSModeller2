@@ -46,7 +46,7 @@
             </SplitPane>
             <ButtonBar prefHeight="40.0" prefWidth="200.0">
               <buttons>
-                <Button mnemonicParsing="false" onAction="#onSaveAction" text="%mainWindow.MenuBar.File.Save" />
+                <Button mnemonicParsing="false" onAction="#onSaveAction" text="%SAVE" />
               </buttons>
                <VBox.margin>
                   <Insets bottom="5.0" right="30.0" top="5.0" />

@@ -63,7 +63,7 @@
             <ButtonBar prefHeight="40.0" prefWidth="200.0" VBox.vgrow="NEVER">
                <buttons>
                   <Button fx:id="cancelBtn" mnemonicParsing="false" onAction="#onCancelClick" text="%mainWindow.MenuBar.File.Cancel" />
-                  <Button fx:id="doneBtn" mnemonicParsing="false" onAction="#onDoneClick" text="%mainWindow.MenuBar.File.Save" />
+                  <Button fx:id="doneBtn" mnemonicParsing="false" onAction="#onDoneClick" text="%SAVE" />
                </buttons>
             </ButtonBar>
          </children>

@@ -44,7 +44,7 @@
                         <HBox alignment="CENTER_RIGHT" spacing="20.0" HBox.hgrow="ALWAYS">
                            <children>
                               <Button alignment="CENTER" mnemonicParsing="false" onAction="#onCloseClick" text="%CLOSE" />
-                              <Button mnemonicParsing="false" onAction="#onSaveClick" text="%mainWindow.MenuBar.File.Save" />
+                              <Button mnemonicParsing="false" onAction="#onSaveClick" text="%SAVE" />
                            </children>
                         </HBox>
                      </children>
