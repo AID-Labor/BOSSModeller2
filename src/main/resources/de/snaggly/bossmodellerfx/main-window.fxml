@@ -9,7 +9,7 @@
 <AnchorPane onKeyPressed="#onKeyPressed" onKeyReleased="#onKeyReleased" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.snaggly.bossmodellerfx.MainController">
    <BorderPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
       <left>
-         <Accordion fx:id="leftNavigationAccordion" maxHeight="1.7976931348623157E308" maxWidth="100.0" BorderPane.alignment="TOP_LEFT">
+         <Accordion fx:id="leftNavigationAccordion" minWidth="130.0" BorderPane.alignment="TOP_LEFT">
             <panes>
                <TitledPane layoutX="10.0" layoutY="62.0" text="%mainWindow.SideBar.Project">
                   <content>
