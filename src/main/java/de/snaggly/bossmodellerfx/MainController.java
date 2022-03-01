@@ -468,6 +468,10 @@ public class MainController {
             var removedKeysList = ForeignKeyHandler.removeAllForeignKeys(projRelation);
             ForeignKeyHandler.addForeignKeys(projRelation, prefFkTable);
 
+            //Reapply user inputs
+            ForeignKeyHandler.reApplyUserDataInNewForeignKeys(removedKeysList, projRelation.getFkAttributesA());
+            ForeignKeyHandler.reApplyUserDataInNewForeignKeys(removedKeysList, projRelation.getFkAttributesB());
+
             //Adapt the new Objects on UniqueList to prevent ghosts
             ForeignKeyHandler.readjustForeignKeysInUniqueLists(projRelation.getTableA(), removedKeysList, projRelation.getFkAttributesA());
             ForeignKeyHandler.readjustForeignKeysInUniqueLists(projRelation.getTableB(), removedKeysList, projRelation.getFkAttributesB());

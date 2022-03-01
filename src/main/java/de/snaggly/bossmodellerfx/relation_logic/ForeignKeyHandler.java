@@ -148,7 +148,7 @@ public class ForeignKeyHandler {
     }
 
     /**
-     * When once a ForeignKey is deleted, the UniqueList will leave a ghost behind.
+     * Once a ForeignKey is deleted, the UniqueList will leave a ghost behind.
      * This method will readjust the correct object to remove the ghost if the Key does not live anymore.
      * @param table The table which contains the UniqueList to be readjusted.
      * @param removedKeysList A list of all previously removed Key objects. "removeAllForeignKeys" will give that list.
@@ -199,6 +199,36 @@ public class ForeignKeyHandler {
             }
             for (int i = attributeDuplicates.size()-1; i>=0; i--) {
                 attrCombo.getAttributes().remove(attributeDuplicates.get(i).intValue());
+            }
+        }
+    }
+
+    /**
+     * Once a ForeignKey is deleted and regenerated, all previous user data (Name, Check, Default) will be lost.
+     * This method will reapply all user inputs in the new Fks.
+     * @param removedKeysList A list of all previously removed Key objects. "removeAllForeignKeys" will give that list.
+     * @param newFks A list of the new Key objects.
+     */
+    public static void reApplyUserDataInNewForeignKeys(LinkedList<Attribute> removedKeysList, LinkedList<Attribute> newFks) {
+        for (var removedKey : removedKeysList) {
+            Attribute newKey = null;
+            for (var fk : newFks) {
+                var innerFkKey = fk;
+                var innerRmKey = removedKey;
+                //Check if root key matches. FKs can reference other just changed FKs. FkC->FkB->FkA->PK.
+                while (innerFkKey != null && innerRmKey != null) {
+                    if (innerFkKey.getFkTable() == innerRmKey.getFkTable() && innerFkKey.getFkTableColumn() == innerRmKey.getFkTableColumn()) {
+                        newKey = fk;;
+                        break;
+                    }
+                    innerFkKey = innerFkKey.getFkTableColumn();
+                    innerRmKey = innerRmKey.getFkTableColumn();
+                }
+            }
+            if (newKey != null) {
+                newKey.setName(removedKey.getName());
+                newKey.setDefaultName(removedKey.getDefaultName());
+                newKey.setCheckName(removedKey.getCheckName());
             }
         }
     }
