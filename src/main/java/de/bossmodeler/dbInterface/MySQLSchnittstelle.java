@@ -590,48 +590,71 @@ public class MySQLSchnittstelle extends Schnittstelle {
 		return null;
 	}
 
+	//Edited to only show tables of set DB, Fixed by OE
 	@Override
 	public LinkedList<String> getTableNames() throws SQLException{
 		LinkedList<String> helpList = new LinkedList<String>();
-		ResultSet rs = getMetaData().getTables(null, getDb(), null,
+		ResultSet rs = getMetaData().getTables(getDb(), "", null,
 				new String[] { "TABLE" });
 		while (rs.next())
 			helpList.add(rs.getString("TABLE_NAME"));
 		return helpList;
 	}
 
+	//Edited to use SHOW DATABSES query instead. Fixed by OE
 	@Override
 	public LinkedList<String> getDatabase() throws SQLException {
 		if(connection.isClosed())
 			reestablishConnection();
 		LinkedList<String> s = new LinkedList<String>();
-		ResultSet dbc = getMetaData().getCatalogs();
+		ResultSet dbc = connection.createStatement().executeQuery("SHOW DATABASES");
 		while (dbc.next()) {
 			s.add(dbc.getString(1));
 		}
 		
 		LinkedList<String> helplist = new LinkedList<String>();
-		for (int i=0; i<s.size();i++){
-			if(!s.get(i).equals("template0") && !s.get(i).equals("template1") && schemaEmpty(s.get(i))){
-				helplist.add(s.get(i));
+		for (String dbName : s) {
+			if (!dbName.equals("template0")
+					&& !dbName.equals("template1")
+					&& !dbName.equals("information_schema")
+					&& !dbName.equals("mysql")
+					&& !dbName.equals("performance_schema")
+					&& !dbName.equals("sys")
+					&& schemaEmpty(dbName)) {
+				helplist.add(dbName);
 			}
 		}	
 		closeConnection();
 		return helplist;
 	}
 
+	//Method modified to also ignore system DBs. This change was necessary,
+	// as this class did not offer a method to show filled DBs too.
+	//System DBs are not in use.
+	//Edited to use SHOW DATABSES query instead. Fixed by OE
 	@Override
 	public LinkedList<String> getAllDatabase() throws SQLException {
 		if(connection.isClosed())
 			reestablishConnection();
 		LinkedList<String> s = new LinkedList<String>();
-		ResultSet dbc = getMetaData().getCatalogs();
+		ResultSet dbc = connection.createStatement().executeQuery("SHOW DATABASES");
 		while (dbc.next()) {
 			s.add(dbc.getString(1));
 		}
-			
+
+		LinkedList<String> helplist = new LinkedList<String>();
+		for (int i=0; i<s.size();i++){
+			if(!s.get(i).equals("template0")
+					&& !s.get(i).equals("template1")
+					&& !s.get(i).equals("information_schema")
+					&& !s.get(i).equals("mysql")
+					&& !s.get(i).equals("performance_schema")
+					&& !s.get(i).equals("sys")) {
+				helplist.add(s.get(i));
+			}
+		}
 		closeConnection();
-		return s;
+		return helplist;
 	}
 
 	@Override
