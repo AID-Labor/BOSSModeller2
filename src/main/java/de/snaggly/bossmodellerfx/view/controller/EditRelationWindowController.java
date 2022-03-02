@@ -140,6 +140,12 @@ public class EditRelationWindowController implements ModelController<Relation> {
 
     @FXML
     private void save(ActionEvent actionEvent) {
+        //Check if any foreignKeys have had been set.
+        if (relation.getFkAttributesA().size() <= 0 && relation.getFkAttributesB().size() <= 0) {
+            GUIMethods.showWarning(BOSS_Strings.RELATION_EDITOR, BOSS_Strings.RELATION_EDITOR_NO_FOREIGN_KEYS_HEADER, BOSS_Strings.RELATION_EDITOR_NO_FOREIGN_KEYS_WARNING);
+            return;
+        }
+
         //Move temp models to real models
         entityAModelReference.setWeakType(relation.getTableA().isWeakType());
         entityAModelReference.setAttributes(relation.getTableA().getAttributes());
