@@ -532,7 +532,7 @@ public class EditRelationWindowController implements ModelController<Relation> {
                 }
             }
         }
-        else if (relation.getTableB().isWeakType()) {
+        if (!result && relation.getTableB().isWeakType()) {
             for (var fk : relation.getFkAttributesB()) {
                 if (fk.isPrimary() && fk.getFkTable() == relation.getTableA()) {
                     result = true;
