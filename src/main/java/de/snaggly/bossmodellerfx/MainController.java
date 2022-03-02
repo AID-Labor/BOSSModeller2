@@ -506,6 +506,7 @@ public class MainController {
         relationsOverview.remove(relation);
         currentProject.getRelations().remove(relationView.getModel());
         relationLineDrawer(currentProject);
+        currentProject.syncRelationOrder();
     }
 
     /**
