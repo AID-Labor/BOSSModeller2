@@ -216,19 +216,19 @@ public class ForeignKeyHandler {
                 var innerFkKey = fk;
                 var innerRmKey = removedKey;
                 //Check if root key matches. FKs can reference other just changed FKs. FkC->FkB->FkA->PK.
-                while (innerFkKey != null && innerRmKey != null) {
+                while (newKey == null && innerFkKey.getFkTable() != null && innerRmKey.getFkTable() != null) {
                     if (innerFkKey.getFkTable() == innerRmKey.getFkTable() && innerFkKey.getFkTableColumn() == innerRmKey.getFkTableColumn()) {
-                        newKey = fk;;
-                        break;
+                        newKey = fk;
                     }
                     innerFkKey = innerFkKey.getFkTableColumn();
                     innerRmKey = innerRmKey.getFkTableColumn();
                 }
-            }
-            if (newKey != null) {
-                newKey.setName(removedKey.getName());
-                newKey.setDefaultName(removedKey.getDefaultName());
-                newKey.setCheckName(removedKey.getCheckName());
+                if (newKey != null) {
+                    newKey.setName(removedKey.getName());
+                    newKey.setDefaultName(removedKey.getDefaultName());
+                    newKey.setCheckName(removedKey.getCheckName());
+                    break;
+                }
             }
         }
     }

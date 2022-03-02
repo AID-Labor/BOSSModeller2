@@ -7,16 +7,13 @@ import de.snaggly.bossmodellerfx.model.view.Entity;
 import de.snaggly.bossmodellerfx.view.WorkbenchPane;
 import de.snaggly.bossmodellerfx.view.viewtypes.BiSelectable;
 import de.snaggly.bossmodellerfx.view.viewtypes.Selectable;
-import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.input.KeyCode;
 import com.google.gson.Gson;
 import javafx.scene.layout.Pane;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Service class to hold and manage project data.
@@ -149,7 +146,28 @@ public class Project {
     }
 
     public void addRelation(Relation relation) {
+        var relationComplexityList = new LinkedList<Integer>();
+        for (var fKeyA : relation.getFkAttributesA()) {
+            var fk = fKeyA;
+            var fkRelationComplexity = 0;
+            while (fk.getFkTableColumn() != null) {
+                fkRelationComplexity++;
+                fk = fk.getFkTableColumn();
+            }
+            relationComplexityList.add(fkRelationComplexity);
+        }
+        for (var fKeyB : relation.getFkAttributesB()) {
+            var fk = fKeyB;
+            var fkRelationComplexity = 0;
+            while (fk.getFkTableColumn() != null) {
+                fkRelationComplexity++;
+                fk = fk.getFkTableColumn();
+            }
+            relationComplexityList.add(fkRelationComplexity);
+        }
+        relation.relationComplexity = Collections.max(relationComplexityList);
         relations.add(relation);
+        relations.sort(Comparator.comparingInt(r -> r.relationComplexity));
     }
 
     public void removeRelation(Relation relation) {

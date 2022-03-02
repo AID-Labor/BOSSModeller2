@@ -4,7 +4,6 @@ import de.snaggly.bossmodellerfx.model.abstraction.RelationAbstraction;
 import de.snaggly.bossmodellerfx.model.view.Entity;
 import de.snaggly.bossmodellerfx.relation_logic.CrowsFootOptions;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 
@@ -17,6 +16,7 @@ public class Relation extends RelationAbstraction {
     private Entity tableA;
     private Entity tableB;
     private final HashMap<Entity,LinkedList<Attribute>> foreignKeys = new HashMap<>();
+    public int relationComplexity = 0; //How deep this relation goes.
 
     public Relation(Entity tableA, Entity tableB, CrowsFootOptions.Cardinality tableA_Cardinality, CrowsFootOptions.Cardinality tableB_Cardinality, CrowsFootOptions.Obligation tableA_Obligation, CrowsFootOptions.Obligation tableB_Obligation) {
         super(tableA_Cardinality, tableB_Cardinality, tableA_Obligation, tableB_Obligation);
