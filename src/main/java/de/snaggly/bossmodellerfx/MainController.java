@@ -468,13 +468,18 @@ public class MainController {
             ForeignKeyHandler.addForeignKeys(projRelation, prefFkTable);
 
             //Reapply user inputs
-            ForeignKeyHandler.reApplyUserDataInNewForeignKeys(removedKeysList, projRelation.getFkAttributesA());
-            ForeignKeyHandler.reApplyUserDataInNewForeignKeys(removedKeysList, projRelation.getFkAttributesB());
+            var adaptedKeysInA = ForeignKeyHandler.reApplyUserDataInNewForeignKeys(removedKeysList.getKey(), projRelation.getFkAttributesA());
+            var adaptedKeysInB = ForeignKeyHandler.reApplyUserDataInNewForeignKeys(removedKeysList.getKey(), projRelation.getFkAttributesB());
 
             //Adapt the new Objects on UniqueList to prevent ghosts
-            ForeignKeyHandler.readjustForeignKeysInUniqueLists(projRelation.getTableA(), removedKeysList, projRelation.getFkAttributesA());
-            ForeignKeyHandler.readjustForeignKeysInUniqueLists(projRelation.getTableB(), removedKeysList, projRelation.getFkAttributesB());
+            ForeignKeyHandler.readjustForeignKeysInUniqueLists(projRelation.getTableA(), removedKeysList.getKey(), projRelation.getFkAttributesA());
+            ForeignKeyHandler.readjustForeignKeysInUniqueLists(projRelation.getTableB(), removedKeysList.getKey(), projRelation.getFkAttributesB());
 
+            //Reorder FKeys in Attribute list
+            if (adaptedKeysInA.size() > 0)
+                ForeignKeyHandler.reOrderDeletedFKeys(projRelation.getTableA(), removedKeysList.getKey(), adaptedKeysInA, removedKeysList.getValue());
+            if (adaptedKeysInB.size() > 0)
+                ForeignKeyHandler.reOrderDeletedFKeys(projRelation.getTableB(), removedKeysList.getKey(), adaptedKeysInB, removedKeysList.getValue());
 
             var tableAView = entitiesOverview.get(projRelation.getTableA());
             var tableBView = entitiesOverview.get(projRelation.getTableB());

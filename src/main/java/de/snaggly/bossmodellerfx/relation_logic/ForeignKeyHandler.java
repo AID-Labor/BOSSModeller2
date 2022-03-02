@@ -8,10 +8,7 @@ import de.snaggly.bossmodellerfx.model.subdata.Relation;
 import de.snaggly.bossmodellerfx.model.view.Entity;
 import javafx.scene.control.ButtonType;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.LinkedList;
+import java.util.*;
 
 /**
  * Static service class to manage the foreign Key according to the Entity-Relation-Model
@@ -107,21 +104,38 @@ public class ForeignKeyHandler {
      * Removes all ForeignKey(s) in relation.
      * @return A list of a deleted Attributes to keep track of
      */
-    public static LinkedList<Attribute> removeAllForeignKeys(Relation relation) {
+    public static Map.Entry<LinkedList<Attribute>, LinkedList<Integer>> removeAllForeignKeys(Relation relation) {
+        var fKeysResult = new LinkedList<Attribute>();
+        var indexResult = new LinkedList<Integer>();
         //Removing all ForeignKeys in TabA that reference TabB
         var itemsToRemove = relation.getFkAttributesA();
+        var tableAAttributes = relation.getTableA().getAttributes();
+        for (int i=0; i<tableAAttributes.size(); i++) {
+            var attribute = tableAAttributes.get(i);
+            if (itemsToRemove.contains(attribute)) {
+                fKeysResult.add(attribute);
+                indexResult.add(i);
+            }
+        }
         relation.getTableA().getAttributes().removeAll(itemsToRemove);
-        var result = new LinkedList<>(itemsToRemove);
+        //var result = new LinkedList<>(itemsToRemove);
         relation.getFkAttributesA().clear();
 
         //Removing all ForeignKeys in TabB that reference TabA
         itemsToRemove.clear();
         itemsToRemove = relation.getFkAttributesB();
+        var tableBAttributes = relation.getTableB().getAttributes();
+        for (int i=0; i<tableBAttributes.size(); i++) {
+            var attribute = tableBAttributes.get(i);
+            if (itemsToRemove.contains(attribute)) {
+                fKeysResult.add(attribute);
+                indexResult.add(i);
+            }
+        }
         relation.getTableB().getAttributes().removeAll(itemsToRemove);
-        result.addAll(itemsToRemove);
         relation.getFkAttributesB().clear();
 
-        return result;
+        return Map.entry(fKeysResult, indexResult);
     }
 
     /**
@@ -209,8 +223,10 @@ public class ForeignKeyHandler {
      * This method will reapply all user inputs in the new Fks.
      * @param removedKeysList A list of all previously removed Key objects. "removeAllForeignKeys" will give that list.
      * @param newFks A list of the new Key objects.
+     * @returns A map of adapted new keys to the old keys.
      */
-    public static void reApplyUserDataInNewForeignKeys(LinkedList<Attribute> removedKeysList, LinkedList<Attribute> newFks) {
+    public static HashMap<Attribute, Attribute> reApplyUserDataInNewForeignKeys(LinkedList<Attribute> removedKeysList, LinkedList<Attribute> newFks) {
+        var result = new HashMap<Attribute, Attribute>();
         for (var removedKey : removedKeysList) {
             Attribute newKey = null;
             for (var fk : newFks) {
@@ -228,12 +244,18 @@ public class ForeignKeyHandler {
                     newKey.setName(removedKey.getName());
                     newKey.setDefaultName(removedKey.getDefaultName());
                     newKey.setCheckName(removedKey.getCheckName());
+                    result.put(removedKey, newKey);
                     break;
                 }
             }
         }
+        return result;
     }
 
+    /**
+     * Calculated the complexity of one relation.
+     * The complexity is given by how many layers one foreign key references.
+     */
     public static void setRelationComplexity(Relation relation) {
         var relationComplexityList = new LinkedList<Integer>();
         for (var fKeyA : relation.getFkAttributesA()) {
@@ -255,6 +277,32 @@ public class ForeignKeyHandler {
             relationComplexityList.add(fkRelationComplexity);
         }
         relation.relationComplexity = Collections.max(relationComplexityList);
+    }
+
+    /**
+     * Rearrange the previous ForeignKey order in one entity.
+     * @param table Table to edit.
+     * @param deletedKeys What keys used to exist in given entity.
+     * @param newKeysMaps Map oldKey->newKey.
+     * @param originalIndexes In which index did the Key lie?
+     */
+    public static void reOrderDeletedFKeys(Entity table, LinkedList<Attribute> deletedKeys, HashMap<Attribute, Attribute> newKeysMaps, LinkedList<Integer> originalIndexes) {
+        for (int i=0; i<deletedKeys.size(); i++) {
+            var newKey = newKeysMaps.get(deletedKeys.get(i));
+            if (newKey == null)
+                continue;
+            var attributesList = table.getAttributes();
+            var index = attributesList.indexOf(newKey);
+            var originalIndex = originalIndexes.get(i);
+            if (index >= 0) {
+                if (originalIndex < attributesList.size()) {
+                    attributesList.add(originalIndex, attributesList.remove(index));
+                }
+                else {
+                    attributesList.add(attributesList.size()-1, attributesList.remove(index));
+                }
+            }
+        }
     }
 
     /**
