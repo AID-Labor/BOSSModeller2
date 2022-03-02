@@ -534,7 +534,7 @@ public class MainController {
             var emptyAttrCombo = new LinkedList<AttributeCombination>();
             for (var uniqueCombo : entity.getUniqueCombination().getCombinations()) {
                 uniqueCombo.getAttributes().removeAll(foreignKeys);
-                if (uniqueCombo.getAttributes().size() < 1) {
+                if (uniqueCombo.getAttributes().size() <= 1) {
                     emptyAttrCombo.add(uniqueCombo);
                 }
             }

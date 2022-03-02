@@ -182,25 +182,25 @@ public class ForeignKeyHandler {
                 }
             }
             attrCombo.removeAll(removedAttrs);
-            if (attrCombo.size() < 1) { //There is nothing left -> Causes SQL Error
-                emptyAttrCombo.add(uniqueCombo);
-            }
         }
-        table.getUniqueCombination().getCombinations().removeAll(emptyAttrCombo);
 
         //Platting duplicates
-        for (var attrCombo : table.getUniqueCombination().getCombinations()) {
+        for (var uniqueCombo : table.getUniqueCombination().getCombinations()) {
             var attributeHashSet = new HashSet<Attribute>();
             var attributeDuplicates = new LinkedList<Integer>();
-            for (int i = 0; i < attrCombo.getAttributes().size(); i++) {
-                if (!attributeHashSet.add(attrCombo.getAttributes().get(i))) {
+            for (int i = 0; i < uniqueCombo.getAttributes().size(); i++) {
+                if (!attributeHashSet.add(uniqueCombo.getAttributes().get(i))) {
                     attributeDuplicates.add(i);
                 }
             }
             for (int i = attributeDuplicates.size()-1; i>=0; i--) {
-                attrCombo.getAttributes().remove(attributeDuplicates.get(i).intValue());
+                uniqueCombo.getAttributes().remove(attributeDuplicates.get(i).intValue());
+            }
+            if (uniqueCombo.getAttributes().size() < 1) { //There is nothing left -> Causes SQL Error
+                emptyAttrCombo.add(uniqueCombo);
             }
         }
+        table.getUniqueCombination().getCombinations().removeAll(emptyAttrCombo);
     }
 
     /**
