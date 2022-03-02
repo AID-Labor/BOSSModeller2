@@ -195,9 +195,9 @@ public class ProjectDataAdapter implements BOSSModel {
                     dbTable.addPKey(dbColumn);
                 }
                 if (attribute.getFkTable() != null) {
-                    dbColumn.setdBCFKRefName(attribute.getFkTableColumn().getName());
+                    dbColumn.setdBCFKConstraintName(entity.getName()+"_");
                     dbColumn.setdBCFKRefTableName(attribute.getFkTable().getName());
-                    dbColumn.setdBCFKConstraintName(dbTable.getdBTName() + "_" + attribute.getName() + "_fkey");
+                    dbColumn.setdBCFKRefName(attribute.getFkTableColumn().getName());
                     dbTable.addFKey(dbColumn);
                 }
 
@@ -209,6 +209,9 @@ public class ProjectDataAdapter implements BOSSModel {
                 var columnList = new LinkedList<DBColumn>();
                 for (var attribute : attributeCombination.getAttributes()) {
                     columnList.add(columnMap.get(attribute));
+                }
+                if (attributeCombination.isPrimaryCombination()) {
+                    attributeCombination.setCombinationName(null);
                 }
                 dbTable.addUniqueCombination(
                         new de.bossmodeler.logicalLayer.elements.UniqueCombination(columnList, attributeCombination.getCombinationName())
@@ -241,17 +244,19 @@ public class ProjectDataAdapter implements BOSSModel {
 
             //Set foreign Table and Keys
             var fkColumns = new LinkedList<DBColumn>();
-            if (relation.getFkAttributesA().size() > 0) {
-                dbRelation.setFkTable(dbRelation.getTableA());
-                for (var fk : relation.getFkAttributesA()) {
-                    fkColumns.add(columnMap.get(fk));
-                }
+            var constraintName = "";
+            var fKeys = relation.getFkAttributesA();
+            if (fKeys.size() <= 0) {
+                fKeys = relation.getFkAttributesB();
             }
-            else {
-                dbRelation.setFkTable(dbRelation.getTableB());
-                for (var fk : relation.getFkAttributesB()) {
-                    fkColumns.add(columnMap.get(fk));
-                }
+            for (var fk : fKeys) {
+                constraintName = constraintName.concat(fk.getName()+"_");
+            }
+            dbRelation.setFkTable(dbRelation.getTableA());
+            for (var fk : fKeys) {
+                var dbColumn = columnMap.get(fk);
+                dbColumn.setdBCFKConstraintName(dbColumn.getdBCFKConstraintName()+constraintName+"_fkey");
+                fkColumns.add(dbColumn);
             }
             dbRelation.setFkColumn(fkColumns);
 
