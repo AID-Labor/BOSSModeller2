@@ -256,6 +256,16 @@ public class MainController {
         if (MouseButton.PRIMARY == mouseEvent.getButton() && mainWorkbenchContextMenu.isShowing()) {
             mainWorkbenchContextMenu.hide();
         }
+
+        if (MouseButton.PRIMARY == mouseEvent.getButton() && mouseEvent.getClickCount() == 2) { //Double click
+            var selectedItem = currentProject.getCurrentSelected();
+            if (selectedItem instanceof EntityView) {
+                editEntity((EntityView) selectedItem);
+            }
+            else if (selectedItem instanceof RelationViewNode) {
+                editRelation((RelationViewNode) selectedItem);
+            }
+        }
     }
 
     @FXML
