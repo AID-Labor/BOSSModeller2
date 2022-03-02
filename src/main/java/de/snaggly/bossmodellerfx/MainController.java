@@ -175,50 +175,59 @@ public class MainController {
                 editEntityMenu.setOnAction(actionEvent -> editEntity(entityView));
                 var removeEntityMenu = new MenuItem(BOSS_Strings.DELETE_ENTITY);
                 removeEntityMenu.setOnAction(actionEvent -> deleteEntity(entityView));
-                var separator = new SeparatorMenuItem();
-                mainWorkbenchContextMenu.getItems().addAll(editEntityMenu, removeEntityMenu, separator);
+                mainWorkbenchContextMenu.getItems().addAll(editEntityMenu, removeEntityMenu);
             } else if (currentSelection instanceof CommentView) {
                 var commentView = (CommentView)(currentProject.getCurrentSelected());
                 var editCommentMenu = new MenuItem(BOSS_Strings.EDIT_COMMENT);
                 editCommentMenu.setOnAction(actionEvent -> editComment(commentView));
                 var removeCommentMenu = new MenuItem(BOSS_Strings.DELETE_COMMENT);
                 removeCommentMenu.setOnAction(actionEvent -> deleteComment(commentView));
-                var separator = new SeparatorMenuItem();
-                mainWorkbenchContextMenu.getItems().addAll(editCommentMenu, removeCommentMenu, separator);
+                mainWorkbenchContextMenu.getItems().addAll(editCommentMenu, removeCommentMenu);
             } else if (currentSelection instanceof RelationViewNode) {
                 var relationView = (RelationViewNode)(currentProject.getCurrentSelected());
                 var editRelationMenu = new MenuItem(BOSS_Strings.EDIT_RELATION);
                 editRelationMenu.setOnAction(actionEvent -> editRelation(relationView));
                 var removeRelation = new MenuItem(BOSS_Strings.DELETE_RELATION);
                 removeRelation.setOnAction(actionEvent -> deleteRelation(relationView));
-                var separator = new SeparatorMenuItem();
-                mainWorkbenchContextMenu.getItems().addAll(editRelationMenu, removeRelation, separator);
+                mainWorkbenchContextMenu.getItems().addAll(editRelationMenu, removeRelation);
+            } else {
+                var newEntityMenu = new MenuItem(BOSS_Strings.NEW_ENTITY);
+                newEntityMenu.setOnAction(actionEvent -> createNewEntity(
+                        contextMenuEvent.getX(),
+                        contextMenuEvent.getY()
+                ));
+
+                var newRelationMenu = new MenuItem(BOSS_Strings.NEW_RELATION);
+                newRelationMenu.setOnAction(actionEvent -> createNewRelation());
+
+                var newCommentMenu = new MenuItem(BOSS_Strings.NEW_COMMENT);
+                newCommentMenu.setOnAction(actionEvent -> createNewComment(
+                        contextMenuEvent.getX(),
+                        contextMenuEvent.getY()
+                ));
+                mainWorkbenchContextMenu.getItems().addAll(newEntityMenu, newCommentMenu, newRelationMenu);
+
+                if (currentProject.getEntities().size() > 0) {
+                    var separator = new SeparatorMenuItem();
+                    mainWorkbenchContextMenu.getItems().add(separator);
+                    var generateSQLMenu = new MenuItem(BOSS_Strings.GENERATE_SQL_SCRIPT);
+                    generateSQLMenu.setOnAction(actionEvent -> exportSQLClick());
+                    mainWorkbenchContextMenu.getItems().add(generateSQLMenu);
+                    var exportPicture = new MenuItem(BOSS_Strings.EXPORT_TO_PICTURE);
+                    exportPicture.setOnAction(actionEvent -> exportPictureClick());
+                    mainWorkbenchContextMenu.getItems().add(exportPicture);
+                }
             }
 
             if (currentSelection instanceof EntityView || currentSelection instanceof CommentView) {
+                var separator = new SeparatorMenuItem();
                 var editCommentMenu = new MenuItem(BOSS_Strings.MOVE_TO_FRONT);
                 editCommentMenu.setOnAction(actionEvent -> currentSelection.toFront());
                 var removeCommentMenu = new MenuItem(BOSS_Strings.MOVE_TO_BACK);
                 removeCommentMenu.setOnAction(actionEvent -> currentSelection.toBack());
-                var separator = new SeparatorMenuItem();
-                mainWorkbenchContextMenu.getItems().addAll(editCommentMenu, removeCommentMenu, separator);
+                mainWorkbenchContextMenu.getItems().addAll(separator, editCommentMenu, removeCommentMenu);
             }
 
-            var newEntityMenu = new MenuItem(BOSS_Strings.NEW_ENTITY);
-            newEntityMenu.setOnAction(actionEvent -> createNewEntity(
-                    contextMenuEvent.getX(),
-                    contextMenuEvent.getY()
-            ));
-
-            var newRelationMenu = new MenuItem(BOSS_Strings.NEW_RELATION);
-            newRelationMenu.setOnAction(actionEvent -> createNewRelation());
-
-            var newCommentMenu = new MenuItem(BOSS_Strings.NEW_COMMENT);
-            newCommentMenu.setOnAction(actionEvent -> createNewComment(
-                    contextMenuEvent.getX(),
-                    contextMenuEvent.getY()
-            ));
-            mainWorkbenchContextMenu.getItems().addAll(newEntityMenu, newCommentMenu, newRelationMenu);
             mainWorkbenchContextMenu.show(
                     currentProject.getWorkField(),
                     contextMenuEvent.getScreenX(),

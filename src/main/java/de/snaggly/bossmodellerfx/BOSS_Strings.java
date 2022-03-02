@@ -119,4 +119,5 @@ public class BOSS_Strings {
     public static final String PROJECT_SAVED_SUCCESSFULLY = resourceBundle.getString("PROJECT_SAVED_SUCCESSFULLY");
     public static final String RELATION_EDITOR_NO_FOREIGN_KEYS_HEADER = resourceBundle.getString("RELATION_EDITOR_NO_FOREIGN_KEYS_HEADER");
     public static final String RELATION_EDITOR_NO_FOREIGN_KEYS_WARNING = resourceBundle.getString("RELATION_EDITOR_NO_FOREIGN_KEYS_WARNING");
+    public static final String GENERATE_SQL_SCRIPT = resourceBundle.getString("GENERATE_SQL_SCRIPT");
 }
