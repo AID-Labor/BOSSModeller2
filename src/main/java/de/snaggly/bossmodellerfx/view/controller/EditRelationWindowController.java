@@ -468,28 +468,27 @@ public class EditRelationWindowController implements ModelController<Relation> {
             }
         }
         else if (relation.getTableA_Cardinality() == CrowsFootOptions.Cardinality.ONE && relation.getTableB_Cardinality() == CrowsFootOptions.Cardinality.MANY) {
-            if (relation.getTableA_Obligation() == CrowsFootOptions.Obligation.MUST) {
-                tableAIsWeakChkBox.setDisable(true);
-                tableAIsWeakChkBox.setSelected(false);
-            }
-            else if (relation.getTableB_Obligation() == CrowsFootOptions.Obligation.CAN) {
+            if (relation.getTableA_Obligation() == CrowsFootOptions.Obligation.CAN && relation.getTableB_Obligation() == CrowsFootOptions.Obligation.CAN) {
                 tableAIsWeakChkBox.setDisable(true);
                 tableBIsWeakChkBox.setDisable(true);
                 tableAIsWeakChkBox.setSelected(false);
                 tableBIsWeakChkBox.setSelected(false);
+            }
+            else if (relation.getTableA_Obligation() == CrowsFootOptions.Obligation.MUST) {
+                tableAIsWeakChkBox.setDisable(true);
+                tableAIsWeakChkBox.setSelected(false);
             }
         }
         else if (relation.getTableA_Cardinality() == CrowsFootOptions.Cardinality.MANY && relation.getTableB_Cardinality() == CrowsFootOptions.Cardinality.ONE) {
             if (relation.getTableB_Obligation() == CrowsFootOptions.Obligation.MUST) {
                 tableBIsWeakChkBox.setDisable(true);
                 tableBIsWeakChkBox.setSelected(false);
+            } else if (relation.getTableA_Obligation() == CrowsFootOptions.Obligation.CAN && relation.getTableB_Obligation() == CrowsFootOptions.Obligation.CAN) {
+                tableAIsWeakChkBox.setDisable(true);
+                tableBIsWeakChkBox.setDisable(true);
+                tableAIsWeakChkBox.setSelected(false);
+                tableBIsWeakChkBox.setSelected(false);
             }
-        }
-        else if (relation.getTableA_Obligation() == CrowsFootOptions.Obligation.CAN && relation.getTableB_Obligation() == CrowsFootOptions.Obligation.CAN) {
-            tableAIsWeakChkBox.setDisable(true);
-            tableBIsWeakChkBox.setDisable(true);
-            tableAIsWeakChkBox.setSelected(false);
-            tableBIsWeakChkBox.setSelected(false);
         }
     }
 
