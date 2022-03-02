@@ -378,16 +378,20 @@ public class EditRelationWindowController implements ModelController<Relation> {
             tableAexample.setDisable(true);
             tableBexample.setDisable(true);
             tableAexample.heightProperty().addListener((observableValue, number, newValue) -> {
-                var delta = (Double)newValue - previousAHeight;
-                previousAHeight = (Double)newValue;
-                var window = examplePane.getScene().getWindow();
-                window.setHeight(window.getHeight() + delta);
+                if (tableBexample.getHeight() < newValue.doubleValue()) {
+                    var delta = (Double)newValue - previousAHeight;
+                    previousAHeight = (Double)newValue;
+                    var window = examplePane.getScene().getWindow();
+                    window.setHeight(window.getHeight() + delta);
+                }
             });
             tableBexample.heightProperty().addListener((observableValue, number, newValue) -> {
-                var delta = (Double)newValue - previousBHeight;
-                previousBHeight = (Double)newValue;
-                var window = examplePane.getScene().getWindow();
-                window.setHeight(window.getHeight() + delta);
+                if (tableAexample.getHeight() < newValue.doubleValue()) {
+                    var delta = (Double)newValue - previousBHeight;
+                    previousBHeight = (Double)newValue;
+                    var window = examplePane.getScene().getWindow();
+                    window.setHeight(window.getHeight() + delta);
+                }
             });
             examplePane.getChildren().addAll(tableAexample, tableBexample);
 
