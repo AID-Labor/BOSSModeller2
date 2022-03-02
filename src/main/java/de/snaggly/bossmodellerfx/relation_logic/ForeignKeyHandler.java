@@ -9,6 +9,7 @@ import de.snaggly.bossmodellerfx.model.view.Entity;
 import javafx.scene.control.ButtonType;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedList;
 
@@ -231,6 +232,29 @@ public class ForeignKeyHandler {
                 }
             }
         }
+    }
+
+    public static void setRelationComplexity(Relation relation) {
+        var relationComplexityList = new LinkedList<Integer>();
+        for (var fKeyA : relation.getFkAttributesA()) {
+            var fk = fKeyA;
+            var fkRelationComplexity = 0;
+            while (fk.getFkTableColumn() != null) {
+                fkRelationComplexity++;
+                fk = fk.getFkTableColumn();
+            }
+            relationComplexityList.add(fkRelationComplexity);
+        }
+        for (var fKeyB : relation.getFkAttributesB()) {
+            var fk = fKeyB;
+            var fkRelationComplexity = 0;
+            while (fk.getFkTableColumn() != null) {
+                fkRelationComplexity++;
+                fk = fk.getFkTableColumn();
+            }
+            relationComplexityList.add(fkRelationComplexity);
+        }
+        relation.relationComplexity = Collections.max(relationComplexityList);
     }
 
     /**

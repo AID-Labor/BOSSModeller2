@@ -551,7 +551,10 @@ public class MainController {
 
         try {
             var relationBuilderWindow = RelationEditorWindowBuilder.buildRelationEditor(selectedRelationModel);
-            relationBuilderWindow.getValue().parentObserver = (resultedRelation) -> showNewRelation(currentProject);
+            relationBuilderWindow.getValue().parentObserver = (resultedRelation) -> {
+                showNewRelation(currentProject);
+                currentProject.syncRelationOrder();
+            };
             var stage = new Stage();
             stage.setTitle(BOSS_Strings.EDIT_RELATION);
             stage.setScene(relationBuilderWindow.getKey());

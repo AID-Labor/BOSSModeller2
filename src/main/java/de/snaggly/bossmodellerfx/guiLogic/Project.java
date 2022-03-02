@@ -4,6 +4,7 @@ import de.snaggly.bossmodellerfx.model.serializable.*;
 import de.snaggly.bossmodellerfx.model.subdata.Relation;
 import de.snaggly.bossmodellerfx.model.view.Comment;
 import de.snaggly.bossmodellerfx.model.view.Entity;
+import de.snaggly.bossmodellerfx.relation_logic.ForeignKeyHandler;
 import de.snaggly.bossmodellerfx.view.WorkbenchPane;
 import de.snaggly.bossmodellerfx.view.viewtypes.BiSelectable;
 import de.snaggly.bossmodellerfx.view.viewtypes.Selectable;
@@ -146,33 +147,19 @@ public class Project {
     }
 
     public void addRelation(Relation relation) {
-        var relationComplexityList = new LinkedList<Integer>();
-        for (var fKeyA : relation.getFkAttributesA()) {
-            var fk = fKeyA;
-            var fkRelationComplexity = 0;
-            while (fk.getFkTableColumn() != null) {
-                fkRelationComplexity++;
-                fk = fk.getFkTableColumn();
-            }
-            relationComplexityList.add(fkRelationComplexity);
-        }
-        for (var fKeyB : relation.getFkAttributesB()) {
-            var fk = fKeyB;
-            var fkRelationComplexity = 0;
-            while (fk.getFkTableColumn() != null) {
-                fkRelationComplexity++;
-                fk = fk.getFkTableColumn();
-            }
-            relationComplexityList.add(fkRelationComplexity);
-        }
-        relation.relationComplexity = Collections.max(relationComplexityList);
         relations.add(relation);
-        relations.sort(Comparator.comparingInt(r -> r.relationComplexity));
+        syncRelationOrder();
     }
 
     public void removeRelation(Relation relation) {
         relations.remove(relation);
+        syncRelationOrder();
         currentSelected = workField;
+    }
+
+    public void syncRelationOrder() {
+        for (var projRelation : relations) ForeignKeyHandler.setRelationComplexity(projRelation);
+        relations.sort(Comparator.comparingInt(r -> r.relationComplexity));
     }
 
     public synchronized Node getCurrentSelected() {
