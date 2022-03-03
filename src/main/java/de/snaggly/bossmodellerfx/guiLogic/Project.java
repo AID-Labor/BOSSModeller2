@@ -33,7 +33,6 @@ public class Project {
     private final ArrayList<Relation> relations = new ArrayList<>();
 
     public File activeFile;
-    public ContextMenuCommander contextMenuCommander;
 
     /**
      * This class currently holds the current pressed keyboard keys for KeyCombos.
@@ -201,11 +200,6 @@ public class Project {
                 ((Selectable) newSelection).setFocusStyle();
             }
             this.currentSelected = newSelection;
-        }
-
-        if (contextMenuCommander != null) { //If context menu was requested, this member should be set.
-            contextMenuCommander.requestContextMenu(); //Once a new selection has been set, it can process however it wants to show.
-            contextMenuCommander = null; //Only once when a request has been made!
         }
     }
 
