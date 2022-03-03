@@ -173,29 +173,32 @@ public class MainController {
                 var currentSelection = currentProject.getCurrentSelected();
 
                 if (currentSelection instanceof EntityView){
-                    var separator = new SeparatorMenuItem();
+                    if (currentProject.getCurrentSecondSelection() instanceof EntityView) {
+                        var newRelationMenu = new MenuItem(BOSS_Strings.NEW_RELATION);
+                        newRelationMenu.setOnAction(actionEvent -> createNewRelation());
+                        var separator = new SeparatorMenuItem();
+                        mainWorkbenchContextMenu.getItems().addAll(newRelationMenu, separator);
+                    }
                     var entityView = (EntityView)(currentProject.getCurrentSelected());
                     var editEntityMenu = new MenuItem(BOSS_Strings.EDIT_ENTITY);
                     editEntityMenu.setOnAction(actionEvent -> editEntity(entityView));
                     var removeEntityMenu = new MenuItem(BOSS_Strings.DELETE_ENTITY);
                     removeEntityMenu.setOnAction(actionEvent -> deleteEntity(entityView));
-                    mainWorkbenchContextMenu.getItems().addAll(editEntityMenu, removeEntityMenu, separator);
+                    mainWorkbenchContextMenu.getItems().addAll(editEntityMenu, removeEntityMenu);
                 } else if (currentSelection instanceof CommentView) {
-                    var separator = new SeparatorMenuItem();
                     var commentView = (CommentView)(currentProject.getCurrentSelected());
                     var editCommentMenu = new MenuItem(BOSS_Strings.EDIT_COMMENT);
                     editCommentMenu.setOnAction(actionEvent -> editComment(commentView));
                     var removeCommentMenu = new MenuItem(BOSS_Strings.DELETE_COMMENT);
                     removeCommentMenu.setOnAction(actionEvent -> deleteComment(commentView));
-                    mainWorkbenchContextMenu.getItems().addAll(editCommentMenu, removeCommentMenu, separator);
+                    mainWorkbenchContextMenu.getItems().addAll(editCommentMenu, removeCommentMenu);
                 } else if (currentSelection instanceof RelationViewNode) {
-                    var separator = new SeparatorMenuItem();
                     var relationView = (RelationViewNode)(currentProject.getCurrentSelected());
                     var editRelationMenu = new MenuItem(BOSS_Strings.EDIT_RELATION);
                     editRelationMenu.setOnAction(actionEvent -> editRelation(relationView));
                     var removeRelation = new MenuItem(BOSS_Strings.DELETE_RELATION);
                     removeRelation.setOnAction(actionEvent -> deleteRelation(relationView));
-                    mainWorkbenchContextMenu.getItems().addAll(editRelationMenu, removeRelation, separator);
+                    mainWorkbenchContextMenu.getItems().addAll(editRelationMenu, removeRelation);
                 } else {
                     if (currentProject.getEntities().size() > 0) {
                         var generateSQLMenu = new MenuItem(BOSS_Strings.GENERATE_SQL_SCRIPT);
@@ -207,6 +210,22 @@ public class MainController {
                         var separator = new SeparatorMenuItem();
                         mainWorkbenchContextMenu.getItems().add(separator);
                     }
+
+                    var newEntityMenu = new MenuItem(BOSS_Strings.NEW_ENTITY);
+                    newEntityMenu.setOnAction(actionEvent -> createNewEntity(
+                            contextMenuEvent.getX(),
+                            contextMenuEvent.getY()
+                    ));
+
+                    var newRelationMenu = new MenuItem(BOSS_Strings.NEW_RELATION);
+                    newRelationMenu.setOnAction(actionEvent -> createNewRelation());
+
+                    var newCommentMenu = new MenuItem(BOSS_Strings.NEW_COMMENT);
+                    newCommentMenu.setOnAction(actionEvent -> createNewComment(
+                            contextMenuEvent.getX(),
+                            contextMenuEvent.getY()
+                    ));
+                    mainWorkbenchContextMenu.getItems().addAll(newEntityMenu, newCommentMenu, newRelationMenu);
                 }
 
                 if (currentSelection instanceof EntityView || currentSelection instanceof CommentView) {
@@ -215,24 +234,8 @@ public class MainController {
                     editCommentMenu.setOnAction(actionEvent -> currentSelection.toFront());
                     var removeCommentMenu = new MenuItem(BOSS_Strings.MOVE_TO_BACK);
                     removeCommentMenu.setOnAction(actionEvent -> currentSelection.toBack());
-                    mainWorkbenchContextMenu.getItems().addAll(editCommentMenu, removeCommentMenu, separator);
+                    mainWorkbenchContextMenu.getItems().addAll(separator, editCommentMenu, removeCommentMenu);
                 }
-
-                var newEntityMenu = new MenuItem(BOSS_Strings.NEW_ENTITY);
-                newEntityMenu.setOnAction(actionEvent -> createNewEntity(
-                        contextMenuEvent.getX(),
-                        contextMenuEvent.getY()
-                ));
-
-                var newRelationMenu = new MenuItem(BOSS_Strings.NEW_RELATION);
-                newRelationMenu.setOnAction(actionEvent -> createNewRelation());
-
-                var newCommentMenu = new MenuItem(BOSS_Strings.NEW_COMMENT);
-                newCommentMenu.setOnAction(actionEvent -> createNewComment(
-                        contextMenuEvent.getX(),
-                        contextMenuEvent.getY()
-                ));
-                mainWorkbenchContextMenu.getItems().addAll(newEntityMenu, newCommentMenu, newRelationMenu);
 
                 mainWorkbenchContextMenu.show(
                         currentProject.getWorkField(),
