@@ -51,16 +51,16 @@
             <ProgressIndicator fx:id="progressIndicator" GridPane.halignment="RIGHT" GridPane.rowIndex="5" />
             <HBox alignment="CENTER" spacing="5.0" GridPane.columnIndex="1" GridPane.rowIndex="5">
                <children>
-                  <Button fx:id="connectBtn" mnemonicParsing="false" onAction="#connectClick" text="%connectToDBWindow.ConnectBtn">
-                     <font>
-                        <Font name="System Bold" size="14.0" />
-                     </font>
-                  </Button>
                   <Button fx:id="cancelBtn" mnemonicParsing="false" onAction="#onCancel" text="%mainWindow.MenuBar.File.Cancel">
                      <font>
                         <Font name="System Bold" size="14.0" />
                      </font>
                   </Button>
+                   <Button fx:id="connectBtn" mnemonicParsing="false" onAction="#connectClick" text="%connectToDBWindow.ConnectBtn">
+                       <font>
+                           <Font name="System Bold" size="14.0" />
+                       </font>
+                   </Button>
                </children>
             </HBox>
          </children>
