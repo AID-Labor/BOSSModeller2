@@ -42,16 +42,13 @@ public class ConnectToDBWindowController implements ModelController<DBLAHolder>{
     private void initialize(){
         progressIndicator.setVisible(false);
 
-        usernameTf.setText("admin");
-        passwordTf.setText("admin123");
-        hostTf.setText("192.168.0.37");
-
         for (var sqlLang : SQLLanguage.values()) {
             sqlLangChoiceBox.getItems().add(sqlLang.name());
         }
         sqlLangChoiceBox.getSelectionModel().selectedIndexProperty().addListener((observableValue, number, t1) -> {
             sqlInterface = SQLInterface.getSQLInterfaceDescriptor(SQLLanguage.values()[t1.intValue()]);
             portTf.setText(sqlInterface.getDefaultPort());
+            usernameTf.setText(sqlInterface.getDefaultUsername());
         });
         sqlLangChoiceBox.getSelectionModel().selectFirst();
     }

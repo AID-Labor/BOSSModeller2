@@ -14,6 +14,7 @@ public class SQLInterface {
     private boolean isSchemaCompatible;
     private String defaultDBName;
     private String defaultPort;
+    private String defaultUsername;
     private final SQLLanguage language;
 
     private SQLInterface(SQLLanguage selectedLanguage) {
@@ -24,16 +25,19 @@ public class SQLInterface {
                 isSchemaCompatible = true;
                 defaultPort = "5432";
                 defaultDBName = "postgres";
+                defaultUsername = "postgres";
                 break;
             case Microsoft_SQL:
                 isSchemaCompatible = true;
                 defaultPort = "1433";
                 defaultDBName = "";
+                defaultUsername = "sa";
                 break;
             case MySQL:
                 isSchemaCompatible = false;
                 defaultPort = "3306";
                 defaultDBName = "";
+                defaultUsername = "root";
                 break;
         }
     }
@@ -87,6 +91,10 @@ public class SQLInterface {
 
     public String getDefaultPort() {
         return defaultPort;
+    }
+
+    public String getDefaultUsername() {
+        return defaultUsername;
     }
 
     public SQLLanguage getLanguage() {
