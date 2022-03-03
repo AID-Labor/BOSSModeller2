@@ -12,7 +12,7 @@
          <children>
             <HBox alignment="BOTTOM_CENTER">
                <children>
-                  <Label text="%bossmodellerfx.fullname">
+                  <Label text="%bossmodellerfx">
                      <font>
                         <Font name="System Bold" size="18.0" />
                      </font>
