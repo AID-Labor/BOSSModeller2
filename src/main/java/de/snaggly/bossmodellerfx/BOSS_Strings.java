@@ -120,4 +120,7 @@ public class BOSS_Strings {
     public static final String RELATION_EDITOR_NO_FOREIGN_KEYS_HEADER = resourceBundle.getString("RELATION_EDITOR_NO_FOREIGN_KEYS_HEADER");
     public static final String RELATION_EDITOR_NO_FOREIGN_KEYS_WARNING = resourceBundle.getString("RELATION_EDITOR_NO_FOREIGN_KEYS_WARNING");
     public static final String GENERATE_SQL_SCRIPT = resourceBundle.getString("GENERATE_SQL_SCRIPT");
+    public static final String LANGUAGE_CHANGE = resourceBundle.getString("LANGUAGE_CHANGE");
+    public static final String LANGUAGE_CHANGE_ERROR = resourceBundle.getString("LANGUAGE_CHANGE_ERROR");
+    public static final String LANGUAGE_CHANGE_SUCCESS = resourceBundle.getString("LANGUAGE_CHANGE_SUCCESS");
 }

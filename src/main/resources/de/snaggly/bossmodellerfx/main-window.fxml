@@ -240,7 +240,7 @@
                      <MenuItem mnemonicParsing="false" onAction="#zoomOutClick" text="%mainWindow.MenuBar.Edit.ZoomOut" />
                      <MenuItem mnemonicParsing="false" onAction="#zoomResetClick" text="%mainWindow.MenuBar.Edit.ZoomReset" />
                   </Menu>
-                  <Menu mnemonicParsing="false" text="%mainWindow.MenuBar.Language" />
+                  <Menu mnemonicParsing="false" text="%mainWindow.MenuBar.Language" fx:id="languageMenuTab"/>
                   <Menu mnemonicParsing="false" text="%mainWindow.MenuBar.Help">
                      <MenuItem mnemonicParsing="false" text="%mainWindow.MenuBar.Help.FAQ" />
                      <MenuItem mnemonicParsing="false" text="%mainWindow.MenuBar.Help.UserManual" />

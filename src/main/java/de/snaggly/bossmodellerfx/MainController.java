@@ -15,7 +15,6 @@ import de.snaggly.bossmodellerfx.view.factory.nodetype.CommentBuilder;
 import de.snaggly.bossmodellerfx.view.factory.nodetype.EntityBuilder;
 import de.snaggly.bossmodellerfx.view.factory.windowtype.*;
 import javafx.embed.swing.SwingFXUtils;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -35,6 +34,7 @@ import javax.imageio.ImageIO;
 import java.io.*;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Locale;
 import java.util.Objects;
 
 import static de.snaggly.bossmodellerfx.guiLogic.KeyCombos.*;
@@ -45,6 +45,8 @@ import static de.snaggly.bossmodellerfx.guiLogic.KeyCombos.*;
  * @author Omar Emshani
  */
 public class MainController {
+    @FXML
+    private Menu languageMenuTab;
     @FXML
     private Label infoLabel;
     @FXML
@@ -166,6 +168,29 @@ public class MainController {
         newCommentBtn.setOnMouseExited(mouseEvent -> infoLabel.setText(""));
         deleteCommentBtn.setOnMouseEntered(mouseEvent -> infoLabel.setText(BOSS_Strings.DESCRIPTOR_DELETE_COMMENT));
         deleteCommentBtn.setOnMouseExited(mouseEvent -> infoLabel.setText(""));
+
+        buildLanguageMenuList();
+    }
+
+    private void buildLanguageMenuList() {
+        languageMenuTab.getItems().clear();
+        for (var supportedLanguage : BOSS_Config.supportedLanguages) {
+            var isCurrentLanguageCheckMark = "";
+            if (Locale.getDefault().getLanguage().equals(supportedLanguage.getLanguage()))
+                isCurrentLanguageCheckMark = " ✔";
+            //Here comes the one line everyone hates ;)
+            languageMenuTab.getItems().add(new MenuItem(supportedLanguage.getDisplayLanguage() + isCurrentLanguageCheckMark){{setOnAction(_e -> manageNewLanguageSelectionClick(supportedLanguage));}});
+        }
+    }
+
+    private void manageNewLanguageSelectionClick(Locale newLang) {
+        if (BOSS_Config.setLanguage(newLang)) {
+            Locale.setDefault(newLang);
+            GUIMethods.showInfo(BOSS_Strings.PRODUCT_NAME, BOSS_Strings.LANGUAGE_CHANGE, BOSS_Strings.LANGUAGE_CHANGE_SUCCESS);
+        }
+        else {
+            GUIMethods.showInfo(BOSS_Strings.PRODUCT_NAME, BOSS_Strings.LANGUAGE_CHANGE, BOSS_Strings.LANGUAGE_CHANGE_ERROR);
+        }
     }
 
     private void initializeContextMenu(Pane workBench) {
