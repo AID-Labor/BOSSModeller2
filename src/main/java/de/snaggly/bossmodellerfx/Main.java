@@ -3,9 +3,11 @@ package de.snaggly.bossmodellerfx;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.Objects;
 
 /**
  * Here the application starts.
@@ -27,6 +29,7 @@ public class Main extends Application {
         FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("main-window.fxml"), BOSS_Strings.resourceBundle);
         Scene scene = new Scene(fxmlLoader.load());
         primaryStage.setTitle(BOSS_Strings.PRODUCT_NAME);
+        primaryStage.getIcons().add(new Image(Objects.requireNonNull(Main.class.getResourceAsStream("view/bossfx_icon.png"))));
         primaryStage.setScene(scene);
         primaryStage.show();
         //To close all subwindows when main application closes.

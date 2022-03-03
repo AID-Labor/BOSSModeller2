@@ -21,6 +21,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
@@ -33,6 +34,7 @@ import javax.imageio.ImageIO;
 import java.io.*;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Objects;
 
 import static de.snaggly.bossmodellerfx.guiLogic.KeyCombos.*;
 
@@ -104,6 +106,7 @@ public class MainController {
             var scene = new Scene(fxmlLoader.load());
             var stage = new Stage();
             stage.setTitle(BOSS_Strings.ABOUT_US);
+            stage.getIcons().add(new Image(Objects.requireNonNull(Main.class.getResourceAsStream("view/bossfx_icon.png"))));
             stage.setScene(scene);
             stage.show();
             addSubWindow(SubWindowType.Misc, scene.getWindow());
@@ -362,6 +365,7 @@ public class MainController {
             var entityBuilder = EntityEditorWindowBuilder.buildEntityEditor(null);
             var stage = new Stage();
             stage.setTitle(BOSS_Strings.NEW_ENTITY);
+            stage.getIcons().add(new Image(Objects.requireNonNull(Main.class.getResourceAsStream("view/bossfx_icon.png"))));
             stage.setScene(entityBuilder.getKey());
             stage.show();
             addSubWindow(SubWindowType.Editor, entityBuilder.getKey().getWindow());
@@ -392,6 +396,7 @@ public class MainController {
             var entityBuilder = EntityEditorWindowBuilder.buildEntityEditor(selectedEntity);
             var stage = new Stage();
             stage.setTitle(BOSS_Strings.EDIT_ENTITY);
+            stage.getIcons().add(new Image(Objects.requireNonNull(Main.class.getResourceAsStream("view/bossfx_icon.png"))));
             stage.setScene(entityBuilder.getKey());
             stage.show();
             addSubWindow(SubWindowType.Editor, entityBuilder.getKey().getWindow());
@@ -439,6 +444,7 @@ public class MainController {
             relationBuilderWindow.getValue().parentObserver = this::saveNewRelation;
             var stage = new Stage();
             stage.setTitle(BOSS_Strings.NEW_RELATION);
+            stage.getIcons().add(new Image(Objects.requireNonNull(Main.class.getResourceAsStream("view/bossfx_icon.png"))));
             stage.setScene(relationBuilderWindow.getKey());
             stage.show();
             addSubWindow(SubWindowType.Editor, relationBuilderWindow.getKey().getWindow());
@@ -591,6 +597,7 @@ public class MainController {
             };
             var stage = new Stage();
             stage.setTitle(BOSS_Strings.EDIT_RELATION);
+            stage.getIcons().add(new Image(Objects.requireNonNull(Main.class.getResourceAsStream("view/bossfx_icon.png"))));
             stage.setScene(relationBuilderWindow.getKey());
             stage.show();
             addSubWindow(SubWindowType.Editor, relationBuilderWindow.getKey().getWindow());
@@ -837,6 +844,7 @@ public class MainController {
                     };
                     chooseWindowStage.setScene(chooserWindow.getKey());
                     chooseWindowStage.setTitle(BOSS_Strings.CHOOSE_TABLES);
+                    chooseWindowStage.getIcons().add(new Image(Objects.requireNonNull(Main.class.getResourceAsStream("view/bossfx_icon.png"))));
                     chooseWindowStage.show();
                     addSubWindow(SubWindowType.DBConnector, chooseWindowStage);
                 } catch (IOException e) {
@@ -845,6 +853,7 @@ public class MainController {
             };
             connectWindowStage.setScene(window.getKey());
             connectWindowStage.setTitle(BOSS_Strings.CONNECT_TO_DATABASE);
+            connectWindowStage.getIcons().add(new Image(Objects.requireNonNull(Main.class.getResourceAsStream("view/bossfx_icon.png"))));
             connectWindowStage.show();
             addSubWindow(SubWindowType.DBConnector, connectWindowStage);
         } catch (IOException e) {
@@ -869,6 +878,7 @@ public class MainController {
                     var exportWindowStage = new Stage();
                     exportWindowStage.setScene(exportWindow.getKey());
                     exportWindowStage.setTitle(BOSS_Strings.CHOOSE_DATABASE_AND_SCHEMA);
+                    exportWindowStage.getIcons().add(new Image(Objects.requireNonNull(Main.class.getResourceAsStream("view/bossfx_icon.png"))));
                     exportWindowStage.show();
                     addSubWindow(SubWindowType.DBConnector, exportWindowStage);
                 } catch (IOException e) {
@@ -877,6 +887,7 @@ public class MainController {
             };
             connectWindowStage.setScene(window.getKey());
             connectWindowStage.setTitle(BOSS_Strings.CONNECT_TO_DATABASE);
+            connectWindowStage.getIcons().add(new Image(Objects.requireNonNull(Main.class.getResourceAsStream("view/bossfx_icon.png"))));
             connectWindowStage.show();
             addSubWindow(SubWindowType.DBConnector, connectWindowStage);
         } catch (IOException e) {
@@ -913,6 +924,7 @@ public class MainController {
             var sqlWindowStage = new Stage();
             sqlWindowStage.setScene(window.getKey());
             sqlWindowStage.setTitle(BOSS_Strings.SQL_DISPLAY);
+            sqlWindowStage.getIcons().add(new Image(Objects.requireNonNull(Main.class.getResourceAsStream("view/bossfx_icon.png"))));
             sqlWindowStage.show();
             addSubWindow(SubWindowType.Misc, sqlWindowStage);
         } catch (IOException e) {

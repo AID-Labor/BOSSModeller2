@@ -1,6 +1,7 @@
 package de.snaggly.bossmodellerfx.view.controller;
 
 import de.snaggly.bossmodellerfx.BOSS_Strings;
+import de.snaggly.bossmodellerfx.Main;
 import de.snaggly.bossmodellerfx.guiLogic.GUIActionListener;
 import de.snaggly.bossmodellerfx.guiLogic.GUIMethods;
 import de.snaggly.bossmodellerfx.guiLogic.Project;
@@ -16,6 +17,7 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
@@ -325,6 +327,7 @@ public class EditEntityWindowController implements ModelController<Entity> {
                 var stage = new Stage();
                 stage.setScene(uniqueEditorWindow.getKey());
                 stage.setTitle(BOSS_Strings.UNIQUE_COMBO_EDITOR_TITLE);
+                stage.getIcons().add(new Image(Objects.requireNonNull(Main.class.getResourceAsStream("view/bossfx_icon.png"))));
                 stage.show();
             } catch (IOException e) {
                 GUIMethods.showError(EditEntityWindowController.class.getSimpleName(), BOSS_Strings.PRODUCT_NAME, e.getLocalizedMessage());
