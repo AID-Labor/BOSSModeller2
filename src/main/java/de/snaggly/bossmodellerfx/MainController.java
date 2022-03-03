@@ -22,6 +22,7 @@ import javafx.scene.Scene;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
@@ -744,6 +745,17 @@ public class MainController {
         }
         else if (currentProject.getPressedKeys().containsAll(keyComboZoomRestore)) {
             zoomResetClick();
+        }
+        else if (currentProject.getPressedKeys().contains(KeyCode.DELETE)) {
+            if (currentProject.getCurrentSelected() instanceof EntityView) {
+                deleteEntityClick();
+            }
+            else if (currentProject.getCurrentSelected() instanceof RelationViewNode) {
+                deleteRelationClick();
+            }
+            else if (currentProject.getCurrentSelected() instanceof CommentView) {
+                deleteCommentClick();
+            }
         }
     }
 
