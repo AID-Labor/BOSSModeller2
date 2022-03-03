@@ -212,7 +212,7 @@
                         <!--MenuItem mnemonicParsing="false" text="%mainWindow.MenuBar.File.Import.FromSQL" /-->
                      </Menu>
                      <MenuItem mnemonicParsing="false" onAction="#saveFileClick" text="%mainWindow.MenuBar.File.Save" />
-                     <MenuItem mnemonicParsing="false" onAction="#saveUnderFileClick" text="%mainWindow.MenuBar.File.SaveAs" />
+                     <MenuItem mnemonicParsing="false" onAction="#saveAsFileClick" text="%mainWindow.MenuBar.File.SaveAs" />
                      <Menu mnemonicParsing="false" text="%mainWindow.MenuBar.File.Export">
                         <MenuItem mnemonicParsing="false" onAction="#exportPictureClick" text="%mainWindow.MenuBar.File.Export.AsPicture" />
                         <MenuItem fx:id="exportSQLClick" onAction="#exportSQLClick" mnemonicParsing="false" text="%mainWindow.MenuBar.File.Export.AsSQL" />

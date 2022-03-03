@@ -1,6 +1,5 @@
 package de.snaggly.bossmodellerfx;
 
-import de.snaggly.bossmodellerfx.guiLogic.ContextMenuCommander;
 import de.snaggly.bossmodellerfx.model.adapter.DBLAHolder;
 import de.snaggly.bossmodellerfx.model.subdata.Attribute;
 import de.snaggly.bossmodellerfx.model.subdata.AttributeCombination;
@@ -650,7 +649,7 @@ public class MainController {
     @FXML
     private void saveFileClick() {
         if (currentProject.activeFile == null) {
-            saveUnderFileClick();
+            saveAsFileClick();
         }
         else {
             saveFile(currentProject.activeFile);
@@ -658,7 +657,7 @@ public class MainController {
     }
 
     @FXML
-    private void saveUnderFileClick() {
+    private void saveAsFileClick() {
         var file = GUIMethods.showJSONFileSaveDialog(BOSS_Strings.SAVE_PROJECT, currentProject.getWorkField().getScene().getWindow());
         if (file == null)
             return;
@@ -698,13 +697,37 @@ public class MainController {
     private void onKeyPressed(KeyEvent keyEvent) {
         currentProject.addPressedKey(keyEvent.getCode());
 
-        if (currentProject.getPressedKeys().containsAll(keyComboOpen)) {
-            currentProject.getPressedKeys().clear();
+        if (currentProject.getPressedKeys().containsAll(keyComboNewProject)) {
+            currentProject.getPressedKeys().clear(); //Focuses on new pane before the key release is registered
+            startNewProject();
+        }
+        else if (currentProject.getPressedKeys().containsAll(keyComboImportDB)) {
+            currentProject.getPressedKeys().clear(); //Focuses on new window before the key release is registered
+            importFromDBClick();
+        }
+        else if (currentProject.getPressedKeys().containsAll(keyComboOpen)) {
+            currentProject.getPressedKeys().clear(); //Focuses on new window before the key release is registered
             openFileClick();
         }
+        else if (currentProject.getPressedKeys().containsAll(keyComboSaveAs)) {
+            currentProject.getPressedKeys().clear(); //Focuses on new window before the key release is registered
+            saveAsFileClick();
+        }
         else if (currentProject.getPressedKeys().containsAll(keyComboSave)) {
-            currentProject.getPressedKeys().clear();
+            currentProject.getPressedKeys().clear(); //Focuses on new window before the key release is registered
             saveFileClick();
+        }
+        else if (currentProject.getPressedKeys().containsAll(keyComboExportToDB)) {
+            currentProject.getPressedKeys().clear(); //Focuses on new window before the key release is registered
+            exportToDBClick();
+        }
+        else if (currentProject.getPressedKeys().containsAll(keyComboExportToPicture)) {
+            currentProject.getPressedKeys().clear(); //Focuses on new window before the key release is registered
+            exportPictureClick();
+        }
+        else if (currentProject.getPressedKeys().containsAll(keyComboGenSQL)) {
+            currentProject.getPressedKeys().clear(); //Focuses on new window before the key release is registered
+            exportSQLClick();
         }
         else if (currentProject.getPressedKeys().containsAll(keyComboZoomIn)) {
             zoomInClick();
@@ -779,7 +802,7 @@ public class MainController {
     }
 
     @FXML
-    private void importFromDBClick(ActionEvent actionEvent) {
+    private void importFromDBClick() {
         if (subWindows.get(SubWindowType.DBConnector) != null) {
             subWindows.get(SubWindowType.DBConnector).requestFocus();
             return;
@@ -830,7 +853,7 @@ public class MainController {
     }
 
     @FXML
-    private void exportToDBClick(ActionEvent actionEvent) {
+    private void exportToDBClick() {
         if (subWindows.get(SubWindowType.DBConnector) != null) {
             subWindows.get(SubWindowType.DBConnector).requestFocus();
             return;
