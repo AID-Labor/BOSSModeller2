@@ -224,17 +224,6 @@ public class MainController {
             removeRelation.setOnAction(actionEvent -> deleteRelation(relationView));
             mainWorkbenchContextMenu.getItems().addAll(editRelationMenu, removeRelation);
         } else {
-            if (currentProject.getEntities().size() > 0) {
-                var generateSQLMenu = new MenuItem(BOSS_Strings.GENERATE_SQL_SCRIPT);
-                generateSQLMenu.setOnAction(actionEvent -> exportSQLClick());
-                mainWorkbenchContextMenu.getItems().add(generateSQLMenu);
-                var exportPicture = new MenuItem(BOSS_Strings.EXPORT_TO_PICTURE);
-                exportPicture.setOnAction(actionEvent -> exportPictureClick());
-                mainWorkbenchContextMenu.getItems().add(exportPicture);
-                var separator = new SeparatorMenuItem();
-                mainWorkbenchContextMenu.getItems().add(separator);
-            }
-
             var newEntityMenu = new MenuItem(BOSS_Strings.NEW_ENTITY);
             newEntityMenu.setOnAction(actionEvent -> createNewEntity(
                     mouseEvent.getX(),
@@ -250,6 +239,17 @@ public class MainController {
                     mouseEvent.getY()
             ));
             mainWorkbenchContextMenu.getItems().addAll(newEntityMenu, newCommentMenu, newRelationMenu);
+
+            if (currentProject.getEntities().size() > 0) {
+                var separator = new SeparatorMenuItem();
+                mainWorkbenchContextMenu.getItems().add(separator);
+                var generateSQLMenu = new MenuItem(BOSS_Strings.GENERATE_SQL_SCRIPT);
+                generateSQLMenu.setOnAction(actionEvent -> exportSQLClick());
+                mainWorkbenchContextMenu.getItems().add(generateSQLMenu);
+                var exportPicture = new MenuItem(BOSS_Strings.EXPORT_TO_PICTURE);
+                exportPicture.setOnAction(actionEvent -> exportPictureClick());
+                mainWorkbenchContextMenu.getItems().add(exportPicture);
+            }
         }
 
         if (currentSelection instanceof EntityView || currentSelection instanceof CommentView) {
