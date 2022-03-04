@@ -34,6 +34,7 @@ import java.util.*;
 public class EditEntityWindowController implements ModelController<Entity> {
     private Entity entity = new Entity();
     private Entity entityRef;
+    private AttributeEditor selectedAttributeEditor = null;
     private AttributeCombination primaryCombination = null;
 
     private final HashMap<Attribute, LinkedList<Attribute>> foreignAttributes = new HashMap<>();
@@ -96,6 +97,12 @@ public class EditEntityWindowController implements ModelController<Entity> {
     }
 
     private void bindAttributeToGui(Attribute attribute, AttributeEditor guiEditor) {
+        guiEditor.addEventFilter(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
+            if (selectedAttributeEditor!= null)
+                selectedAttributeEditor.setDeFocusStyle();
+            selectedAttributeEditor = guiEditor;
+            guiEditor.setFocusStyle();
+        });
         guiEditor.getController().getNameTF().textProperty().addListener((observableValue, s, newValue) -> attribute.setName(newValue));
         guiEditor.getController().getDataTypeComboBox().getEditor().textProperty().addListener((observableValue, s, newValue) -> attribute.setType(newValue));
         guiEditor.getController().getIsPrimaryCheck().selectedProperty().addListener((observableValue, s, newValue) -> {
@@ -208,6 +215,9 @@ public class EditEntityWindowController implements ModelController<Entity> {
     private void initialize() {
         addAttributeAction();
         removeAttrbBtn.setDisable(true);
+        removeAttrbBtn.setTooltip(new Tooltip(BOSS_Strings.ENTITY_EDITOR_TOOLTIP_REMOVE_ATTR));
+        addAttrbBtn.setTooltip(new Tooltip(BOSS_Strings.ENTITY_EDITOR_TOOLTIP_ADD_ATTR));
+        tableNameTextField.setTooltip(new Tooltip(BOSS_Strings.ENTITY_EDITOR_TABLE_NAME_PROMPT));
     }
 
     @FXML
@@ -472,6 +482,8 @@ public class EditEntityWindowController implements ModelController<Entity> {
     }
 
     private AttributeEditor getFocusedAttribute(Node focusedNode) {
+        if (selectedAttributeEditor != null)
+            return selectedAttributeEditor;
         var currentNode = focusedNode;
         do
             currentNode = currentNode.getParent();

@@ -41,8 +41,12 @@ public abstract class AttributeEditor extends CustomNode<Attribute> {
     }
 
     @Override
-    public void setFocusStyle() { }
+    public void setFocusStyle() {
+        this.setStyle("-fx-border-color: rgb(165,185,205); -fx-border-width: 3; -fx-border-radius: 15; -fx-background-color: rgb(211,218,224); -fx-background-radius: 15;");
+    }
 
     @Override
-    public void setDeFocusStyle() { }
+    public void setDeFocusStyle() {
+        this.setStyle("");
+    }
 }

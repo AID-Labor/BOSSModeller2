@@ -123,4 +123,7 @@ public class BOSS_Strings {
     public static final String LANGUAGE_CHANGE = resourceBundle.getString("LANGUAGE_CHANGE");
     public static final String LANGUAGE_CHANGE_ERROR = resourceBundle.getString("LANGUAGE_CHANGE_ERROR");
     public static final String LANGUAGE_CHANGE_SUCCESS = resourceBundle.getString("LANGUAGE_CHANGE_SUCCESS");
+    public static final String ENTITY_EDITOR_TOOLTIP_REMOVE_ATTR = resourceBundle.getString("ENTITY_EDITOR_TOOLTIP_REMOVE_ATTR");
+    public static final String ENTITY_EDITOR_TOOLTIP_ADD_ATTR = resourceBundle.getString("ENTITY_EDITOR_TOOLTIP_ADD_ATTR");
+    public static final String ENTITY_EDITOR_TABLE_NAME_PROMPT = resourceBundle.getString("entityEditorWindow.TableNamePrompt");
 }
