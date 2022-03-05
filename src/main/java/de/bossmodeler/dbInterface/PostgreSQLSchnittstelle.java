@@ -49,6 +49,7 @@ import javax.swing.*;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.Objects;
 import java.util.Properties;
 
 public class PostgreSQLSchnittstelle extends Schnittstelle {
@@ -469,10 +470,34 @@ public class PostgreSQLSchnittstelle extends Schnittstelle {
 		}
 
 		// Setting CHECK-Constraint
-		// ACHTUNG: Spalte b.consrc aus SELECT entfernt 
-		ResultSet cc = query("SELECT a.table_name,a.column_name FROM information_schema.constraint_column_usage a,pg_CONSTRAINT b WHERE a.constraint_name=b.conname AND contype='c' AND a.constraint_schema = '"+getSchema() + "';");
+		// ACHTUNG: Spalte b.consrc aus SELECT entfernt
+		/**
+		 * Edited to get check-constraint on newer PostgreSQL versions.
+		 * @author Omar Emshani
+		 */
+		//ResultSet cc = query("SELECT a.table_name,a.column_name FROM information_schema.constraint_column_usage a,pg_CONSTRAINT b WHERE a.constraint_name=b.conname AND contype='c' AND a.constraint_schema = '"+getSchema() + "';");
+		ResultSet cc = query("select pgc.conname as constraint_name,\n" +
+				"       ccu.table_schema as table_schema,\n" +
+				"       ccu.table_name,\n" +
+				"       ccu.column_name,\n" +
+				"       pg_get_constraintdef(pgc.oid) \n" +
+				"from pg_constraint pgc\n" +
+				"join pg_namespace nsp on nsp.oid = pgc.connamespace\n" +
+				"join pg_class  cls on pgc.conrelid = cls.oid\n" +
+				"left join information_schema.constraint_column_usage ccu\n" +
+				"          on pgc.conname = ccu.constraint_name\n" +
+				"          and nsp.nspname = ccu.constraint_schema\n" +
+				"where table_schema = '"+getSchema()+"' and contype ='c'");
 		while (cc.next()) {
-			getTable(tables,cc.getString("table_name")).getColumn(cc.getString("column_name")).setdBCCheck(cc.getString("consrc"));
+			//getTable(tables,cc.getString("table_name")).getColumn(cc.getString("column_name")).setdBCCheck(cc.getString("consrc"));
+			try {
+				String checkConstraint = cc.getString("pg_get_constraintdef");
+				if (checkConstraint != null && checkConstraint.startsWith("CHECK")) {
+					checkConstraint = checkConstraint.substring(checkConstraint.indexOf('(')+1, checkConstraint.lastIndexOf(')')-1).replace("::numeric", "");
+					Objects.requireNonNull(getTable(tables, cc.getString("table_name"))).getColumn(cc.getString("column_name")).setdBCCheck(checkConstraint);
+				}
+			}
+			catch (Exception ignored) {}
 		}
 
 		// Setting UNIQUE-Constraints
