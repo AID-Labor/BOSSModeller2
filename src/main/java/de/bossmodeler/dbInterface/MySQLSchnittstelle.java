@@ -17,6 +17,8 @@ import javax.swing.*;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.Locale;
+import java.util.Objects;
 
 /**
  * The MySQLSchnittstelle is the interface for MySQL database systems.
@@ -168,6 +170,10 @@ public class MySQLSchnittstelle extends Schnittstelle {
 		}
 		
 		//check if check-constraints exists
+		/**
+		 * Check constraints are now supported after Version 8
+		 * @author Omar Emshani
+		 */
 		boolean checkConstraintsExists = false;
 		for(int i=0;i<tables.size();i++){
 			for(int j=0;j<tables.get(i).getdBTColumns().size();j++){
@@ -217,16 +223,21 @@ public class MySQLSchnittstelle extends Schnittstelle {
 				if(!tables.get(i).getdBTColumns().get(c).isdBCDefault().equals("")){
 					sql+=" DEFAULT "+tables.get(i).getdBTColumns().get(c).isdBCDefault();
 				}
-				if(!tables.get(i).getdBTColumns().get(c).getdBCCheck().equals("")){
+				//Check constraints in MySQL are noted in own line!, Edit by OE
+				/*if(!tables.get(i).getdBTColumns().get(c).getdBCCheck().equals("")){
 					sql+=" CHECK"+tables.get(i).getdBTColumns().get(c).getdBCCheck();
-				}
+				}*/
 				if (tables.get(i).getdBTColumns().get(c).isdBCNotNull()){
 					sql+=" NOT NULL";	
 				}
 				if(tables.get(i).getUnique(tables.get(i).getdBTColumns().get(c).getdBCName()) != null
 						&& !tables.get(i).getdBTPKeyList().contains(tables.get(i).getUnique(tables.get(i).getdBTColumns().get(c).getdBCName()))){
 					sql+=" UNIQUE";
-				}	
+				}
+				//Edited by OE
+				if(!tables.get(i).getdBTColumns().get(c).getdBCCheck().equals("")){
+					sql+=",\n\tCHECK "+tables.get(i).getdBTColumns().get(c).getdBCCheck();
+				}
 				if (c < tables.get(i).getdBTColumns().size() - 1) {
 					sql += ",\n";				
 				} else {
@@ -390,8 +401,10 @@ public class MySQLSchnittstelle extends Schnittstelle {
 					columnType = "bigint";
 				} else if (rstemp.getString("TYPE_NAME").equals("float4")) {
 					columnType = "float";
+				} else if (rstemp.getString("TYPE_NAME").equals("VARCHAR")) { //Has to be varchar(255), otherwise SQL error, Edited by OE
+					columnType = "varchar(255)";
 				} else {
-					columnType = rstemp.getString("TYPE_NAME");
+					columnType = rstemp.getString("TYPE_NAME").toLowerCase(); //Edited by OE
 				}
 
 				String columnCheck = "";
@@ -479,18 +492,28 @@ public class MySQLSchnittstelle extends Schnittstelle {
 		}
 
 		// Setting CHECK-Constraint
-		/* CHECK CONSTRAINTS ARE NOT SUPPORTED BY MYSQL
-		ResultSet cc = query("SELECT a.table_name,a.column_name,b.consrc "
-				+ "FROM information_schema.constraint_column_usage a,pg_CONSTRAINT b "
-				+ "WHERE a.constraint_name=b.conname "
-				+ "AND contype='c' "
-				+ "AND a.constraint_schema = '"+getSchema() + "';");
-		while (cc.next()) {
-			getTable(tables,cc.getString("table_name"))
-				.getColumn(cc.getString("column_name"))
-					.setdBCCheck(cc.getString("consrc"));
-		}
+		// CHECK CONSTRAINTS ARE NOT SUPPORTED BY MYSQL
+		/**
+		 * MySQL support check constraints. Since 8.0.16
+		 * Edited to retrieve Check Constraints
+		 * @author Omar Emshani
 		 */
+		ResultSet cc = query(
+				"select cc.CHECK_CLAUSE, tc.TABLE_NAME " +
+				"from  information_schema.TABLE_CONSTRAINTS tc " +
+				"inner join information_schema.CHECK_CONSTRAINTS cc " +
+				"on tc.CONSTRAINT_NAME = cc.CONSTRAINT_NAME " +
+				"where tc.TABLE_SCHEMA  = '"+getDb()+"';");
+		while (cc.next()) {
+			String checkConstraint = cc.getString("CHECK_CLAUSE");
+			int columnNameIndex = checkConstraint.indexOf("`")+1;
+			String dbColumnName =  checkConstraint.substring(columnNameIndex, checkConstraint.indexOf("`", columnNameIndex));
+			DBColumn dbColumn = Objects.requireNonNull(getTable(tables, cc.getString("TABLE_NAME"))).getColumn(dbColumnName);
+			if (dbColumn!=null) {
+				dbColumn.setdBCCheck(checkConstraint.replace("`", ""));
+			}
+		}
+
 		// Setting UNIQUE-Constraints
 
 		ResultSet uc = query("SELECT a.constraint_name,a.column_name,a.table_name "
