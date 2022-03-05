@@ -106,10 +106,10 @@ public class ConnectToDBWindowController implements ModelController<DBLAHolder>{
 
     @Override
     public void loadModel(DBLAHolder model) {
+        sqlLangChoiceBox.getSelectionModel().select(Arrays.asList(SQLLanguage.values()).indexOf(model.getLanguage()));
         hostTf.setText(model.getHost());
         portTf.setText(model.getPort());
         usernameTf.setText(model.getUser());
         passwordTf.setText(model.getPass());
-        sqlLangChoiceBox.getSelectionModel().select(Arrays.asList(SQLLanguage.values()).indexOf(model.getLanguage()));
     }
 }
