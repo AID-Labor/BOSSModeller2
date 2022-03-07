@@ -8,13 +8,41 @@ import de.snaggly.bossmodellerfx.model.view.Entity;
 
 import java.util.ArrayList;
 
-public class SerializableEntity extends EntityAbstraction {
+/**
+ * Model for a serializable Entity.
+ *
+ * @author Omar Emshani
+ */
+public class SerializableEntity extends EntityAbstraction implements SerializableModel<Entity> {
+    public ArrayList<SerializableAttribute> attributes = new ArrayList<>();
     public SerializableUniqueCombination uniqueCombination = new SerializableUniqueCombination();
 
     public static SerializableEntity serializableEntity(Entity entity) {
+        return singletonInstance.serialize(entity);
+    }
+
+    public static Entity deserializableEntity(SerializableEntity serEntity) {
+        return singletonInstance.deserialize(serEntity);
+    }
+
+    private final static SerializableEntity singletonInstance = new SerializableEntity();
+
+    @Override
+    public SerializableEntity serialize(Entity entity) {
         var serEntity = new SerializableEntity();
         serEntity.setName(entity.getName());
-        serEntity.setAttributes(entity.getAttributes());
+        for (var attribute : entity.getAttributes()){
+            var serAttribute = new SerializableAttribute(
+                    attribute.getName(),
+                    attribute.getType(),
+                    attribute.isPrimary(),
+                    attribute.isNonNull(),
+                    attribute.isUnique(),
+                    attribute.getCheckName(),
+                    attribute.getDefaultName()
+            );
+            serEntity.attributes.add(serAttribute);
+        }
         serEntity.setWeakType(entity.isWeakType());
         serEntity.setXCoordinate(entity.getXCoordinate());
         serEntity.setYCoordinate(entity.getYCoordinate());
@@ -25,18 +53,35 @@ public class SerializableEntity extends EntityAbstraction {
                 serAttrCombination.attributeCombinations.add(
                         entity.getAttributes().indexOf(attrEntry)
                 );
+                serAttrCombination.setPrimaryCombination(uniqueComb.isPrimaryCombination());
             }
             serEntity.uniqueCombination.attributeCombination.add(serAttrCombination);
         }
         return serEntity;
     }
 
-    public static Entity deserializableEntity(SerializableEntity serEntity) {
+    @Override
+    public Entity deserialize(SerializableModel<Entity> serializableModel) {
+        if (!(serializableModel instanceof SerializableEntity))
+            return null;
+        var serEntity = (SerializableEntity)serializableModel;
+        var attributes = new ArrayList<Attribute>();
+        for (var serAttribute : serEntity.attributes) {
+            attributes.add(new Attribute(
+                    serAttribute.getName(),
+                    serAttribute.getType(),
+                    serAttribute.isPrimary(),
+                    serAttribute.isNonNull(),
+                    serAttribute.isUnique(),
+                    serAttribute.getCheckName(),
+                    serAttribute.getDefaultName()
+            ));
+        }
         var entity = new Entity(
                 serEntity.getName(),
                 serEntity.getXCoordinate(),
                 serEntity.getYCoordinate(),
-                serEntity.getAttributes(),
+                attributes,
                 serEntity.isWeakType()
         );
 
@@ -47,6 +92,7 @@ public class SerializableEntity extends EntityAbstraction {
             for (var serAttrCombinationEntry : serAttrCombination.attributeCombinations) {
                 attrCombination.addAttribute(entity.getAttributes().get(serAttrCombinationEntry));
             }
+            attrCombination.setPrimaryCombination(serAttrCombination.isPrimaryCombination());
             attrCombinations.add(attrCombination);
         }
 

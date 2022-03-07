@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+Main-Class: de.snaggly.bossmodellerfx.Starter
+Class-Path: JDBC_Drivers/sqljdbc4-2.0.jar JDBC_Drivers/postgresql-42.2.8
+ .jar JDBC_Drivers/mysql-connector-java-8.0.28.jar
+

@@ -1,10 +1,13 @@
 package de.snaggly.bossmodellerfx.view.controller;
 
+import de.snaggly.bossmodellerfx.BOSS_Strings;
+import de.snaggly.bossmodellerfx.guiLogic.GUIMethods;
 import de.snaggly.bossmodellerfx.model.subdata.Attribute;
 import de.snaggly.bossmodellerfx.model.subdata.AttributeCombination;
 import de.snaggly.bossmodellerfx.model.subdata.UniqueCombination;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
@@ -12,17 +15,27 @@ import javafx.scene.layout.VBox;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+/**
+ * Controller for EntityView
+ *
+ * @author Omar Emshani
+ */
 public class EditUniqueCombinationWindowController implements ModelController<UniqueCombination> {
     private boolean tabSwitchMutex = false;
     private UniqueCombination model;
-    private HashMap<Attribute, CheckBox> checkBoxOverview = new HashMap<>();
-    private HashMap<TextField, AttributeCombination> attributeCombinationOverview = new HashMap<>();
+    private UniqueCombination refModel;
+    private final HashMap<Attribute, CheckBox> checkBoxOverview = new HashMap<>();
+    private final HashMap<TextField, AttributeCombination> attributeCombinationOverview = new HashMap<>();
     private AttributeCombination currentActiveCombination;
 
     @FXML
     private VBox attributesListVBox;
     @FXML
     private VBox uniqueCombNamesListVBox;
+    @FXML
+    private Button newBtn;
+    @FXML
+    private Button deleteBtn;
 
     @FXML
     private void initialize() {
@@ -58,7 +71,18 @@ public class EditUniqueCombinationWindowController implements ModelController<Un
 
     @Override
     public void loadModel(UniqueCombination model) {
-        this.model = model;
+        this.model = new UniqueCombination();
+        this.model.setCombinations(new ArrayList<>());
+        for (var combination : model.getCombinations()) {
+            var attriCombinationL = new AttributeCombination();
+            attriCombinationL.setCombinationName(combination.getCombinationName());
+            attriCombinationL.setPrimaryCombination(combination.isPrimaryCombination());
+            for (var attribute : combination.getAttributes()){
+                attriCombinationL.addAttribute(attribute);
+            }
+            this.model.getCombinations().add(attriCombinationL);
+        }
+        this.refModel = model;
         for (var combination : this.model.getCombinations()) {
             uniqueCombNamesListVBox.getChildren().add(generateUniqueCombinationKeyTextField(combination.getCombinationName(), combination));
         }
@@ -67,7 +91,7 @@ public class EditUniqueCombinationWindowController implements ModelController<Un
     private TextField generateUniqueCombinationKeyTextField(String name, AttributeCombination attributeCombination) {
         var textFieldCombination = new TextField();
         if (name == null) {
-            textFieldCombination.setPromptText("Unique Name...");
+            textFieldCombination.setPromptText(BOSS_Strings.NEW_UNIQUE_NAME_PROMPT);
         }
         else {
             textFieldCombination.setText(name);
@@ -93,7 +117,8 @@ public class EditUniqueCombinationWindowController implements ModelController<Un
             tabSwitchMutex = false;
 
             currentActiveCombination = attributeCombination;
-            attributesListVBox.setDisable(false);
+            attributesListVBox.setDisable(attributeCombination.isPrimaryCombination());
+            deleteBtn.setDisable(attributeCombination.isPrimaryCombination());
         });
 
         attributeCombinationOverview.put(textFieldCombination, attributeCombination);
@@ -117,5 +142,11 @@ public class EditUniqueCombinationWindowController implements ModelController<Un
             attributesListVBox.getChildren().add(checkBox);
             checkBoxOverview.put(attribute, checkBox);
         }
+    }
+
+    @FXML
+    private void onSaveAction(ActionEvent actionEvent) {
+        refModel.setCombinations(model.getCombinations());
+        GUIMethods.closeWindow(actionEvent);
     }
 }

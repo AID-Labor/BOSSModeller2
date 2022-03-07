@@ -5,20 +5,20 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane fx:id="rootPane" prefHeight="400.0" prefWidth="850.0" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.snaggly.bossmodellerfx.view.controller.EditEntityWindowController">
+<AnchorPane fx:id="rootPane" prefHeight="450.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.snaggly.bossmodellerfx.view.controller.EditEntityWindowController">
    <children>
       <VBox spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <padding>
             <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
          </padding>
          <children>
-            <Label text="Tabelle bearbeiten" VBox.vgrow="NEVER">
+            <Label text="%entityEditorWindow.Header" VBox.vgrow="NEVER">
                <font>
                   <Font name="System Bold" size="16.0" />
                </font>
             </Label>
-            <TextField fx:id="tableNameTextField" promptText="Name der Tabelle" VBox.vgrow="NEVER" />
-            <CheckBox fx:id="isWeakTypeCheckBox" disable="true" mnemonicParsing="false" text="Ist schwache Entität?" VBox.vgrow="NEVER" />
+            <TextField fx:id="tableNameTextField" promptText="%entityEditorWindow.TableNamePrompt" VBox.vgrow="NEVER" />
+            <CheckBox fx:id="isWeakTypeCheckBox" disable="true" mnemonicParsing="false" text="%entityEditorWindow.IsTableWeakChkBox" VBox.vgrow="NEVER" />
             <Separator prefWidth="200.0" VBox.vgrow="NEVER">
                <opaqueInsets>
                   <Insets />
@@ -29,7 +29,7 @@
             </Separator>
             <BorderPane VBox.vgrow="NEVER">
                <left>
-                  <Label text="Attribute" BorderPane.alignment="CENTER">
+                  <Label text="%entityEditorWindow.AttributesHeader" BorderPane.alignment="CENTER">
                      <font>
                         <Font name="System Bold" size="16.0" />
                      </font>
@@ -38,12 +38,12 @@
                <right>
                   <HBox spacing="5.0" BorderPane.alignment="CENTER">
                      <children>
-                        <Button fx:id="addAttrbBtn" focusTraversable="false" mnemonicParsing="false" onAction="#addAttributeAction" style="-fx-background-radius: 15; -fx-pref-width: 30; -fx-pref-height: 20;" text="+">
+                        <Button fx:id="removeAttrbBtn" focusTraversable="false" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#removeAttributeAction" style="-fx-background-radius: 15; -fx-pref-width: 30; -fx-pref-height: 20;" text="-">
                            <font>
                               <Font name="System Bold" size="13.0" />
                            </font>
                         </Button>
-                        <Button fx:id="removeAttrbBtn" focusTraversable="false" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#removeAttributeAction" style="-fx-background-radius: 15; -fx-pref-width: 30; -fx-pref-height: 20;" text="-">
+                        <Button fx:id="addAttrbBtn" focusTraversable="false" mnemonicParsing="false" onAction="#addAttributeAction" style="-fx-background-radius: 15; -fx-pref-width: 30; -fx-pref-height: 20;" text="+">
                            <font>
                               <Font name="System Bold" size="13.0" />
                            </font>
@@ -52,7 +52,7 @@
                   </HBox>
                </right>
                <center>
-                  <Button mnemonicParsing="false" onAction="#editUniqueComboClick" text="Unique Kombination bearbeiten..." BorderPane.alignment="CENTER" />
+                  <Button mnemonicParsing="false" onAction="#editUniqueComboClick" text="%entityEditorWindow.EditUniqueCombBtn" BorderPane.alignment="CENTER" />
                </center>
             </BorderPane>
             <ScrollPane fitToWidth="true" focusTraversable="false" hbarPolicy="NEVER" VBox.vgrow="ALWAYS">
@@ -62,8 +62,8 @@
             </ScrollPane>
             <ButtonBar prefHeight="40.0" prefWidth="200.0" VBox.vgrow="NEVER">
                <buttons>
-                  <Button fx:id="cancelBtn" mnemonicParsing="false" onAction="#onCancelClick" text="Abbrechen" />
-                  <Button fx:id="doneBtn" mnemonicParsing="false" onAction="#onDoneClick" text="Fertig" />
+                  <Button fx:id="cancelBtn" mnemonicParsing="false" onAction="#onCancelClick" text="%mainWindow.MenuBar.File.Cancel" />
+                  <Button fx:id="doneBtn" mnemonicParsing="false" onAction="#onDoneClick" text="%SAVE" />
                </buttons>
             </ButtonBar>
          </children>

@@ -6,27 +6,33 @@ import de.snaggly.bossmodellerfx.view.viewtypes.CustomNode;
 import javafx.scene.Node;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 
+/**
+ * Wrapper ViewNode to bundle all required views for a relation.
+ *
+ * @author Omar Emshani
+ */
 public class RelationViewNode extends CustomNode<Relation> {
     private final Relation model;
+    private final EntityView tableAView;
+    private final EntityView tableBView;
+
     public RelationLineView line1;
     public RelationLineView line2;
     public RelationLineView line3;
+    public RelationLineView line4;
     public CrowsFootShape crowsFootA;
     public CrowsFootShape crowsFootB;
 
-    public RelationViewNode(Relation model) {
+    public RelationViewNode(Relation model, EntityView tableAView, EntityView tableBView) {
         this.model = model;
+        this.tableAView = tableAView;
+        this.tableBView = tableBView;
     }
 
     public ArrayList<Node> getAllNodes() {
         var result = new ArrayList<Node>();
-        if (line1 != null)
-            result.add(line1);
-        if (line2 != null)
-            result.add(line2);
-        if (line3 != null)
-            result.add(line3);
         if (crowsFootA != null) {
             result.add(crowsFootA.multiplicityLineOne);
             result.add(crowsFootA.mandatoryLine);
@@ -41,8 +47,22 @@ public class RelationViewNode extends CustomNode<Relation> {
             result.add(crowsFootB.multiplicityLineMultiple1);
             result.add(crowsFootB.multiplicityLineMultiple2);
         }
+        if (line1 != null)
+            result.add(line1);
+        if (line2 != null)
+            result.add(line2);
+        if (line3 != null)
+            result.add(line3);
+        if (line4 != null)
+            result.add(line4);
 
         return result;
+    }
+
+    @Override
+    public void toBack() {
+        for (var node : getAllNodes())
+            node.toBack();
     }
 
     @Override
@@ -67,6 +87,21 @@ public class RelationViewNode extends CustomNode<Relation> {
             line2.highlight();
         if (line3 != null)
             line3.highlight();
+        if (line4 != null)
+            line4.highlight();
+
+        for (var fk : model.getFkAttributesA()) {
+            var index = model.getTableA().getAttributes().indexOf(fk);
+            if (index >= 0) {
+                tableAView.getController().highlightAttributeAt(index);
+            }
+        }
+        for (var fk : model.getFkAttributesB()) {
+            var index = model.getTableB().getAttributes().indexOf(fk);
+            if (index >= 0) {
+                tableBView.getController().highlightAttributeAt(index);
+            }
+        }
     }
 
     @Override
@@ -81,5 +116,20 @@ public class RelationViewNode extends CustomNode<Relation> {
             line2.deHighlight();
         if (line3 != null)
             line3.deHighlight();
+        if (line4 != null)
+            line4.deHighlight();
+
+        for (var fk : model.getFkAttributesA()) {
+            var index = model.getTableA().getAttributes().indexOf(fk);
+            if (index >= 0) {
+                tableAView.getController().unHighlightAttributeAt(index);
+            }
+        }
+        for (var fk : model.getFkAttributesB()) {
+            var index = model.getTableB().getAttributes().indexOf(fk);
+            if (index >= 0) {
+                tableBView.getController().unHighlightAttributeAt(index);
+            }
+        }
     }
 }

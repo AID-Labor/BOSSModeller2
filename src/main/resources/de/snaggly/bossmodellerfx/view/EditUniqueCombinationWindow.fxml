@@ -13,18 +13,18 @@
                   <Insets bottom="10.0" top="10.0" />
                </padding>
                <children>
-                  <Button focusTraversable="false" mnemonicParsing="false" onAction="#newUniqueComboClick" text="Neue Unique-Kombination" />
-                  <Button focusTraversable="false" mnemonicParsing="false" onAction="#deleteUniqueComboClick" text="Unique-Kombination löschen" />
+                  <Button focusTraversable="false" mnemonicParsing="false" fx:id="newBtn" onAction="#newUniqueComboClick" text="%uniqueCombinationEditor.CreateNewCombinationBtn" />
+                  <Button focusTraversable="false" mnemonicParsing="false" fx:id="deleteBtn" onAction="#deleteUniqueComboClick" text="%uniqueCombinationEditor.DeleteCombinationBtn" />
                </children></HBox>
             <SplitPane dividerPositions="0.29797979797979796" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" VBox.vgrow="ALWAYS">
               <items>
                 <AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0">
                      <children>
-                        <ScrollPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                        <ScrollPane layoutY="14.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                           <content>
                             <AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
                                  <children>
-                                    <VBox fx:id="uniqueCombNamesListVBox" minHeight="350.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                    <VBox fx:id="uniqueCombNamesListVBox" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                                  </children>
                               </AnchorPane>
                           </content>
@@ -44,6 +44,14 @@
                      </children></AnchorPane>
               </items>
             </SplitPane>
+            <ButtonBar prefHeight="40.0" prefWidth="200.0">
+              <buttons>
+                <Button mnemonicParsing="false" onAction="#onSaveAction" text="%SAVE" />
+              </buttons>
+               <VBox.margin>
+                  <Insets bottom="5.0" right="30.0" top="5.0" />
+               </VBox.margin>
+            </ButtonBar>
          </children>
       </VBox>
    </children>

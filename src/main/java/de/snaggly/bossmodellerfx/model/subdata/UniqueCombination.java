@@ -1,10 +1,15 @@
 package de.snaggly.bossmodellerfx.model.subdata;
 
-import de.snaggly.bossmodellerfx.model.BOSSModel;
+import de.snaggly.bossmodellerfx.model.abstraction.UniqueCombinationAbstraction;
 
 import java.util.ArrayList;
 
-public class UniqueCombination implements BOSSModel {
+/**
+ * Model for UniqueCombination. This class holds the AttributeCombinations. Used in Entity.
+ *
+ * @author Omar Emshani
+ */
+public class UniqueCombination extends UniqueCombinationAbstraction {
     private ArrayList<AttributeCombination> combinations = new ArrayList<>();
 
     public UniqueCombination() { }
@@ -21,4 +26,7 @@ public class UniqueCombination implements BOSSModel {
         this.combinations = combinations;
     }
 
+    public void addCombination(AttributeCombination combination) {
+        combinations.add(combination);
+    }
 }

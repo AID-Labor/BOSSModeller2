@@ -6,8 +6,13 @@ import de.snaggly.bossmodellerfx.view.factory.ViewFactory;
 
 import java.io.IOException;
 
+/**
+ * Builds the view to display a Comment on workbench.
+ *
+ * @author Omar Emshani
+ */
 public class AttributeEditorBuilder implements ViewFactory<Attribute, AttributeEditor> {
-    private static AttributeEditorBuilder instance;
+    private final static AttributeEditorBuilder instance = new AttributeEditorBuilder(); //Singleton
 
     private AttributeEditorBuilder() { }
 
@@ -16,15 +21,13 @@ public class AttributeEditorBuilder implements ViewFactory<Attribute, AttributeE
         return new AttributeEditor(model) {};
     }
 
-    public static AttributeEditor buildAttributeEditor() throws IOException {
-        if (instance == null)
-            instance = new AttributeEditorBuilder();
-        return instance.buildView(null);
-    }
-
+    /**
+     * Use this method to build a new view.
+     * @param model Existing model to load on view. Can be null to create new model.
+     * @return Returns the new view class.
+     * @throws IOException
+     */
     public static AttributeEditor buildAttributeEditor(Attribute model) throws IOException {
-        if (instance == null)
-            instance = new AttributeEditorBuilder();
         return instance.buildView(model);
     }
 }

@@ -1,6 +1,6 @@
 package de.snaggly.bossmodellerfx.view;
 
-import de.snaggly.bossmodellerfx.struct.relations.CrowsFootOptions;
+import de.snaggly.bossmodellerfx.relation_logic.CrowsFootOptions;
 import de.snaggly.bossmodellerfx.view.viewtypes.Highlightable;
 import javafx.beans.value.ChangeListener;
 import javafx.scene.layout.Pane;
@@ -12,6 +12,11 @@ import javafx.scene.shape.Shape;
 import java.util.ArrayList;
 import java.util.Collection;
 
+/**
+ * Generates the CrowsFootsShape to be bundled with RelationViewNode.
+ *
+ * @author Omar Emshani
+ */
 public abstract class CrowsFootShape implements Highlightable {
     private static final int scale = 5;
 
@@ -47,11 +52,11 @@ public abstract class CrowsFootShape implements Highlightable {
     }
 
     public CrowsFootShape(EntityView entity, double positionShift) {
-        multiplicityLineOne.setStrokeWidth(3);
-        multiplicityLineMultiple1.setStrokeWidth(3);
-        multiplicityLineMultiple2.setStrokeWidth(3);
-        mandatoryLine.setStrokeWidth(3);
-        optionalCircle.setStrokeWidth(3);
+        multiplicityLineOne.setStrokeWidth(2);
+        multiplicityLineMultiple1.setStrokeWidth(2);
+        multiplicityLineMultiple2.setStrokeWidth(2);
+        mandatoryLine.setStrokeWidth(2);
+        optionalCircle.setStrokeWidth(2);
         optionalCircle.setRadius(scale);
         optionalCircle.setFill(Color.WHITE);
         optionalCircle.setStroke(Color.BLACK);
@@ -70,6 +75,8 @@ public abstract class CrowsFootShape implements Highlightable {
         return elementsList;
     }
 
+    //The drawing means differs in what orientation the CrowsFootShape is directed to.
+    //The internal implementing classes define the drawing.
     public abstract ChangeListener<Number> getMultiplicityMany_XListener(Pane parentPane);
     public abstract void drawMultiplicityMany_X(double xOffset);
     public abstract ChangeListener<Number> getMultiplicityMany_YListener(Pane parentPane);
@@ -90,6 +97,12 @@ public abstract class CrowsFootShape implements Highlightable {
 
     private final ArrayList<ChangeListener<Number>> listeners = new ArrayList<>();
 
+    /**
+     * Bind CorwsFootView directly on a parent pane.
+     * @param parentPane Parent Pane
+     * @param cardinality Cardinality (1/N)
+     * @param obligation Relation (Can/Must)
+     */
     public void bindCrowsFootView(Pane parentPane, CrowsFootOptions.Cardinality cardinality, CrowsFootOptions.Obligation obligation) {
         if (cardinality == CrowsFootOptions.Cardinality.MANY) {
             parentPane.getChildren().addAll(this.multiplicityLineMultiple1, this.multiplicityLineMultiple2);
@@ -120,6 +133,14 @@ public abstract class CrowsFootShape implements Highlightable {
         }
     }
 
+    /**
+     * Directly draw CrowsFootShape onto a parent Pane with given X-Y Offset
+     * @param parentPane Parent Pane
+     * @param cardinality Cardinality (1/N)
+     * @param obligation Relation (Can/Must)
+     * @param xOffset X-Offset
+     * @param yOffset Y-Offset
+     */
     public void draw(Pane parentPane, CrowsFootOptions.Cardinality cardinality, CrowsFootOptions.Obligation obligation, double xOffset, double yOffset) {
         if (cardinality == CrowsFootOptions.Cardinality.MANY) {
             parentPane.getChildren().addAll(this.multiplicityLineMultiple1, this.multiplicityLineMultiple2);
@@ -156,6 +177,10 @@ public abstract class CrowsFootShape implements Highlightable {
         }
     }
 
+    /**
+     * Move CrowsFootsShape to position of given entity.
+     * @throws NotDrawnException
+     */
     public void move() throws NotDrawnException {
         try {
             movers[0].move();
@@ -166,6 +191,10 @@ public abstract class CrowsFootShape implements Highlightable {
         }
     }
 
+    /**
+     * Remove all bindings from set parent pane when bindCrowsFootView has been called before
+     * @param parentPane Parent Pane
+     */
     public void unbindCrowsFootView(Pane parentPane) {
         entity.layoutXProperty().removeListener(this.getMultiplicityMany_XListener(parentPane));
         entity.widthProperty().removeListener(this.getMultiplicityMany_XListener(parentPane));

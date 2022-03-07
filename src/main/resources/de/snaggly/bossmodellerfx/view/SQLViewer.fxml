@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="500.0" prefWidth="750.0" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.snaggly.bossmodellerfx.view.controller.SQLViewerController">
+   <children>
+      <BorderPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <center>
+            <TextArea fx:id="sqlTextArea" editable="false" BorderPane.alignment="CENTER">
+               <BorderPane.margin>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </BorderPane.margin>
+            </TextArea>
+         </center>
+         <bottom>
+            <VBox spacing="10.0" BorderPane.alignment="CENTER">
+               <children>
+                  <HBox alignment="CENTER" layoutX="20.0" layoutY="20.0" spacing="10.0">
+                     <children>
+                        <CheckBox fx:id="createNewSchemaChkBox" mnemonicParsing="false" text="%exportToDBWindow.UseNewSchema" />
+                        <TextField fx:id="schemaNameTf" promptText="%sqlViewer.SchemaName" HBox.hgrow="ALWAYS" />
+                     </children>
+                     <VBox.margin>
+                        <Insets left="10.0" right="10.0" />
+                     </VBox.margin>
+                  </HBox>
+                  <HBox>
+                     <VBox.margin>
+                        <Insets left="10.0" right="10.0" />
+                     </VBox.margin>
+                     <children>
+                        <CheckBox fx:id="cssChkBox" mnemonicParsing="false" text="%exportToDBWindow.CaseSensitive" />
+                     </children>
+                  </HBox>
+                  <HBox alignment="CENTER">
+                     <children>
+                        <HBox alignment="CENTER_LEFT" HBox.hgrow="NEVER">
+                           <children>
+                              <ChoiceBox fx:id="dbmsChoiceBox" prefWidth="150.0" />
+                           </children>
+                        </HBox>
+                        <HBox alignment="CENTER_RIGHT" spacing="20.0" HBox.hgrow="ALWAYS">
+                           <children>
+                              <Button alignment="CENTER" mnemonicParsing="false" onAction="#onCloseClick" text="%CLOSE" />
+                              <Button mnemonicParsing="false" onAction="#onSaveClick" text="%SAVE" />
+                           </children>
+                        </HBox>
+                     </children>
+                     <VBox.margin>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                     </VBox.margin>
+                  </HBox>
+               </children>
+            </VBox>
+         </bottom>
+      </BorderPane>
+   </children>
+</AnchorPane>

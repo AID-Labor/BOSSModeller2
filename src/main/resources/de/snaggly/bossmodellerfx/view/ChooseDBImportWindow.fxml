@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.snaggly.bossmodellerfx.view.controller.ChooseDBImportWindowController">
+   <children>
+      <VBox alignment="CENTER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <GridPane VBox.vgrow="NEVER">
+              <columnConstraints>
+                <ColumnConstraints halignment="LEFT" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+              </columnConstraints>
+              <rowConstraints>
+                <RowConstraints minHeight="30.0" prefHeight="30.0" vgrow="NEVER" />
+                <RowConstraints minHeight="30.0" prefHeight="30.0" />
+              </rowConstraints>
+               <children>
+                  <Label text="%connectToDBWindow.DBName">
+                     <padding>
+                        <Insets left="15.0" />
+                     </padding>
+                  </Label>
+                  <Label fx:id="schemeNameLabel" text="%connectToDBWindow.SchemaName" GridPane.rowIndex="1">
+                     <padding>
+                        <Insets left="15.0" />
+                     </padding>
+                  </Label>
+                  <ChoiceBox fx:id="chooseDBNameChoiceBox" prefWidth="300.0" GridPane.columnIndex="1">
+                     <GridPane.margin>
+                        <Insets right="15.0" />
+                     </GridPane.margin>
+                  </ChoiceBox>
+                  <ChoiceBox fx:id="chooseSchemaNameChoiceBox" layoutX="310.0" layoutY="13.0" prefWidth="300.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                     <GridPane.margin>
+                        <Insets right="15.0" />
+                     </GridPane.margin>
+                  </ChoiceBox>
+               </children>
+            </GridPane>
+            <BorderPane VBox.vgrow="ALWAYS">
+               <top>
+                  <CheckBox fx:id="checkAllChkbox" mnemonicParsing="false" onAction="#onCheckAllChkBox" text="%importDBTables.CheckAll" BorderPane.alignment="CENTER_LEFT">
+                     <BorderPane.margin>
+                        <Insets left="20.0" top="10.0" />
+                     </BorderPane.margin>
+                  </CheckBox>
+               </top>
+               <center>
+                  <ScrollPane style="-fx-border-color: black; -fx-background-color: grey;" BorderPane.alignment="CENTER">
+                    <content>
+                      <AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
+                           <children>
+                              <VBox fx:id="entityListVBox" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                           </children>
+                           <padding>
+                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                           </padding>
+                        </AnchorPane>
+                    </content>
+                     <BorderPane.margin>
+                        <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+                     </BorderPane.margin>
+                  </ScrollPane>
+               </center>
+               <bottom>
+                  <HBox alignment="CENTER_RIGHT" spacing="20.0" BorderPane.alignment="CENTER">
+                     <children>
+                        <ProgressIndicator fx:id="progressIndicator" />
+                        <Button fx:id="cancelBtn" alignment="CENTER" mnemonicParsing="false" onAction="#onCancelClick" text="%mainWindow.MenuBar.File.Cancel" />
+                        <Button fx:id="createBtn" alignment="CENTER" mnemonicParsing="false" onAction="#onCreateClick" text="%importDBTables.ImportBtn" />
+                     </children>
+                     <padding>
+                        <Insets bottom="15.0" right="20.0" />
+                     </padding>
+                  </HBox>
+               </bottom>
+            </BorderPane>
+         </children>
+         <padding>
+            <Insets top="15.0" />
+         </padding>
+      </VBox>
+   </children>
+</AnchorPane>

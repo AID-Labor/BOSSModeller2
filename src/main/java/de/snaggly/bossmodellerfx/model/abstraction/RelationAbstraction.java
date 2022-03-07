@@ -1,10 +1,14 @@
 package de.snaggly.bossmodellerfx.model.abstraction;
 
-import de.snaggly.bossmodellerfx.model.BOSSModel;
-import de.snaggly.bossmodellerfx.struct.relations.ConnectingOrientation;
-import de.snaggly.bossmodellerfx.struct.relations.CrowsFootOptions;
-
-public abstract class RelationAbstraction implements BOSSModel {
+import de.snaggly.bossmodellerfx.relation_logic.ConnectingOrientation;
+import de.snaggly.bossmodellerfx.relation_logic.CrowsFootOptions;
+/**
+ * Abstracting around Relation. Here TableA and TableB have been abstracted.
+ *
+ * @author Omar Emshani
+ */
+public abstract class RelationAbstraction implements AbstractedModel {
+    private boolean isStrongRelation = false;
     private CrowsFootOptions.Cardinality tableA_Cardinality;
     private CrowsFootOptions.Cardinality tableB_Cardinality;
     private CrowsFootOptions.Obligation tableA_Obligation;
@@ -50,5 +54,13 @@ public abstract class RelationAbstraction implements BOSSModel {
 
     public void setTableB_Obligation(CrowsFootOptions.Obligation tableB_Obligation) {
         this.tableB_Obligation = tableB_Obligation;
+    }
+
+    public boolean isStrongRelation() {
+        return isStrongRelation;
+    }
+
+    public void setStrongRelation(boolean strongRelation) {
+        isStrongRelation = strongRelation;
     }
 }

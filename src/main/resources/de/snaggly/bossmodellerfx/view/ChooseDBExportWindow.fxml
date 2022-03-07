@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.snaggly.bossmodellerfx.view.controller.ChooseDBExportWindowController">
+   <children>
+      <VBox alignment="CENTER" spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <GridPane alignment="TOP_CENTER" hgap="30.0" vgap="10.0">
+              <columnConstraints>
+                <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" minWidth="10.0" />
+                <ColumnConstraints halignment="LEFT" hgrow="SOMETIMES" minWidth="10.0" />
+              </columnConstraints>
+              <rowConstraints>
+                <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+              </rowConstraints>
+               <children>
+                  <ChoiceBox fx:id="existingDBChoiceBox" prefWidth="300.0" GridPane.columnIndex="1">
+                     <GridPane.margin>
+                        <Insets />
+                     </GridPane.margin>
+                  </ChoiceBox>
+                  <CheckBox fx:id="useExistingDBChkBox" contentDisplay="CENTER" mnemonicParsing="false" nodeOrientation="RIGHT_TO_LEFT" onAction="#useExistingDBChkBoxOnAction" text="%exportToDBWindow.UseExistingDB" />
+                  <Label fx:id="newDbNameLabel" text="%exportToDBWindow.UseNewDB" GridPane.rowIndex="1" />
+                  <TextField fx:id="newDBNameTf" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                  <CheckBox fx:id="useExistingSchemeCkBox" mnemonicParsing="false" nodeOrientation="RIGHT_TO_LEFT" text="%exportToDBWindow.UseExistingSchema" GridPane.rowIndex="2" />
+                  <ChoiceBox fx:id="existingSchemesChoiceBox" prefWidth="300.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                  <Label fx:id="createNewSchemeLabel" text="%exportToDBWindow.UseNewSchema" GridPane.rowIndex="3" />
+                  <TextField fx:id="newSchemeTf" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                  <CheckBox fx:id="caseSensitive" mnemonicParsing="false" nodeOrientation="RIGHT_TO_LEFT" text="%exportToDBWindow.CaseSensitive" GridPane.rowIndex="4" />
+               </children>
+            </GridPane>
+            <HBox alignment="CENTER_RIGHT" spacing="30.0">
+               <children>
+                  <ProgressIndicator fx:id="progressIndicator" visible="false">
+                     <HBox.margin>
+                        <Insets bottom="10.0" top="10.0" />
+                     </HBox.margin>
+                  </ProgressIndicator>
+                  <Button fx:id="cancelBtn" mnemonicParsing="false" onAction="#onCancelClick" text="%mainWindow.MenuBar.File.Cancel" />
+                  <Button fx:id="exportToDBBtn" mnemonicParsing="false" onAction="#onExportClick" text="%exportToDBWindow.ExportBtn" />
+               </children>
+            </HBox>
+         </children>
+         <padding>
+            <Insets bottom="10.0" left="20.0" right="20.0" top="10.0" />
+         </padding>
+      </VBox>
+   </children>
+</AnchorPane>

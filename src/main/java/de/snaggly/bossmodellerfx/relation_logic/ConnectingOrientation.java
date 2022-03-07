@@ -1,5 +1,10 @@
-package de.snaggly.bossmodellerfx.struct.relations;
+package de.snaggly.bossmodellerfx.relation_logic;
 
+/**
+ * Lists all possible orientations for the CrowsVertices.
+ *
+ * @author Omar Emshani
+ */
 public enum ConnectingOrientation {
     Q1_R,
     Q1_O,
@@ -19,5 +24,7 @@ public enum ConnectingOrientation {
     Q4_L,
     Q4_O,
     Q4_R3,
-    Q4_R4
+    Q4_R4,
+
+    SELF
 }

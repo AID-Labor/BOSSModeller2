@@ -5,6 +5,11 @@ import javafx.fxml.FXML;
 import javafx.scene.control.TextArea;
 import javafx.scene.input.MouseEvent;
 
+/**
+ * Controller for Comment View
+ *
+ * @author Omar Emshani
+ */
 public class CommentController implements ModelController<Comment> {
     private boolean isEditable = false;
     private Comment model;

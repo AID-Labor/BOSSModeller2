@@ -12,7 +12,7 @@
          <children>
             <HBox alignment="BOTTOM_CENTER">
                <children>
-                  <Label text="BOSSModeller FX v2.0.3a">
+                  <Label text="%bossmodellerfx">
                      <font>
                         <Font name="System Bold" size="18.0" />
                      </font>
@@ -24,8 +24,8 @@
                   </ImageView>
                </children>
             </HBox>
-            <Label text="BO's Simple SQL Modeller" />
-            <TextArea editable="false" text="Der BOSSModeler wurde von Nils Wagner, Serdar Nurgün, Jahn Langenbrink und Stefan Hufschmidt im Rahmen eines Softwareprojekts der Hochschule Bochum erstellt. Das Projekt wurde von Frau Prof. Dr. Brabender und Herrn Koch angeboten und begleitet. Für Postgres existierten zum Projektstart nur Tools, die sehr kompliziert in der Bedienung waren und mehrere Fehler aufwiesen (Beispielsweise in der Crow's Foot Notation). Zudem waren die bereits erhältlichen Tools meist nicht kostenfrei. Im Fachbereich Elektrotechnik und Informatik wird der BOSSModeler bereits in der Datenbankübung und im Praktikum eingesetzt." wrapText="true">
+            <Label text="%bossmodellerfx.description" />
+            <TextArea editable="false" text="%bossmodellerfx.fulldescription" wrapText="true">
                <VBox.margin>
                   <Insets left="10.0" right="10.0" />
                </VBox.margin>
@@ -34,7 +34,7 @@
                <children>
                   <VBox alignment="CENTER">
                      <children>
-                        <Label text="Original Design von:" textAlignment="CENTER">
+                        <Label text="%bossmodeller.authors" textAlignment="CENTER">
                            <font>
                               <Font name="System Bold Italic" size="13.0" />
                            </font>
@@ -44,7 +44,7 @@
                   </VBox>
                   <VBox alignment="CENTER" layoutX="235.0" layoutY="10.0">
                      <children>
-                        <Label text="FX Redesign von:" textAlignment="CENTER">
+                        <Label text="%bossmodellerfx.authors" textAlignment="CENTER">
                            <font>
                               <Font name="System Bold Italic" size="13.0" />
                            </font>
@@ -56,7 +56,7 @@
             </HBox>
             <ButtonBar>
               <buttons>
-                <Button mnemonicParsing="false" onAction="#close" text="Schließen" />
+                <Button mnemonicParsing="false" onAction="#close" text="%CLOSE" />
               </buttons>
                <VBox.margin>
                   <Insets bottom="15.0" right="30.0" />

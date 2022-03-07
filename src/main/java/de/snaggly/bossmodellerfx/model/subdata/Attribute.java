@@ -1,88 +1,29 @@
 package de.snaggly.bossmodellerfx.model.subdata;
 
-import de.snaggly.bossmodellerfx.model.BOSSModel;
+import de.snaggly.bossmodellerfx.model.abstraction.AttributeAbstraction;
+import de.snaggly.bossmodellerfx.model.view.Entity;
 
-import java.util.ArrayList;
-
-public class Attribute implements BOSSModel {
-    private String name;
-    private String type;
-    private boolean isPrimary;
-    private boolean isNonNull;
-    private boolean isUnique;
-    private String checkName;
-    private String defaultName;
+/**
+ * Model for Attribute. Used in Entity.
+ *
+ * @author Omar Emshani
+ */
+public class Attribute extends AttributeAbstraction {
     private Attribute fkTableColumn;
+    private Entity fkTable;
 
     public Attribute(){
-        this(null, "", false, false, false, "", "", null);
+        this(null, "", false, false, false, "", "", null, null);
     }
 
-    public Attribute(String name, String type, boolean isPrimary, boolean isNonNull, boolean isUnique, String checkName, String defaultName, Attribute fkTableColumn) {
-        this.name = name;
-        this.type = type;
-        this.isPrimary = isPrimary;
-        this.isNonNull = isNonNull;
-        this.isUnique = isUnique;
-        this.checkName = checkName;
-        this.defaultName = defaultName;
+    public Attribute(String name, String type, boolean isPrimary, boolean isNonNull, boolean isUnique, String checkName, String defaultName) {
+        this(name, type, isPrimary, isNonNull, isUnique, checkName, defaultName, null, null);
+    }
+
+    public Attribute(String name, String type, boolean isPrimary, boolean isNonNull, boolean isUnique, String checkName, String defaultName, Attribute fkTableColumn, Entity fkTable) {
+        super(name, type, isPrimary, isNonNull, isUnique, checkName, defaultName);
         this.fkTableColumn = fkTableColumn;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public boolean isPrimary() {
-        return isPrimary;
-    }
-
-    public void setPrimary(boolean primary) {
-        isPrimary = primary;
-    }
-
-    public boolean isNonNull() {
-        return isNonNull;
-    }
-
-    public void setNonNull(boolean nonNull) {
-        isNonNull = nonNull;
-    }
-
-    public boolean isUnique() {
-        return isUnique;
-    }
-
-    public void setUnique(boolean unique) {
-        isUnique = unique;
-    }
-
-    public String getCheckName() {
-        return checkName;
-    }
-
-    public void setCheckName(String checkName) {
-        this.checkName = checkName;
-    }
-
-    public String getDefaultName() {
-        return defaultName;
-    }
-
-    public void setDefaultName(String defaultName) {
-        this.defaultName = defaultName;
+        this.fkTable = fkTable;
     }
 
     public Attribute getFkTableColumn() {
@@ -91,5 +32,13 @@ public class Attribute implements BOSSModel {
 
     public void setFkTableColumn(Attribute fkTableColumn) {
         this.fkTableColumn = fkTableColumn;
+    }
+
+    public Entity getFkTable() {
+        return fkTable;
+    }
+
+    public void setFkTable(Entity fkTable) {
+        this.fkTable = fkTable;
     }
 }

@@ -6,207 +6,262 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane prefHeight="960.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.snaggly.bossmodellerfx.MainController">
+<AnchorPane onKeyPressed="#onKeyPressed" onKeyReleased="#onKeyReleased" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.snaggly.bossmodellerfx.MainController">
    <BorderPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
       <left>
-         <Accordion maxHeight="1.7976931348623157E308" maxWidth="100.0" BorderPane.alignment="TOP_LEFT">
+         <Accordion fx:id="leftNavigationAccordion" minWidth="130.0" BorderPane.alignment="TOP_LEFT">
             <panes>
-               <TitledPane alignment="TOP_LEFT" text="Bearbeiten">
-                  <AnchorPane>
-                     <VBox alignment="TOP_CENTER" layoutX="34.0" layoutY="14.0" spacing="15.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                        <Button alignment="CENTER" maxHeight="78.0" maxWidth="78.0" minHeight="78.0" minWidth="78.0" mnemonicParsing="false" onAction="#newEntityClick" textAlignment="CENTER" VBox.vgrow="NEVER">
-                           <font>
-                              <Font name="System Bold" size="31.0" />
-                           </font>
-                           <graphic>
-                              <ImageView pickOnBounds="true" preserveRatio="true" scaleX="0.65" scaleY="0.65" smooth="false">
-                                 <Image url="@entity_new.png" />
-                              </ImageView>
-                           </graphic>
-                        </Button>
-                        <Button alignment="CENTER" contentDisplay="CENTER" maxHeight="78.0" maxWidth="78.0" minHeight="78.0" minWidth="78.0" mnemonicParsing="false" onAction="#editEntityClick" textAlignment="CENTER" VBox.vgrow="NEVER">
-                           <font>
-                              <Font name="System Bold" size="31.0" />
-                           </font>
-                           <graphic>
-                              <ImageView preserveRatio="true" scaleX="0.65" scaleY="0.65">
-                                 <Image url="@entity_edit.png" />
-                              </ImageView>
-                           </graphic>
-                        </Button>
-                        <Button alignment="CENTER" contentDisplay="CENTER" maxHeight="78.0" maxWidth="78.0" minHeight="78.0" minWidth="78.0" mnemonicParsing="false" onAction="#deleteEntityClick" textAlignment="CENTER" VBox.vgrow="NEVER">
-                           <font>
-                              <Font name="System Bold" size="31.0" />
-                           </font>
-                           <graphic>
-                              <ImageView preserveRatio="true" scaleX="0.65" scaleY="0.65">
-                                 <Image url="@entity_delete.png" />
-                              </ImageView>
-                           </graphic>
-                        </Button>
-                        <Separator prefWidth="200.0" />
-                        <Button alignment="CENTER" contentDisplay="CENTER" maxHeight="78.0" maxWidth="78.0" minHeight="78.0" minWidth="78.0" mnemonicParsing="false" onAction="#newRelationClick" textAlignment="CENTER" VBox.vgrow="NEVER">
-                           <font>
-                              <Font name="System Bold" size="31.0" />
-                           </font>
-                           <graphic>
-                              <ImageView pickOnBounds="true" preserveRatio="true" scaleX="0.65" scaleY="0.65" smooth="false">
-                                 <Image url="@relation_new.png" />
-                              </ImageView>
-                           </graphic>
-                        </Button>
-                        <Button alignment="CENTER" contentDisplay="CENTER" maxHeight="78.0" maxWidth="78.0" minHeight="78.0" minWidth="78.0" mnemonicParsing="false" onAction="#editRelationClick" textAlignment="CENTER" VBox.vgrow="NEVER">
-                           <font>
-                              <Font name="System Bold" size="31.0" />
-                           </font>
-                           <graphic>
-                              <ImageView pickOnBounds="true" preserveRatio="true" scaleX="0.65" scaleY="0.65">
-                                 <Image url="@relation_edit.png" />
-                              </ImageView>
-                           </graphic>
-                        </Button>
-                        <Button alignment="CENTER" contentDisplay="CENTER" maxHeight="78.0" maxWidth="78.0" minHeight="78.0" minWidth="78.0" mnemonicParsing="false" onAction="#deleteRelationClick" textAlignment="CENTER" VBox.vgrow="NEVER">
-                           <font>
-                              <Font name="System Bold" size="31.0" />
-                           </font>
-                           <graphic>
-                              <ImageView pickOnBounds="true" preserveRatio="true" scaleX="0.65" scaleY="0.65">
-                                 <Image url="@relation_delete.png" />
-                              </ImageView>
-                           </graphic>
-                        </Button>
-                        <Separator prefWidth="200.0" />
-                        <Button alignment="CENTER" contentDisplay="CENTER" maxHeight="78.0" maxWidth="78.0" minHeight="78.0" minWidth="78.0" mnemonicParsing="false" onAction="#newCommentClick" textAlignment="CENTER" VBox.vgrow="NEVER">
-                           <font>
-                              <Font name="System Bold" size="31.0" />
-                           </font>
-                           <graphic>
-                              <ImageView pickOnBounds="true" preserveRatio="true" scaleX="0.65" scaleY="0.65" smooth="false">
-                                 <Image url="@comment_new.png" />
-                              </ImageView>
-                           </graphic>
-                        </Button>
-                        <Button alignment="CENTER" contentDisplay="CENTER" maxHeight="78.0" maxWidth="78.0" minHeight="78.0" minWidth="78.0" mnemonicParsing="false" onAction="#deleteCommentClick" textAlignment="CENTER" VBox.vgrow="NEVER">
-                           <font>
-                              <Font name="System Bold" size="31.0" />
-                           </font>
-                           <graphic>
-                              <ImageView pickOnBounds="true" preserveRatio="true" scaleX="0.65" scaleY="0.65">
-                                 <Image url="@comment_delete.png" />
-                              </ImageView>
-                           </graphic>
-                        </Button>
-                     </VBox>
-                  </AnchorPane>
+               <TitledPane layoutX="10.0" layoutY="62.0" text="%mainWindow.SideBar.Project">
+                  <content>
+                     <ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER">
+                        <content>
+                           <VBox alignment="TOP_CENTER" spacing="10.0">
+                              <Button fx:id="startNewProjectBtn" alignment="CENTER" contentDisplay="CENTER" layoutX="23.0" layoutY="196.0" maxHeight="78.0" maxWidth="78.0" minHeight="78.0" minWidth="78.0" mnemonicParsing="false" onAction="#startNewProject" textAlignment="CENTER" VBox.vgrow="NEVER">
+                                 <font>
+                                    <Font name="System Bold" size="31.0" />
+                                 </font>
+                                 <graphic>
+                                    <ImageView pickOnBounds="true" preserveRatio="true" scaleX="0.5" scaleY="0.5">
+                                       <image>
+                                          <Image url="@new.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                              </Button>
+                              <Button fx:id="openFileBtn" alignment="CENTER" contentDisplay="CENTER" layoutX="40.0" layoutY="87.0" maxHeight="78.0" maxWidth="78.0" minHeight="78.0" minWidth="78.0" mnemonicParsing="false" onAction="#openFileClick" textAlignment="CENTER" VBox.vgrow="NEVER">
+                                 <font>
+                                    <Font name="System Bold" size="31.0" />
+                                 </font>
+                                 <graphic>
+                                    <ImageView pickOnBounds="true" preserveRatio="true" scaleX="0.5" scaleY="0.6">
+                                       <Image url="@open.png" />
+                                    </ImageView>
+                                 </graphic>
+                              </Button>
+                              <Button fx:id="saveFileBtn" alignment="CENTER" contentDisplay="CENTER" layoutX="23.0" layoutY="10.0" maxHeight="78.0" maxWidth="78.0" minHeight="78.0" minWidth="78.0" mnemonicParsing="false" onAction="#saveFileClick" textAlignment="CENTER" VBox.vgrow="NEVER">
+                                 <font>
+                                    <Font name="System Bold" size="31.0" />
+                                 </font>
+                                 <graphic>
+                                    <ImageView pickOnBounds="true" preserveRatio="true" scaleX="0.5" scaleY="0.5">
+                                       <Image url="@save.png" />
+                                    </ImageView>
+                                 </graphic>
+                              </Button>
+                              <Button fx:id="exportPictureBtn" alignment="CENTER" contentDisplay="CENTER" layoutX="23.0" layoutY="103.0" maxHeight="78.0" maxWidth="78.0" minHeight="78.0" minWidth="78.0" mnemonicParsing="false" onAction="#exportPictureClick" textAlignment="CENTER" VBox.vgrow="NEVER">
+                                 <font>
+                                    <Font name="System Bold" size="31.0" />
+                                 </font>
+                                 <graphic>
+                                    <ImageView pickOnBounds="true" preserveRatio="true" scaleX="0.5" scaleY="0.5">
+                                       <Image url="@export_picture.png" />
+                                    </ImageView>
+                                 </graphic>
+                              </Button>
+                              <Button fx:id="importFromDBBtn" alignment="CENTER" contentDisplay="CENTER" layoutX="23.0" layoutY="289.0" maxHeight="78.0" maxWidth="78.0" minHeight="78.0" minWidth="78.0" mnemonicParsing="false" onAction="#importFromDBClick" textAlignment="CENTER">
+                                 <font>
+                                    <Font name="System Bold" size="31.0" />
+                                 </font>
+                                 <graphic>
+                                    <ImageView pickOnBounds="true" preserveRatio="true" scaleX="0.5" scaleY="0.5">
+                                       <image>
+                                          <Image url="@import_db.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                              </Button>
+                              <Button fx:id="exportToDBBtn" alignment="CENTER" contentDisplay="CENTER" layoutX="23.0" layoutY="382.0" maxHeight="78.0" maxWidth="78.0" minHeight="78.0" minWidth="78.0" mnemonicParsing="false" onAction="#exportToDBClick" textAlignment="CENTER">
+                                 <font>
+                                    <Font name="System Bold" size="31.0" />
+                                 </font>
+                                 <graphic>
+                                    <ImageView pickOnBounds="true" preserveRatio="true" scaleX="0.5" scaleY="0.5">
+                                       <image>
+                                          <Image url="@update_db.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                              </Button>
+                              <Button fx:id="exportSQLBtn" alignment="CENTER" contentDisplay="CENTER" layoutX="23.0" layoutY="475.0" maxHeight="78.0" maxWidth="78.0" minHeight="78.0" minWidth="78.0" mnemonicParsing="false" onAction="#exportSQLClick" textAlignment="CENTER">
+                                 <font>
+                                    <Font name="System Bold" size="31.0" />
+                                 </font>
+                                 <graphic>
+                                    <ImageView pickOnBounds="true" preserveRatio="true" scaleX="0.5" scaleY="0.5">
+                                       <image>
+                                          <Image url="@sql.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                              </Button>
+                              <padding>
+                                 <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                              </padding>
+                           </VBox>
+                        </content>
+                     </ScrollPane>
+                  </content>
                </TitledPane>
-               <TitledPane layoutX="10.0" layoutY="62.0" text="Datei">
-                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                     <VBox alignment="TOP_CENTER" spacing="15.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                        <Button alignment="CENTER" contentDisplay="CENTER" layoutX="40.0" layoutY="87.0" maxHeight="78.0" maxWidth="78.0" minHeight="78.0" minWidth="78.0" mnemonicParsing="false" onAction="#openFileClick" textAlignment="CENTER" VBox.vgrow="NEVER">
-                           <font>
-                              <Font name="System Bold" size="31.0" />
-                           </font>
-                           <graphic>
-                              <ImageView pickOnBounds="true" preserveRatio="true" scaleX="0.5" scaleY="0.6">
-                                 <Image url="@open.png" />
-                              </ImageView>
-                           </graphic>
-                        </Button>
-                        <Button alignment="CENTER" contentDisplay="CENTER" layoutX="23.0" layoutY="10.0" maxHeight="78.0" maxWidth="78.0" minHeight="78.0" minWidth="78.0" mnemonicParsing="false" onAction="#saveFileClick" textAlignment="CENTER" VBox.vgrow="NEVER">
-                           <font>
-                              <Font name="System Bold" size="31.0" />
-                           </font>
-                           <graphic>
-                              <ImageView pickOnBounds="true" preserveRatio="true" scaleX="0.5" scaleY="0.5">
-                                 <Image url="@save.png" />
-                              </ImageView>
-                           </graphic>
-                        </Button>
-                        <Button alignment="CENTER" contentDisplay="CENTER" layoutX="23.0" layoutY="103.0" maxHeight="78.0" maxWidth="78.0" minHeight="78.0" minWidth="78.0" mnemonicParsing="false" onAction="#exportPictureClick" textAlignment="CENTER" VBox.vgrow="NEVER">
-                           <font>
-                              <Font name="System Bold" size="31.0" />
-                           </font>
-                           <graphic>
-                              <ImageView pickOnBounds="true" preserveRatio="true" scaleX="0.5" scaleY="0.5">
-                                 <Image url="@export_picture.png" />
-                              </ImageView>
-                           </graphic>
-                        </Button>
-                     </VBox>
-                  </AnchorPane>
-               </TitledPane>
-               <TitledPane text="Einstellungen">
-                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                     <VBox alignment="TOP_CENTER" spacing="15.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-                  </AnchorPane>
+               <TitledPane alignment="TOP_LEFT" text="%mainWindow.SideBar.Edit">
+                  <content>
+                     <ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER">
+                        <content>
+                           <VBox alignment="TOP_CENTER" spacing="10.0">
+                              <Button fx:id="newEntityBtn" alignment="CENTER" maxHeight="78.0" maxWidth="78.0" minHeight="78.0" minWidth="78.0" mnemonicParsing="false" onAction="#newEntityClick" textAlignment="CENTER" VBox.vgrow="NEVER">
+                                 <font>
+                                    <Font name="System Bold" size="31.0" />
+                                 </font>
+                                 <graphic>
+                                    <ImageView pickOnBounds="true" preserveRatio="true" scaleX="0.65" scaleY="0.65" smooth="false">
+                                       <Image url="@entity_new.png" />
+                                    </ImageView>
+                                 </graphic>
+                              </Button>
+                              <Button fx:id="editEntityBtn" alignment="CENTER" contentDisplay="CENTER" maxHeight="78.0" maxWidth="78.0" minHeight="78.0" minWidth="78.0" mnemonicParsing="false" onAction="#editEntityClick" textAlignment="CENTER" VBox.vgrow="NEVER">
+                                 <font>
+                                    <Font name="System Bold" size="31.0" />
+                                 </font>
+                                 <graphic>
+                                    <ImageView preserveRatio="true" scaleX="0.65" scaleY="0.65">
+                                       <Image url="@entity_edit.png" />
+                                    </ImageView>
+                                 </graphic>
+                              </Button>
+                              <Button fx:id="deleteEntityBtn" alignment="CENTER" contentDisplay="CENTER" maxHeight="78.0" maxWidth="78.0" minHeight="78.0" minWidth="78.0" mnemonicParsing="false" onAction="#deleteEntityClick" textAlignment="CENTER" VBox.vgrow="NEVER">
+                                 <font>
+                                    <Font name="System Bold" size="31.0" />
+                                 </font>
+                                 <graphic>
+                                    <ImageView preserveRatio="true" scaleX="0.65" scaleY="0.65">
+                                       <Image url="@entity_delete.png" />
+                                    </ImageView>
+                                 </graphic>
+                              </Button>
+                              <Separator />
+                              <Button fx:id="newRelationBtn" alignment="CENTER" contentDisplay="CENTER" maxHeight="78.0" maxWidth="78.0" minHeight="78.0" minWidth="78.0" mnemonicParsing="false" onAction="#newRelationClick" textAlignment="CENTER" VBox.vgrow="NEVER">
+                                 <font>
+                                    <Font name="System Bold" size="31.0" />
+                                 </font>
+                                 <graphic>
+                                    <ImageView pickOnBounds="true" preserveRatio="true" scaleX="0.65" scaleY="0.65" smooth="false">
+                                       <Image url="@relation_new.png" />
+                                    </ImageView>
+                                 </graphic>
+                              </Button>
+                              <Button fx:id="editRelationBtn" alignment="CENTER" contentDisplay="CENTER" maxHeight="78.0" maxWidth="78.0" minHeight="78.0" minWidth="78.0" mnemonicParsing="false" onAction="#editRelationClick" textAlignment="CENTER" VBox.vgrow="NEVER">
+                                 <font>
+                                    <Font name="System Bold" size="31.0" />
+                                 </font>
+                                 <graphic>
+                                    <ImageView pickOnBounds="true" preserveRatio="true" scaleX="0.65" scaleY="0.65">
+                                       <Image url="@relation_edit.png" />
+                                    </ImageView>
+                                 </graphic>
+                              </Button>
+                              <Button fx:id="deleteRelationBtn" alignment="CENTER" contentDisplay="CENTER" maxHeight="78.0" maxWidth="78.0" minHeight="78.0" minWidth="78.0" mnemonicParsing="false" onAction="#deleteRelationClick" textAlignment="CENTER" VBox.vgrow="NEVER">
+                                 <font>
+                                    <Font name="System Bold" size="31.0" />
+                                 </font>
+                                 <graphic>
+                                    <ImageView pickOnBounds="true" preserveRatio="true" scaleX="0.65" scaleY="0.65">
+                                       <Image url="@relation_delete.png" />
+                                    </ImageView>
+                                 </graphic>
+                              </Button>
+                              <Separator />
+                              <Button fx:id="newCommentBtn" alignment="CENTER" contentDisplay="CENTER" maxHeight="78.0" maxWidth="78.0" minHeight="78.0" minWidth="78.0" mnemonicParsing="false" onAction="#newCommentClick" textAlignment="CENTER" VBox.vgrow="NEVER">
+                                 <font>
+                                    <Font name="System Bold" size="31.0" />
+                                 </font>
+                                 <graphic>
+                                    <ImageView pickOnBounds="true" preserveRatio="true" scaleX="0.65" scaleY="0.65" smooth="false">
+                                       <Image url="@comment_new.png" />
+                                    </ImageView>
+                                 </graphic>
+                              </Button>
+                              <Button fx:id="deleteCommentBtn" alignment="CENTER" contentDisplay="CENTER" maxHeight="78.0" maxWidth="78.0" minHeight="78.0" minWidth="78.0" mnemonicParsing="false" onAction="#deleteCommentClick" textAlignment="CENTER" VBox.vgrow="NEVER">
+                                 <font>
+                                    <Font name="System Bold" size="31.0" />
+                                 </font>
+                                 <graphic>
+                                    <ImageView pickOnBounds="true" preserveRatio="true" scaleX="0.65" scaleY="0.65">
+                                       <Image url="@comment_delete.png" />
+                                    </ImageView>
+                                 </graphic>
+                              </Button>
+                              <padding>
+                                 <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                              </padding>
+                           </VBox>
+                        </content>
+                     </ScrollPane>
+                  </content>
                </TitledPane>
             </panes>
          </Accordion>
       </left>
-      <center>
-         <Pane fx:id="mainWorkbench" onMouseClicked="#onMainWorkbenchClick" style="-fx-border-color: grey;" BorderPane.alignment="CENTER">
-         </Pane>
-      </center>
       <top>
          <VBox BorderPane.alignment="CENTER">
             <MenuBar maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
                <menus>
-                  <Menu mnemonicParsing="false" text="Datei">
-                     <MenuItem mnemonicParsing="false" text="Neu" />
-                     <MenuItem mnemonicParsing="false" text="Öffnen" />
-                     <Menu mnemonicParsing="false" text="Import">
-                        <MenuItem mnemonicParsing="false" text="Datenbankmodell aus Datenbank lesen" />
-                        <MenuItem mnemonicParsing="false" text="Aus SQL-Skript importieren" />
+                  <Menu mnemonicParsing="false" text="%mainWindow.MenuBar.File">
+                     <MenuItem mnemonicParsing="false" onAction="#startNewProject" text="%mainWindow.MenuBar.File.New" />
+                     <MenuItem mnemonicParsing="false" onAction="#openFileClick" text="%mainWindow.MenuBar.File.Open" />
+                     <Menu mnemonicParsing="false" text="%mainWindow.MenuBar.File.Import">
+                        <MenuItem mnemonicParsing="false" onAction="#importFromDBClick" text="%mainWindow.MenuBar.File.Import.FromDB" />
+                        <!--MenuItem mnemonicParsing="false" text="%mainWindow.MenuBar.File.Import.FromSQL" /-->
                      </Menu>
-                     <MenuItem mnemonicParsing="false" onAction="#saveFileClick" text="Speichern" />
-                     <MenuItem mnemonicParsing="false" text="Speichern unter..." />
-                     <Menu mnemonicParsing="false" text="Export">
-                        <MenuItem mnemonicParsing="false" text="Als Bild speichern" />
-                        <MenuItem mnemonicParsing="false" text="Als SQL-Skript speichern" />
-                        <MenuItem mnemonicParsing="false" text="Projekt in Datenbank schreiben" />
+                     <MenuItem mnemonicParsing="false" onAction="#saveFileClick" text="%mainWindow.MenuBar.File.Save" />
+                     <MenuItem mnemonicParsing="false" onAction="#saveAsFileClick" text="%mainWindow.MenuBar.File.SaveAs" />
+                     <Menu mnemonicParsing="false" text="%mainWindow.MenuBar.File.Export">
+                        <MenuItem mnemonicParsing="false" onAction="#exportPictureClick" text="%mainWindow.MenuBar.File.Export.AsPicture" />
+                        <MenuItem fx:id="exportSQLClick" onAction="#exportSQLClick" mnemonicParsing="false" text="%mainWindow.MenuBar.File.Export.AsSQL" />
+                        <MenuItem mnemonicParsing="false" onAction="#exportToDBClick" text="%mainWindow.MenuBar.File.Export.ToDB" />
                      </Menu>
-                     <MenuItem mnemonicParsing="false" onAction="#closeApp" text="Beenden" />
+                     <MenuItem mnemonicParsing="false" onAction="#closeApp" text="%mainWindow.MenuBar.File.Close" />
                   </Menu>
-                  <Menu mnemonicParsing="false" text="Bearbeiten">
-                     <Menu mnemonicParsing="false" text="Entität">
-                        <MenuItem mnemonicParsing="false" onAction="#newEntityClick" text="Neu erstellen" />
-                        <MenuItem mnemonicParsing="false" onAction="#editEntityClick" text="Ausgewählte bearbeiten" />
-                        <MenuItem mnemonicParsing="false" onAction="#deleteEntityClick" text="Ausgewählte löschen" />
+                  <Menu mnemonicParsing="false" text="%mainWindow.MenuBar.Edit">
+                     <Menu mnemonicParsing="false" text="%mainWindow.MenuBar.Edit.Entity">
+                        <MenuItem mnemonicParsing="false" onAction="#newEntityClick" text="%mainWindow.MenuBar.Edit.CreateNew" />
+                        <MenuItem mnemonicParsing="false" onAction="#editEntityClick" text="%mainWindow.MenuBar.Edit.EditSelected" />
+                        <MenuItem mnemonicParsing="false" onAction="#deleteEntityClick" text="%mainWindow.MenuBar.Edit.DeleteSelected" />
                      </Menu>
-                     <Menu mnemonicParsing="false" text="Relation">
-                        <MenuItem mnemonicParsing="false" onAction="#newRelationClick" text="Neu erstellen" />
-                        <MenuItem mnemonicParsing="false" onAction="#editRelationClick" text="Ausgewählte bearbeiten" />
-                        <MenuItem mnemonicParsing="false" onAction="#deleteRelationClick" text="Ausgewählte löschen" />
+                     <Menu mnemonicParsing="false" text="%mainWindow.MenuBar.Edit.Relation">
+                        <MenuItem mnemonicParsing="false" onAction="#newRelationClick" text="%mainWindow.MenuBar.Edit.CreateNew" />
+                        <MenuItem mnemonicParsing="false" onAction="#editRelationClick" text="%mainWindow.MenuBar.Edit.EditSelected" />
+                        <MenuItem mnemonicParsing="false" onAction="#deleteRelationClick" text="%mainWindow.MenuBar.Edit.DeleteSelected" />
                      </Menu>
-                     <Menu mnemonicParsing="false" text="Kommentar">
-                        <MenuItem mnemonicParsing="false" onAction="#newCommentClick" text="Neu erstellen" />
-                        <MenuItem mnemonicParsing="false" onAction="#editCommentClick" text="Ausgewählte bearbeiten" />
-                        <MenuItem mnemonicParsing="false" onAction="#deleteCommentClick" text="Ausgewählte löschen" />
+                     <Menu mnemonicParsing="false" text="%mainWindow.MenuBar.Edit.Comment">
+                        <MenuItem mnemonicParsing="false" onAction="#newCommentClick" text="%mainWindow.MenuBar.Edit.CreateNew" />
+                        <MenuItem mnemonicParsing="false" onAction="#editCommentClick" text="%mainWindow.MenuBar.Edit.EditSelected" />
+                        <MenuItem mnemonicParsing="false" onAction="#deleteCommentClick" text="%mainWindow.MenuBar.Edit.DeleteSelected" />
                      </Menu>
+                     <MenuItem mnemonicParsing="false" onAction="#zoomInClick" text="%mainWindow.MenuBar.Edit.ZoomIn" />
+                     <MenuItem mnemonicParsing="false" onAction="#zoomOutClick" text="%mainWindow.MenuBar.Edit.ZoomOut" />
+                     <MenuItem mnemonicParsing="false" onAction="#zoomResetClick" text="%mainWindow.MenuBar.Edit.ZoomReset" />
                   </Menu>
-                  <Menu mnemonicParsing="false" text="Einstellungen">
-                     <MenuItem mnemonicParsing="false" text="Datenbanksprache" />
-                     <MenuItem mnemonicParsing="false" text="Sprache" />
-                  </Menu>
-                  <Menu mnemonicParsing="false" text="Hilfe">
-                     <MenuItem mnemonicParsing="false" text="FAQ" />
-                     <MenuItem mnemonicParsing="false" text="Bedienungsanleitung" />
-                     <MenuItem mnemonicParsing="false" onAction="#showAboutUsWindow" text="Über Uns" />
+                  <Menu mnemonicParsing="false" text="%mainWindow.MenuBar.Language" fx:id="languageMenuTab"/>
+                  <Menu mnemonicParsing="false" text="%mainWindow.MenuBar.Help">
+                     <MenuItem mnemonicParsing="false" text="%mainWindow.MenuBar.Help.FAQ" />
+                     <MenuItem mnemonicParsing="false" text="%mainWindow.MenuBar.Help.UserManual" />
+                     <MenuItem mnemonicParsing="false" onAction="#showAboutUsWindow" text="%mainWindow.MenuBar.Help.AboutUs" />
                   </Menu>
                </menus>
             </MenuBar>
          </VBox>
       </top>
+      <center>
+         <TabPane fx:id="projectsTabPane" tabClosingPolicy="UNAVAILABLE" tabMaxHeight="20.0" tabMaxWidth="200.0" BorderPane.alignment="CENTER" />
+      </center>
       <bottom>
-         <ButtonBar prefHeight="40.0" BorderPane.alignment="CENTER">
-            <buttons>
-               <TextField alignment="CENTER" disable="true" editable="false" text="Bereit" />
-               <ComboBox promptText="PostgreSQL" />
-            </buttons>
-            <BorderPane.margin>
-               <Insets right="10.0" />
-            </BorderPane.margin>
-         </ButtonBar>
+         <HBox alignment="CENTER_LEFT" prefHeight="30.0" BorderPane.alignment="CENTER">
+            <children>
+               <Label fx:id="infoLabel" HBox.hgrow="ALWAYS" />
+            </children>
+            <padding>
+               <Insets left="20.0" right="20.0" />
+            </padding>
+         </HBox>
       </bottom>
    </BorderPane>
 </AnchorPane>

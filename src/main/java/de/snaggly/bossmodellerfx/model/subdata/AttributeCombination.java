@@ -4,6 +4,11 @@ import de.snaggly.bossmodellerfx.model.abstraction.AttributeCombinationAbstracti
 
 import java.util.ArrayList;
 
+/**
+ * Combination set of Attributes used in UniqueCombination.
+ *
+ * @author Omar Emshani
+ */
 public class AttributeCombination extends AttributeCombinationAbstraction {
     private ArrayList<Attribute> attributes = new ArrayList<>();
 
